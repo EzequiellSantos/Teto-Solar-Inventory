@@ -21,10 +21,12 @@ mongoose.connect(`mongodb+srv://${DBUser}:${DBPassword}@cluster0.t9g7g6t.mongodb
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
+const inversoresRoutes = require('./routes/inversoresRoutes')
 
 app.use(cors())
 
 app.use('/api/users', userRoutes);
+app.use('api/inversores', inversoresRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;
