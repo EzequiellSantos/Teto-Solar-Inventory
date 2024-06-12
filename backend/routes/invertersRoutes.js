@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Inverter = require('../models/inversores')
 
-router.post('/enviar', async (req, res) => {
+router.post('/', async (req, res) => {
 
     const { sn, description, type } = req.body
 
@@ -12,10 +12,54 @@ router.post('/enviar', async (req, res) => {
         res.status(201).send('Inversor Registrado!')
     } catch (error) {
         
-        res.status(400).send(err.message);
+        res.status(400).json({ msg: "Error" });
 
     }
 
+})
+
+router.delete("/", async (req, res) => {
+
+    const inverterId = req.body.id
+
+    try {
+
+        await Inverter.deleteOne({_id: inverterId})
+
+        res.json({ error: null, msg: "Inversor deletado com sucesso" })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: 'Acesso Negado' })
+    }
+
+})
+
+router.put("/", async (req, res) => {
+    const sn = req.body.sn
+    const description = req.body.description
+    const type =  req.body.type
+    const inverterId = req.body._id
+
+    const inverter = {
+        id: inverterId,
+        sn: sn,
+        description: description,
+        type: type
+    }
+
+    try {
+        
+        const updateInverter = await Inverter.findOneAndUpdate({_id: inverterId}, { $set: inverter }, { new: true })
+        
+        res.json({ error: null, msg: 'Inversor atualizado com sucesso', data: updateInverter } )
+
+    } catch (error) {
+
+        console.log(error)
+        res.status(400).json({ error, msg: "error ao atualizar" })
+
+    }
 })
 
 module.exports = router;

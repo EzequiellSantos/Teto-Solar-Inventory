@@ -34,13 +34,19 @@ app.use('/api/inverters', invertersRoutes)
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
+
     res.json({ message: "Rota Aberta >>> BDTetoSolar" })
+    
 })
 
 app.get("/api/inverters/enviar", (req, res) => {
+
     res.json({message: 'cuuiida'})
+
 })
 
 app.listen(PORT, () => {
+
   console.log(`Server running on port ${PORT}`);
+
 });
