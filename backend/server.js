@@ -21,18 +21,24 @@ mongoose.connect(`mongodb+srv://${DBUser}:${DBPassword}@cluster0.t9g7g6t.mongodb
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
-const inversoresRoutes = require('./routes/inversoresRoutes')
+const invertersRoutes = require('./routes/invertersRoutes')
+// const logRoutes = require('./routes/logRoutes')
 
 app.use(cors())
 
 app.use('/api/users', userRoutes);
-app.use('api/inversores', inversoresRoutes)
+app.use('/api/inverters', invertersRoutes)
+// app.use('/api/logs', logRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
     res.json({ message: "Rota Aberta >>> BDTetoSolar" })
+})
+
+app.get("/api/inverters/enviar", (req, res) => {
+    res.json({message: 'cuuiida'})
 })
 
 app.listen(PORT, () => {

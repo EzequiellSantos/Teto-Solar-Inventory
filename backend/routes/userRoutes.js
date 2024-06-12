@@ -6,11 +6,11 @@ const bcrypt = require('bcrypt');
 
 router.post('/register', async (req, res) => {
 
-  const { username, password } = req.body;
+  const { username, password, permission } = req.body;
 
   try {
 
-    const user = new User({ username, password });
+    const user = new User({ username, password, permission });
     await user.save();
     res.status(201).send('Usuario Registradox');
 
