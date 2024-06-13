@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const Logs = require('../models/logs')
 
+// pegando todos os registros
 router.get("/all", async (req, res) => {
 
     try {
@@ -17,6 +18,7 @@ router.get("/all", async (req, res) => {
 
 })
 
+// enviando registros
 router.post('/', async (req, res) => {
 
     const { inverter, movements, client, logDate, obs } = req.body

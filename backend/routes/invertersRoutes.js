@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Inverter = require('../models/inversores')
 
+//buscando todos os inverters
 router.get('/all', async (req, res) => {
     
     try {
@@ -17,6 +18,7 @@ router.get('/all', async (req, res) => {
 
 })
 
+// enviando inverter
 router.post('/', async (req, res) => {
 
     const { sn, description, type } = req.body
@@ -33,6 +35,7 @@ router.post('/', async (req, res) => {
 
 })
 
+//deletando inverter
 router.delete("/", async (req, res) => {
 
     const inverterId = req.body.id
@@ -50,6 +53,7 @@ router.delete("/", async (req, res) => {
 
 })
 
+// atualizando inverter
 router.put("/", async (req, res) => {
     const sn = req.body.sn
     const description = req.body.description

@@ -35,13 +35,14 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
 
-    res.json({ message: "Rota Aberta >>> BDTetoSolar" })
+  res.json({ message: "Rota Aberta >>> BDTetoSolar" })
 
 })
 
+//rota teste
 app.get("/api/inverters/enviar", (req, res) => {
 
-    res.json({message: 'cuuiida'})
+  res.json({message: 'cuuiida'})
 
 })
 
