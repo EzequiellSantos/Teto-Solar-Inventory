@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const logSchema = new mongoose.Schema({
 
-    inverter: {
+    inverterId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
