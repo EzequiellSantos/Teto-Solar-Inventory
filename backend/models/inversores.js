@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const InverterSchema = new mongoose.Schema({
+
+    invoice: {
+        type: String,
+        required: true,
+        unique: true
+    },
     sn: {
         type: String,
         required: true,

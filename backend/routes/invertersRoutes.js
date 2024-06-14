@@ -18,18 +18,70 @@ router.get('/all', async (req, res) => {
 
 })
 
+//buscando inversores por consulta
+router.get("/search", async (req, res) => {
+
+    try {
+        
+        let search = req.body.search
+
+        const inverter = await Inverter.find({$text: {$search:`${search}`}})
+
+        if(inverter.length == 0){
+
+            res.json({error: "inversor não encontrado :/"})
+
+        } else{
+
+            res.status(200).json({error: null, inverter: inverter})
+
+        }
+
+    } catch (error) {
+        
+        res.status(400).json({error: "Inversor não encontrado"})
+
+    }
+
+})
+
+router.get("/:id", async (req, res) => {
+
+    try {
+        
+        const inverterId = req.body.id
+        const inverter = await Inverter.findOne({_id: inverterId})
+
+        if(inverter === null){
+
+            res.json({error: "Este inversor não existe"})
+
+        } else{
+
+            res.json({error: null, inverter: inverter})
+
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({error: "Este inversor não existe" })
+    }
+
+})
+
 // enviando inverter
 router.post('/', async (req, res) => {
 
-    const { sn, description, type } = req.body
+    const { invoice, sn, description, type } = req.body
 
     try {
-        const inverter = new Inverter({sn, description, type})
+        const inverter = new Inverter({ invoice, sn, description, type})
         await inverter.save()
         res.status(201).json({error: null, msg:'Inversor Registrado!'})
     } catch (error) {
         
         res.status(400).json({ error: "Erro ao cadastrar" });
+        console.log(error)
 
     }
 
@@ -44,7 +96,7 @@ router.delete("/", async (req, res) => {
 
         await Inverter.deleteOne({_id: inverterId})
 
-        res.json({ error: null, msg: "Inversor deletado com sucesso" })
+        res.status(201).json({ error: null, msg: "Inversor deletado com sucesso" })
 
     } catch (error) {
         console.log(error);
@@ -55,6 +107,7 @@ router.delete("/", async (req, res) => {
 
 // atualizando inverter
 router.put("/", async (req, res) => {
+    const invoice = req.body.invoice
     const sn = req.body.sn
     const description = req.body.description
     const type =  req.body.type
@@ -62,6 +115,7 @@ router.put("/", async (req, res) => {
 
     const inverter = {
         id: inverterId,
+        invoice: invoice,
         sn: sn,
         description: description,
         type: type
@@ -71,7 +125,7 @@ router.put("/", async (req, res) => {
         
         const updateInverter = await Inverter.findOneAndUpdate({_id: inverterId}, { $set: inverter }, { new: true })
         
-        res.json({ error: null, msg: 'Inversor atualizado com sucesso', data: updateInverter } )
+        res.status(201).json({ error: null, msg: 'Inversor atualizado com sucesso', data: updateInverter } )
 
     } catch (error) {
 
