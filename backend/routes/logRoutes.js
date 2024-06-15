@@ -22,7 +22,7 @@ router.get("/:id", async (req, res) => {
 
     try {
         
-        const logId = req.body.id
+        const logId = req.body.id //params
         const log = await Logs.findOne({_id: logId})
 
         if(log.length == 0){

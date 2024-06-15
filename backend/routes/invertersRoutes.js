@@ -49,8 +49,8 @@ router.get("/:id", async (req, res) => {
 
     try {
         
-        const inverterId = req.body.id
-        const inverter = await Inverter.findOne({_id: inverterId})
+        const id = req.params.id
+        const inverter = await Inverter.findOne({_id: id})
 
         if(inverter === null){
 
