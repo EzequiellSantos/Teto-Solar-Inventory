@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Teto Solar Energia Renonável</h1>
+    <p><small>Conectamos você ao sol</small></p>
   </div>
 </template>
 

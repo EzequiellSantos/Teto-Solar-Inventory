@@ -19,6 +19,16 @@ const routes = [
     path: '/inverters',
     name:'inverters',
     component: () => import(/* webpackChunkName: "inverters" */ '../views/Inverters.vue')
+  },
+  {
+    path: '/logs',
+    name:'logs',
+    component: () => import(/* webpackChunkName: "logs" */ '../views/Logs.vue')
+  },
+  {
+    path: '/register',
+    name:'register',
+    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
   }
 ]
 
