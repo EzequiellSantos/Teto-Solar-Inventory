@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/inverters',
     name:'inverters',
-    component: () => import(/* webpackChunkName: "inverters" */ '../views/Inverters.vue')
+    component: () => import(/* webpackChunkName: "inverters" */ '../views/DashboardInv.vue')
   },
   {
     path: '/logs',
@@ -29,6 +29,11 @@ const routes = [
     path: '/register',
     name:'register',
     component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
+  },
+  {
+    path: '/inverter',
+    name:'inverter',
+    component: () => import(/* webpackChunkName: "inverter" */ '../views/Inverter.vue')
   }
 ]
 
