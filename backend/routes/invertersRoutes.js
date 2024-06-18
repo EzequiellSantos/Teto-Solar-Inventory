@@ -111,7 +111,7 @@ router.put("/", async (req, res) => {
     const sn = req.body.sn
     const description = req.body.description
     const type =  req.body.type
-    const inverterId = req.body._id
+    const inverterId = req.body.id
 
     const inverter = {
         id: inverterId,

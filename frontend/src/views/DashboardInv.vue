@@ -10,7 +10,7 @@
 
         <div v-if="inverters.length > 0">
 
-            <DatableInv :inverters="inverters" />
+            <DataTableInv :inverters="inverters" />
 
         </div>
 
@@ -26,7 +26,7 @@
 
 <script>
 
-import DatableInv from '../components/DataTableInv.vue'
+import DataTableInv from '../components/DataTableInv.vue'
 
 export default {
     data() {
@@ -42,7 +42,7 @@ export default {
 
     },
     components: {
-        DatableInv
+        DataTableInv
     },
     methods: {
 
