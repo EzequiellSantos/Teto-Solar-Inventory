@@ -13,7 +13,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
   },
   {
     path: '/inverters',
@@ -23,12 +23,17 @@ const routes = [
   {
     path: '/logs',
     name:'logs',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/Logs.vue')
+    component: () => import(/* webpackChunkName: "logs" */ '../views/DashboardLogs.vue')
   },
   {
-    path: '/register',
-    name:'register',
-    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
+    path: '/registerLog',
+    name:'registerLog',
+    component: () => import(/* webpackChunkName: "logs" */ '../views/DashboardLogs.vue')
+  },
+  {
+    path: '/registerInv',
+    name:'registerInv',
+    component: () => import(/* webpackChunkName: "register" */ '../views/NewInv.vue')
   },
   {
     path: '/inverter/:id',

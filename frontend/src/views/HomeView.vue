@@ -23,13 +23,15 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import {BASE_URL} from '@/config'
 
 export default {
   name: 'HomeView',
   data() {
 
     return {
-        inverters: []
+        inverters: [],
+        apiURL: BASE_URL
     }
 
   },
@@ -44,7 +46,7 @@ export default {
 
         try {
             
-            const response = await fetch('http://127.0.0.1:3000/api/inverters/all', {
+            const response = await fetch(`${this.apiURL}/api/inverters/all`, {
 
                 method: "GET",
                 headers: {

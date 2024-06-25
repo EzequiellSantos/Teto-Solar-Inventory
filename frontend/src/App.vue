@@ -1,7 +1,6 @@
 <template>
   <div>
 
-    <Navbar />
     <router-view class="container"></router-view>
     <Footer/>
      
@@ -12,7 +11,7 @@
 <script>
 
   import Footer from './components/Footer.vue'
-  import Navbar from './components/Navbar.vue'
+  import Navbar from './components/NavbarInv.vue'
 
   export default {
       name: "App",
@@ -28,6 +27,12 @@
   *{
     margin: 0;
     padding: 0;
+  }
+
+  :root{
+    --color-for-client: #ff00ff;
+    --color-for-inventory: #00ff00;
+    --color-for-backup: #0000ff ;
   }
 
   #app {
@@ -52,7 +57,24 @@
   }
 
   .container{
-    margin-top: 40px;
+    margin-top: 0px;
+  }
+
+  .links-menu-container{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    max-width: 400px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+
+  .links-menu-container  span {
+
+    margin: 0px 15px ;
+
   }
 
 

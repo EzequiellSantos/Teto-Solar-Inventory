@@ -3,14 +3,14 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <form id="invForm" @submit="page === 'register' ? register($event) : update($event)">
+        <form id="invForm" enctype="multipart/form-data" @submit="page === 'register' ? register($event) : update($event)">
 
             <input type="hidden" id="id" name="id" v-model="id">
 
             <div class="input-container">
 
                 <label for="invoice">Nota Fiscal:</label>
-                <input type="text" name="invoice" id="invoiceInput" v-model="invoice" required placeholder="Número da Nota">
+                <input type="text" name="invoice" id="invoice" v-model="invoice" required placeholder="Número da Nota">
 
             </div>
 
@@ -31,7 +31,7 @@
             <div class="input-container">
 
                 <label for="type">Tipo:</label>
-                <input type="text" name="type" id="type" v-model="type" required>
+                <input type="text" name="type" id="type" v-model="type" required >
 
             </div>
 
@@ -48,18 +48,20 @@
 
     import Message from '../components/Message.vue'
     import InputSubmit from '../components/form/inputSubmit.vue'
+    import {BASE_URL} from '@/config'
 
 export default {
     name: "invForm",
     data() {
         return {
             id: this.inverter._id || null,
-            invoice: this.invoice || null,
-            sn: (this.sn) ?? null,
-            description: null,
-            type: null,
+            invoice: this.inverter.invoice || null,
+            sn: this.inverter.sn || null,
+            description:this.inverter.description || null,
+            type: this.inverter.type || null,
             msg: null,
-            msgClass: null 
+            msgClass: null,
+            apiURL: BASE_URL
         }
     },
     components: {
@@ -85,7 +87,7 @@ export default {
 
             const jsonData = JSON.stringify(data)
 
-            await fetch("http://127.0.0.1:3000/api/inverters/", {
+            await fetch(`${this.apiURL}/api/inverters/`, {
 
                 mwthod: "POST",
                 headers: {"Content-type":"application/json"},
@@ -130,13 +132,13 @@ export default {
                 invoice: this.invoice,
                 sn: this.sn,
                 description: this.description,
-                type: this.description
+                type: this.type
 
             }
 
             const jsonData = JSON.stringify(data)
 
-            await fetch("http://127.0.0.1:3000/api/inverters", {
+            await fetch(`${this.apiURL}/api/inverters`, {
                 method: "POST",
                 headers: { "Content-type":"application/json" },
                 body: jsonData

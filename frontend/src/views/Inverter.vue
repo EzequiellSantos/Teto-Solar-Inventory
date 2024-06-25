@@ -29,11 +29,15 @@
 </template>
 
 <script>
+
+import {BASE_URL} from '@/config'
+
 export default {
     data () {
         return {
             inverter: {},
-            msg:null
+            msg:null,
+            apiURL: BASE_URL
         }
     },
     created() {
@@ -44,7 +48,7 @@ export default {
 
             const id =  this.$route.params.id
 
-            await fetch(`http://127.0.0.1:3000/api/inverters/${id}`, {
+            await fetch(`${this.apiURL}/api/inverters/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-type": "application/json"

@@ -9,6 +9,7 @@
 <script>
 
 import InvForm from "../components/InvForm.vue"
+import {BASE_URL} from '@/config'
 
 export default {
     components: {
@@ -18,7 +19,8 @@ export default {
 
         return {
             inverter: {},
-            componentKey: 0
+            componentKey: 0,
+            apiURL: BASE_URL
         }
 
     },
@@ -33,7 +35,7 @@ export default {
 
             const id = this.$route.params.id
 
-            await fetch (`http://127.0.0.1:3000/api/inverters/${id}`, {
+            await fetch (`${this.apiURL}/api/inverters/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-type":"application/json"

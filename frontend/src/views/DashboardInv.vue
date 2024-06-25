@@ -1,24 +1,26 @@
 <template>
 
-    <div class="dashboard">
+    <div class="dashboard"> 
 
-        <div class="title-container"> 
+        <NavbarInv />
 
-            <h1>Gerenciando inversores</h1>
+        <div id="search-container">
+            <input type="text" @input="inputTextoBusca" v-model="inputBusca">
+        </div>
+
+        <div>
+
+            <DataTableInv :inverters="inverters"  />
 
         </div>
 
-        <div v-if="inverters.length > 0">
+        <Message :msg="msg" :msgClass="msgClass" />
 
-            <DataTableInv :inverters="inverters" />
-
-        </div>
-
-        <div v-else>
+        <!-- <div v-else>
 
             <p>Cadastre Inversores...</p>
 
-        </div>
+        </div> -->
 
     </div>
 
@@ -26,13 +28,22 @@
 
 <script>
 
+import NavbarInv from '../components/NavbarInv.vue'
 import DataTableInv from '../components/DataTableInv.vue'
+import InputInv from '../components/form/inputText.vue'
+import Message from '../components/Message.vue' 
+import { BASE_URL } from '@/config'
 
 export default {
     data() {
 
         return {
-            inverters: []
+            inputBusca: '',
+            inverters: [],
+            apiURL : BASE_URL,
+            loading: false,
+            msg: null,
+            msgClass: null
         }
 
     },
@@ -42,15 +53,74 @@ export default {
 
     },
     components: {
-        DataTableInv
+        NavbarInv,
+        DataTableInv,
+        InputInv,
+        Message
+
+    },
+    props: {
+        placeholder:"S/N ou Nota"
     },
     methods: {
+
+        async inputTextoBusca () {
+
+            this.loading = true
+            this.inverters = []
+
+            try {
+                
+                await fetch(`${this.apiURL}/api/inverters/search?query=${this.inputBusca}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                } )
+                .then((resp) => resp.json())
+                .then((data) => {
+                   
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    }  else {
+
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
+
+                    }
+
+                    setTimeout(() => {
+
+                        this.msg = null
+
+                        let inputValue = this.inputBusca
+
+                        if(inputValue == "" || inputValue.length == 0){
+                            this.getInverters()
+                        }
+
+                    }, 2000)
+
+                    this.inverters = data.inverter
+
+                })
+
+            } catch (error) {
+                
+                console.log(error)
+
+            }
+
+        },
 
         async getInverters() {
 
             try {
                 
-                await fetch('http://127.0.0.1:3000/api/inverters/all', {
+                await fetch(`${this.apiURL}/api/inverters/all`, {
 
                     method: "GET",
                     headers: {
@@ -64,6 +134,7 @@ export default {
                 .then((data) => {
 
                     this.inverters = data.inverters
+
 
                 })
 
