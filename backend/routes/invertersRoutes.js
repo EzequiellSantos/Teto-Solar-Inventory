@@ -4,11 +4,13 @@ const Inverter = require('../models/inversores')
 
 //buscando todos os inverters
 router.get('/all', async (req, res) => {
+
     
     try {
         
         const inverters = await Inverter.find({})
         res.json({ error: null, inverters: inverters })
+
 
     } catch (error) {
      
@@ -23,9 +25,9 @@ router.get("/search", async (req, res) => {
 
     try {
         
-        let search = req.body.search
+        let query = req.query.query
 
-        const inverter = await Inverter.find({$text: {$search:`${search}`}})
+        const inverter = await Inverter.find({$text: {$search: `${query}` }})
 
         if(inverter.length == 0){
 
