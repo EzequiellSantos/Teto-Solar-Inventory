@@ -2,8 +2,8 @@ const mongoose = require("mongoose")
 
 const logSchema = new mongoose.Schema({
 
-    inverterId: {
-        type: mongoose.Schema.Types.ObjectId,
+    sn: {
+        type: String,
         required: true
     },
     movements: {

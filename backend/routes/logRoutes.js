@@ -74,13 +74,13 @@ router.get('/search', async (req, res) => {
 // enviando registros
 router.post('/', async (req, res) => {
 
-    const { inverterId, movements, client, logDate, obs } = req.body
+    const { sn, movements, client, logDate, obs } = req.body
 
     try {
 
-        const log = new Logs({inverterId, movements, client, logDate, obs})
+        const log = new Logs({sn, movements, client, logDate, obs})
         await log.save()
-        res.status(201).json({error: null, msg:'Registro adicionado!'})
+        res.status(201).json({error: null, msg:'Registro adicionado!', data: log})
 
     } catch (error) {
         
