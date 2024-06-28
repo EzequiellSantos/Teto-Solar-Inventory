@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/registerLog',
     name:'registerLog',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/DashboardLogs.vue')
+    component: () => import(/* webpackChunkName: "logForm" */ '../views/NewLog.vue')
   },
   {
     path: '/registerInv',

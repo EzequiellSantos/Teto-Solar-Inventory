@@ -24,36 +24,39 @@
 
         <div class="data-table-body">
 
-            <div id="data-row" v-for="(inverter, index) in inverters" :key="index" :class="getClassForType(inverter.type)">
+            
+                <div v-for="(inverter, index) in inverters" :key="index" >
 
-                <div class="index-container">
-                    <p>{{ index + 1}}</p>
-                </div>
+                    <router-link id="data-row" :class="getClassForType(inverter.type)" :to="`/inverter/${ inverter._id }`" >  
+                    <div class="index-container">
+                        <p>{{ index + 1}}</p>
+                    </div>
 
-                <div class="data-sn-container">
-                    <p>{{ inverter.sn }}</p>
-                </div>
+                    <div class="data-sn-container">
+                        <p>{{ inverter.sn }}</p>
+                    </div>
 
-                <div class="data-description-container">
-                    <router-link :to="`/inverter/${ inverter._id }`" >
-                        {{ inverter.description }}
+                    <div class="data-description-container">
+                        
+                        <p>{{ inverter.description }}</p>
+                        
+                    </div>
+
+                    <div class="data-type-container">
+                        <p> {{ inverter.type }}</p>
+                    </div>
+
+                    <div class="data-actions-container">
+
+                        <!-- <router-link :to="`/editInverter/${inverter._id}`" class="edit-btn">
+                            editar inv  
+                        </router-link>
+                        <button class="remove-btn" @click="remove(inverter._id)">Remover Inversor</button> -->
+
+                    </div>
                     </router-link>
                 </div>
-
-                <div class="data-type-container">
-                    <p> {{ inverter.type }}</p>
-                </div>
-
-                <div class="data-actions-container">
-
-                    <!-- <router-link :to="`/editInverter/${inverter._id}`" class="edit-btn">
-                        editar inv  
-                    </router-link>
-                    <button class="remove-btn" @click="remove(inverter._id)">Remover Inversor</button> -->
-
-                </div>
-
-            </div>
+            
 
 
         </div>

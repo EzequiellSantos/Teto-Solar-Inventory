@@ -3,7 +3,7 @@
     <footer>
 
         <section class="section-nav">
-            <router-link to="/inverters" :class="getLinkClass('/inverters', '/registerInv', '/inverter/:id')">Inv</router-link>
+            <router-link to="/inverters" :class="getLinkClass('/inverters', '/registerInv', '/inverter/')">Inv</router-link>
             <router-link to="/logs" :class="getLinkClass('/logs', '/registerLog')">Logs</router-link>
         </section>
 

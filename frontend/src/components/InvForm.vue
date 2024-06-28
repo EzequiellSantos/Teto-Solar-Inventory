@@ -23,7 +23,7 @@
 
             <div class="input-container">
 
-                <label for="description">Descrição</label>
+                <label for="description">Descrição:</label>
                 <input type="text" name="description" id="description" required v-model="description">
 
             </div>
@@ -31,7 +31,18 @@
             <div class="input-container">
 
                 <label for="type">Tipo:</label>
-                <input type="text" name="type" id="type" v-model="type" required >
+                <select name="type" id="type" v-model="type" aria-placeholder="Tste">
+                                       
+                    <optgroup label="Escolha o tipo do Inversor">
+                        <option value="ESTOQUE">Estoque da loja</option>
+                        <option value="BACKUP">Backup para Clientes</option>
+                        <option value="GARANTIA">Vai para autorizada</option>
+                        <option value="CLIENTE">Está indo para clientes</option>
+                    </optgroup>
+                </select>
+
+                
+                <!-- <input type="text" name="type" id="type" v-model="type" required > -->
 
             </div>
 
@@ -72,6 +83,7 @@ export default {
     text: "Cadastrar",
     methods: {
 
+
         async register(e) {
 
             e.preventDefault()
@@ -84,6 +96,7 @@ export default {
                 type: this.type
 
             }
+            console.log(this.type)
 
             const jsonData = JSON.stringify(data)
 
@@ -126,6 +139,8 @@ export default {
         async update(e){
 
             e.preventDefault()
+
+            console.log("Viiiiixe ta atualizaaando");
 
             const data = {
                 id: this.id,

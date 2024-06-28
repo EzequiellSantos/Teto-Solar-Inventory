@@ -2,6 +2,9 @@
     
     <div class="inverter">
 
+        <NavbarInv />
+
+
         <h1 class="invoice"> 
             {{ inverter.invoice }}
         </h1>
@@ -31,6 +34,7 @@
 <script>
 
 import {BASE_URL} from '@/config'
+import NavbarInv from '../components/NavbarInv.vue'
 
 export default {
     data () {
@@ -39,6 +43,9 @@ export default {
             msg:null,
             apiURL: BASE_URL
         }
+    },
+    components: {
+        NavbarInv
     },
     created() {
         this.getInverter()
@@ -105,6 +112,10 @@ export default {
 
     .invoice{
         text-transform: uppercase;
+    }
+
+    footer{
+        display: none;
     }
 
 </style>
