@@ -79,7 +79,7 @@ router.post('/', async (req, res) => {
     try {
         const inverter = new Inverter({ invoice, sn, description, type})
         await inverter.save()
-        res.status(201).json({error: null, msg:'Inversor Registrado!'})
+        res.status(201).json({error: null, msg:'Inversor Registrado!', data: inverter})
     } catch (error) {
         
         res.status(400).json({ error: "Erro ao cadastrar" });

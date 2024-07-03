@@ -22,12 +22,12 @@ router.get("/:id", async (req, res) => {
 
     try {
         
-        const logId = req.body.id //params
+        const logId = req.params.id //params
         const log = await Logs.findOne({_id: logId})
 
-        if(log.length == 0){
+        if(log === null){
 
-            res.json({error: "Este registro nao existe"})
+            res.json({error: "Este registro nao existe :)"})
 
         } else{
 
@@ -49,8 +49,8 @@ router.get('/search', async (req, res) => {
 
     try {
         
-        let search = req.body.search
-        const log = await Logs.find({$text: {$search: `${search}`}})
+        let query = req.query.query
+        const log = await Logs.find({$text: {$search: `${query}`}})
 
         if(log.length == 0){
 

@@ -30,4 +30,6 @@ const logSchema = new mongoose.Schema({
     
 })
 
+logSchema.index({ movements: "text", client: "text"})
+
 module.exports = mongoose.model('Logs', logSchema);

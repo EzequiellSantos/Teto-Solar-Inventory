@@ -4,7 +4,7 @@
     <div class="new-inv">
 
         <h1>Cadastrar Inversor:</h1>
-        <InvForm :inverter="{}" page="newinverter" btnText="Cadastrar"/>
+        <InvForm :inverter="{}" page="registerInv" btnText="Cadastrar"/>
 
     </div>
 

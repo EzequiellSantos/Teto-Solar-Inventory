@@ -2,7 +2,7 @@
     <div class="editInverter">
 
         <h1>Editando o Inversor</h1>
-        <InvForm :inverter="inverter" page="editInverter" btnText="Editar Inv" :key="componentKey" />
+        <InvForm :inverter="inverter" page="editInv" btnText="Editar Inv" :key="componentKey" />
 
     </div>
 </template>

@@ -25,8 +25,14 @@
                 </section>
             
             </div>
+
+            
+
         </div>
 
+        <div class="editButton">
+            <router-link :to="`/editInverter/${inverter._id}`"><span>Editar</span></router-link>
+        </div>
     </div>
 
 </template>

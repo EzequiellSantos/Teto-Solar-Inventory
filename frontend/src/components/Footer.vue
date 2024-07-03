@@ -7,7 +7,7 @@
             <router-link to="/logs" :class="getLinkClass('/logs', '/registerLog')">Logs</router-link>
         </section>
 
-        <p><small>Teto Solar 2024 &copy; </small></p>
+        <!-- <p><small>Teto Solar 2024 &copy; </small></p> -->
 
     </footer>
 
@@ -55,7 +55,9 @@ export default ({
         height: 50px;        
         padding: 5px;
         border-radius: 30px;
-        background-color: rgb(246, 255, 127);
+        backdrop-filter: blur(15px);
+        color: rgb(0, 0, 87);
+        background-color: rgba(253, 238, 104, 0.459);
     }
 
     .section-nav > a{
@@ -72,7 +74,7 @@ export default ({
         width: 40px;
         padding: 40px ;
         border-radius: 30px;
-        background-color: rgb(0, 81, 255);
+        background-color: rgba(0, 81, 255, 0.486);
         transition: background .7s ease-in-out;
         color: #fff;
     }

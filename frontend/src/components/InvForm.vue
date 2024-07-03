@@ -3,7 +3,7 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <form id="invForm" enctype="multipart/form-data" @submit="page === 'register' ? register($event) : update($event)">
+        <form id="invForm" enctype="multipart/form-data" @submit="page === 'registerInv' ? register($event) : update($event)">
 
             <input type="hidden" id="id" name="id" v-model="id">
 
@@ -96,13 +96,12 @@ export default {
                 type: this.type
 
             }
-            console.log(this.type)
 
             const jsonData = JSON.stringify(data)
 
             await fetch(`${this.apiURL}/api/inverters/`, {
 
-                mwthod: "POST",
+                method: "POST",
                 headers: {"Content-type":"application/json"},
                 body: jsonData
 
@@ -127,12 +126,18 @@ export default {
                     behavior: 'smooth'
                 })
 
-                /* setTimeout(() => {
+                setTimeout(() => {
 
-                    this.$router.push("Inverters")
+                    this.msg = null
+                    this.$router.push("/inverters")
+            
+                }, 2000)
 
-                }, 2000) */
-
+            })
+            .catch((error) => {
+                console.log(error, " Erro ao Cadastrar")
+                this.msg = error
+                this.msgClass = 'error'
             })
 
         },
@@ -154,7 +159,7 @@ export default {
             const jsonData = JSON.stringify(data)
 
             await fetch(`${this.apiURL}/api/inverters`, {
-                method: "POST",
+                method: "PUT",
                 headers: { "Content-type":"application/json" },
                 body: jsonData
             })
@@ -181,6 +186,7 @@ export default {
                 setTimeout(() => {
 
                     this.msg = null
+                    this.$router.push("/inverters")
             
                 }, 2000)
 

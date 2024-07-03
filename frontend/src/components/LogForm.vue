@@ -3,7 +3,7 @@
 
         <Message :msg="msg" :msgClass="msgClass"/>
 
-        <form id="logForm" enctype="multipart/form-data" @submit="page == 'register' ? register($event) : update($event)">
+        <form id="logForm" enctype="multipart/form-data" @submit="page == 'registerLog' ? register($event) : update($event)">
 
         <input type="hidden" id="id" name="id" v-model="id">
 
@@ -13,15 +13,15 @@
             <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" >
 
             <p class="title-description">SN:</p>
-            <p class="text-description">394r343 teste</p>
+            <p class="text-description">{{ this.textSn }}</p>
             <input type="hidden" id="textSn" name="textSn" v-model="textSn">
 
             <p class="title-description">Descrição:</p>
-            <p class="text-description">INV 2k DEYE</p>
+            <p class="text-description">{{ this.textDescription}}</p>
             <input type="hidden" id="textDescription" name="textDescription" v-model="textDescription">
 
             <p class="title-description">Tipo:</p>
-            <p class="text-description">ESTOQUE</p>
+            <p class="text-description">{{ this.textType }}</p>
             <input type="hidden" id="textType" name="textType" v-model="textType">
 
         </div>
@@ -87,7 +87,7 @@ export default {
     data (){
         return {
 
-            textSn: this.log.textSn || null,
+            textSn: this.textSn || null,
             textDescription: this.log.textDescription || null,
             textType: this.log.textType || null,
 
@@ -108,11 +108,86 @@ export default {
 
             console.log(this.sn);
 
+            await fetch(`${this.apiURL}/api/inverters/search?query=${this.sn}`, {
+                method: "GET",
+                headers: {
+                    "Content-type":"application/json"  
+                }
+
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                
+                
+                this.textSn = data.inverter[0].sn
+                this.textDescription = data.inverter[0].description
+                this.textType = data.inverter[0].type
+                
+
+            })
+
         },
 
         async register(e){
+
             e.preventDefault()
             console.log('teste');
+
+
+            const data = {
+
+                sn: this.sn,
+                movements: this.movements,
+                client: this.client,
+                logDate: this.logDate,
+                obs: this.obs   
+
+            }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/logs/`, {
+
+                method: "POST",
+                headers: {
+                    "Content-type":"application/json"
+                },
+                body: jsonData
+
+            })
+            .then((resp) => resp.json)
+            .then((data) => {
+
+                if(data.error){
+                    this.msg = data.error
+                    this.msgClass = 'error'
+                } else {
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+                }
+
+                window.scrollTo({
+                    top: 100,
+                    behavior: 'smooth'
+                })
+
+                setTimeout(() => {
+
+                    this.msg = null
+                    this.$router.push("/logs")
+            
+                }, 2000)
+
+            })
+            .catch((error) => {
+                console.log(error, " Erro ao registrar histórico")
+                this.msg = error
+                this.msgClass = 'error'
+            })
+
+            }
+
         },
 
         async update(e){
@@ -122,5 +197,4 @@ export default {
         }
 
     }
-}
 </script>

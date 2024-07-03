@@ -41,8 +41,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "inverter" */ '../views/Inverter.vue')
   },
   {
+    path: '/log/:id',
+    name:'log',
+    component: () => import(/* webpackChunkName: "logs" */ '../views/Log.vue')
+  },
+  {
     path: '/editInverter/:id',
-    name: "EditInv",
+    name: "editinverter",
     component: () => import(/* webpackChunkName: "EditInv" */ '../views/EditInverter.vue')
   }
 ]
