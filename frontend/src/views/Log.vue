@@ -27,8 +27,17 @@
                     <p class="text">{{ log.logDate }}</p>
                 </section>
 
+                <section class="paragraph">
+                    <p class="bold">Observações:</p>
+                    <p class="text">{{ log.obs }}</p>
+                </section>
+
             </div>
 
+        </div>
+
+        <div class="editButton">
+            <router-link :to="`/editLog/${log._id}`"><span>Editar</span></router-link>
         </div>
 
     </div>
@@ -47,7 +56,7 @@ export default {
         return {
 
             log: {},
-            apiURL: BASE_URL
+            apiURL: BASE_URL,
 
         }
 
@@ -68,30 +77,33 @@ export default {
 
             const id = this.$route.params.id
 
-            await fetch(`${this.apiURL}/api/logs/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-type":"application/json"
-                }
-            })
-            .then((resp) => resp.json())
-            .then((data) => {
-
-                this.log = data.log.map(registro => {
-
-                    if(registro.logDate){
-                        registro.logDate = new Date(registro.logDate).toLocaleDateString()
+            try {
+                
+                const response = await fetch(`${this.apiURL}/api/logs/${id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
                     }
-
-                    return log
-
                 })
 
-                
+                if(!response.ok){
+                    
+                    throw new Error(`HTTP error! status: ${response.status}`)
 
+                }
                 
+                const data = await response.json()
 
-            })
+                this.log = data.log
+
+                this.log.logDate = new Date(this.log.logDate).toLocaleDateString()
+
+            } catch (error) {
+                
+                console.error(error, "Erro ao carregar Registro");
+
+            }
+            
 
         }
 

@@ -5,7 +5,7 @@
 
         <h1>Registrar Movimentos</h1>
         
-        <LogForm :log="{}" page="newLog" btnText="Registrar"/>
+        <LogForm :log="{}" page="registerLog" btnText="Registrar"/>
 
     </div>
 </template>

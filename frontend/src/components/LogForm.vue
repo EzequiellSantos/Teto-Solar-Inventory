@@ -75,6 +75,7 @@
 import Message from '../components/Message.vue'
 import InputSubmit from '../components/form/inputSubmit.vue'
 import { BASE_URL } from '@/config'
+import { dateFormated } from 'date-fns'
 
 export default {
     name: "LogForm",
@@ -87,7 +88,7 @@ export default {
     data (){
         return {
 
-            textSn: this.textSn || null,
+            textSn: this.log.textSn || null,
             textDescription: this.log.textDescription || null,
             textType: this.log.textType || null,
 
@@ -96,6 +97,20 @@ export default {
             movements: this.log.movements || null,
             client: this.log.client || null,
             logDate: this.log.logDate || null,
+
+            /* usar a biblioteca date-fns para coinverter a data exata ao que o vue pede
+            
+                chamar  a função de busca do inversor assim que o botao deeditrar inverter for acionado
+                
+                
+                adicionar as configurações de update para atualizar os inversores
+
+                adicionar as funções de busca do input de logs por sn, nota, cliente
+
+                adiconar o campo de description ao index de busca dos inversores
+
+            */
+
             obs: this.log.obs || "",
             msg: null,
             msgClass: null,
@@ -194,6 +209,9 @@ export default {
             e.preventDefault()
 
             console.log("viiiiiixe ta atualizaaando");
+
+
+
         }
 
     }
