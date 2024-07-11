@@ -55,7 +55,6 @@ export default {
         async inputTextoBusca(){
             this.loading = true
             this.logs = []
-            console.log(this.inputBusca)
 
             try {
                 
@@ -68,12 +67,37 @@ export default {
                 .then((resp) => resp.json())
                 .then((data) => {
 
-                    console.log(data);
+                    if(data.error){
+                        this.msg = data.error
+                        this.msgClass = 'error'
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass =  'error'
+
+                    }
+
+                    setTimeout(() => {
+
+                        this.msg = null
+
+                        let inputValue = this.inputTextoBusca
+
+                        if(inputValue == "" || inputValue.length == 0){
+                            this.getLogs()
+                        }
+
+                    }, 2000)
+
+                    this.logs = data.log
 
                 })
 
             } catch (error) {
                 
+
+                console.log(error);
+
             }
 
         },

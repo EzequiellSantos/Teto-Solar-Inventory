@@ -18,7 +18,34 @@ router.get("/all", async (req, res) => {
 
 })
 
-router.get("/:id", async (req, res) => {
+//buscando registros por consulta
+router.get('/search', async (req, res) => {
+
+    try {
+        
+        const query = req.query.query
+        const log = await Logs.find({$text: {$search: `${query}`}})
+
+        if(log.length == 0){
+
+            res.json({error:"Este registro não existe :/"})
+
+        } else{
+
+            res.status(200).json({error: null, log: log})
+
+        }
+
+    } catch (error) {
+        
+        console.log(error)
+        res.status(400).json({error: "Erro na busca do registro"})
+
+    }
+
+})
+
+router.get('/:id', async (req, res) => {
 
     try {
         
@@ -38,38 +65,12 @@ router.get("/:id", async (req, res) => {
     } catch (error) {
 
         console.log(error)
-        res.status(400).json({error: "Este registro não existe" })
+        res.status(400).json({error: "Erro ao buscar registros " })
 
     }
 
 })
 
-//buscando registros por consulta
-router.get('/search', async (req, res) => {
-
-    try {
-        
-        let query = req.query.query
-        const log = await Logs.find({$text: {$search: `${query}`}})
-
-        if(log.length == 0){
-
-            res.json({ereor:"Este registro não existe :/"})
-
-        } else{
-
-            res.status(200).json({error: null, log: log})
-
-        }
-
-    } catch (error) {
-        
-        console.log(error)
-        res.status(400).json({error: "Registro não encontrado..."})
-
-    }
-
-})
 
 // enviando registros
 router.post('/', async (req, res) => {
@@ -95,7 +96,7 @@ router.post('/', async (req, res) => {
 router.put("/", async (req, res) => {
 
     const logId = req.body.id
-    const inverterId = req.body.inverterId
+    const sn = req.body.sn
     const movements = req.body.movements
     const client = req.body.client
     const logDate = req.body.logDate   
@@ -103,7 +104,7 @@ router.put("/", async (req, res) => {
 
     const log = {
         id: logId,
-        inverterId: inverterId,
+        sn: sn,
         movements: movements,
         client: client,
         logDate: logDate,
@@ -112,7 +113,7 @@ router.put("/", async (req, res) => {
 
     try{
 
-        const updateLog = await Logs.findOneAndUpdate({ _id: logId, inverterId: inverterId }, {$set: log}, { new: true })
+        const updateLog = await Logs.findOneAndUpdate({ _id: logId, sn: sn}, {$set: log}, { new: true })
         res.status(201).json({ error: null, msg: "Registro atualizado com sucesso", data: updateLog })
 
     }catch(error){

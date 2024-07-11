@@ -3,13 +3,13 @@
 
         <Message :msg="msg" :msgClass="msgClass"/>
 
-        <form id="logForm" enctype="multipart/form-data" @submit="page == 'registerLog' ? register($event) : update($event)">
+        <form id="logForm" enctype="multipart/form-data" @submit="page === 'registerLog' ? register($event) : update($event)">
 
         <input type="hidden" id="id" name="id" v-model="id">
 
         <div class="input-container">
 
-            <label for="inverterId">Inversor:</label>
+            <label for="sn">Inversor:</label>
             <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" >
 
             <p class="title-description">SN:</p>
@@ -75,7 +75,7 @@
 import Message from '../components/Message.vue'
 import InputSubmit from '../components/form/inputSubmit.vue'
 import { BASE_URL } from '@/config'
-import { dateFormated } from 'date-fns'
+import { parseISO, format, parse } from 'date-fns'
 
 export default {
     name: "LogForm",
@@ -87,41 +87,43 @@ export default {
     props: ["log", "page", "btnText", "inverter"],
     data (){
         return {
+            originalDate: '',
+            formattedDate: '',
 
-            textSn: this.log.textSn || null,
-            textDescription: this.log.textDescription || null,
-            textType: this.log.textType || null,
+            textSn: this.textSn || null,
+            textDescription: this.textDescription || null,
+            textType: this.textType || null,
 
-            id: this.log.id || null,
+            id: this.log._id || null,
             sn: this.log.sn || null,
             movements: this.log.movements || null,
             client: this.log.client || null,
             logDate: this.log.logDate || null,
 
-            /* usar a biblioteca date-fns para coinverter a data exata ao que o vue pede
-            
-                chamar  a função de busca do inversor assim que o botao deeditrar inverter for acionado
-                
-                
+            /* 
+                               
                 adicionar as configurações de update para atualizar os inversores
 
                 adicionar as funções de busca do input de logs por sn, nota, cliente
 
                 adiconar o campo de description ao index de busca dos inversores
 
+                adicionar msg de retorno e msgClass ao registrar ou editar um registro
+
             */
 
             obs: this.log.obs || "",
             msg: null,
             msgClass: null,
-            apiURL: BASE_URL
+            apiURL: BASE_URL,
         }
+    },
+    created(){
+        this.inverterIdBusca()
     },
     methods:{
 
         async inverterIdBusca () {
-
-            console.log(this.sn);
 
             await fetch(`${this.apiURL}/api/inverters/search?query=${this.sn}`, {
                 method: "GET",
@@ -132,23 +134,22 @@ export default {
             })
             .then((resp) => resp.json())
             .then((data) => {
+                
+                if(data.inverter){
 
-                
-                
-                this.textSn = data.inverter[0].sn
-                this.textDescription = data.inverter[0].description
-                this.textType = data.inverter[0].type
-                
+                    this.textSn = data.inverter[0].sn
+                    this.textDescription = data.inverter[0].description
+                    this.textType = data.inverter[0].type
+
+                }
 
             })
 
-        },
+        }, 
 
-        async register(e){
+        async register(e) {
 
             e.preventDefault()
-            console.log('teste');
-
 
             const data = {
 
@@ -201,18 +202,75 @@ export default {
                 this.msgClass = 'error'
             })
 
-            }
-
         },
 
         async update(e){
+
             e.preventDefault()
 
-            console.log("viiiiiixe ta atualizaaando");
+            const data = {
 
+                id: this.id,
+                sn: this.sn,
+                movements: this.movements,
+                client: this.client,
+                logDate: this.logDate, // testar formatISO aqui
+                obs: this.obs
+
+
+            }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/logs`, {
+                method:"PUT",
+                headers: {
+                    "Content-type":"application/json"
+                },
+                body: jsonData
+
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                    this.msg = data.error,
+                    this.msgClass = 'error'
+
+                } else{
+
+                    this.msg = data.msg,
+                    this.msgClass = 'sucess'
+
+                }
+
+                window.scrollTo({
+                    top: 100,
+                    behavior: "smooth"
+                })
+
+                setTimeout(() => {
+
+                    this.msg = null
+                    this.$router.push("/logs")
+            
+                }, 2000)               
+
+            })
+            .catch((err) => {
+
+                this.msg = err.message || "Error.. "
+                this.msgClass = 'error'
+                console.log(err)
+
+            })
 
 
         }
 
     }
+
+
+}
 </script>

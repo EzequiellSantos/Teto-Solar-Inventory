@@ -145,8 +145,6 @@ export default {
 
             e.preventDefault()
 
-            console.log("Viiiiixe ta atualizaaando");
-
             const data = {
                 id: this.id,
                 invoice: this.invoice,

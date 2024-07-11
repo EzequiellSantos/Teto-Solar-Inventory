@@ -1,8 +1,8 @@
 <template>
 
     <div class="editLog">
-        <h1>Editando Registros</h1>
 
+        <h1>Editando Registros</h1>
         <LogForm :log="log" page="editLog" btnText="Editar Log" :key="componentKey" />
 
     </div>

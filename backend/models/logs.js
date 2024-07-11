@@ -19,7 +19,7 @@ const logSchema = new mongoose.Schema({
     },
     logDate: {
 
-        type: Date
+        type: String
 
     },
     obs: {
@@ -30,6 +30,6 @@ const logSchema = new mongoose.Schema({
     
 })
 
-logSchema.index({ movements: "text", client: "text"})
+logSchema.index({ movements: "text", client: "text", sn: "text"})
 
 module.exports = mongoose.model('Logs', logSchema);

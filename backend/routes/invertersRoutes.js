@@ -66,7 +66,7 @@ router.get("/:id", async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(400).json({error: "Este inversor não existe" })
+        res.status(400).json({error: "Erro ao buscar inversor" })
     }
 
 })

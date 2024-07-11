@@ -2,7 +2,7 @@
   <div>
 
     <router-view class="container"></router-view>
-    <Footer/>
+    
      
   </div>
 

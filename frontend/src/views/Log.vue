@@ -96,8 +96,6 @@ export default {
 
                 this.log = data.log
 
-                this.log.logDate = new Date(this.log.logDate).toLocaleDateString()
-
             } catch (error) {
                 
                 console.error(error, "Erro ao carregar Registro");

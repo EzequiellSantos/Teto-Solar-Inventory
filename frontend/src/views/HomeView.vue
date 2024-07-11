@@ -3,19 +3,27 @@
     <h1>Teto Solar Energia Renonável</h1>
     <p><small>Conectamos você ao sol</small></p>
 
-    <div class="inverters-container">
+    <div id="card-links">
 
-        <div class="inverter-container" v-for="(inverter, index) in inverters" :key="index">
+      
 
-            <router-link :to="`/inverters/${inverter._id}`" class="inverter-description"> {{ inverter.description }} </router-link>
+      <router-link to="/inverters">
+        <section class="card">
 
-            <router-link :to="`/party/${inverter._id}`" class="inverter-details-btn">Ver mais</router-link>
+          <p>Inversores</p>
+          
+        </section>
+      </router-link>
 
-        </div>
+      <router-link to="/logs">
+        <section class="card">
+
+          <p>Registros</p>
+          
+        </section>
+      </router-link>
 
     </div>
-
-    <p v-if="inverters.length == 0">Não há inversores cadastrados ainda....</p>  
 
   </div>
 </template>
