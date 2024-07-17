@@ -24,15 +24,28 @@
 </script>
 
 <style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
   *{
     margin: 0;
     padding: 0;
+  }
+
+  html{
+    height: 100vh;
+    width: 100vw;
   }
 
   :root{
     --color-for-client: #ff00ff;
     --color-for-inventory: #00ff00;
     --color-for-backup: #0000ff ;
+
+    --color-main00: #F9AB01;
+    --color-main01: #0054a7;
+    
+    --font-base: "Quattrocento Sans", sans-serif;
   }
 
   #app {
@@ -45,6 +58,15 @@
 
   input {
     text-transform: uppercase;
+  }
+
+  #search-container{
+    position: fixed;
+    width: 100%;
+    right: 50%;
+    margin-top: 10px;
+    transform: translateX(50%);
+    top: 10px;
   }
 
   nav {
@@ -102,28 +124,42 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+
+    position: fixed;
+    top: 50px;
+    right: 50%;
+    transform: translateX(50%);
+
   }
 
-  .data-table-heading > div{
-    margin: 0 20px;
+  .data-description-heading{
+    width: 200px;
+  }
+
+  .data-type-heading{
+    width: 90px;
   }
 
   .data-table-body{
     margin: auto;
     max-width: 800px;
+    margin-top: 40px;
   }
 
   #data-row{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     align-content: center;
 
     margin: 30px 0;
     padding: 10px;
-    border-radius: 10px;
-    border: 1px solid ;
+    border-radius: 30px;
+    border: 1px thin ;
+
+    text-decoration: none;
+
   }
 
   .color-for-CLIENTE{
@@ -143,30 +179,49 @@
 
   .data-sn-container{
     width: 100px;
+    margin: auto;
   }
 
   .data-description-container{
-    width: 200px;
-  margin: auto;
-  text-align: center;
+    width: 300px;
+    margin: auto;
+    text-align: center;
     }
 
   .data-type-container {
-    width: 100px;
+    width: 150px;
   }
 
   .data-table-heading{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     align-content: center;
+
+    padding: 3px;
+    background-color: #e4e4e4;
+    color: #4b4b4b;
+    width: calc(100%);
+    max-width: 810px;
+    margin: auto;
+    margin-top: 20px ;
+    border-radius: 20px;
+  }
+
+  .data-sn-heading{
+    min-width: 80px;
+  }
+
+
+  .indexes-number{
+    min-width: 60px;
   }
 
   .index-container{
-    width: 40px;
-    background-color: rgba(0, 17, 0, 0.384);
+    width: 15%;
+    min-width: 20px;
     border-radius: 5px;
-    margin: 0 5px;
+    margin: 0 15px 0 10px;
   }
 
   .data-type-container{
@@ -176,6 +231,20 @@
 
   .data-container{
     margin-bottom: 100px;
+    width: calc(100% - 20px);
+    margin: auto;
+  }
+
+  @media (600px > width){
+
+    .data-description-container, .data-type-container, .data-sn-container, .index-container{
+      font-size: clamp(0.625rem, 0.3125rem + 1.6667vw, 0.9375rem);
+    }
+
+    a{
+      cursor: default;
+    }
+
   }
 
 </style>

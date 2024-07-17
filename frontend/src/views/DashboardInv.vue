@@ -4,23 +4,23 @@
 
         <NavbarInv />
 
-        <div id="search-container">
-            <input type="text" @input="inputTextoBusca" v-model="inputBusca">
-        </div>
-
-        <div>
-
-            <DataTableInv :inverters="inverters"  />
-
-        </div>
-
-        <Message :msg="msg" :msgClass="msgClass" />
+        <main>
+            <div id="search-container">
+                <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Descrição">
+            </div>
+            <div>
+                <DataTableInv :inverters="inverters"  />
+            </div>
+            <Message :msg="msg" :msgClass="msgClass" />
+        </main>
 
         <!-- <div v-else>
 
             <p>Cadastre Inversores...</p>
 
         </div> -->
+
+        <Footer/>
 
     </div>
 
@@ -31,7 +31,8 @@
 import NavbarInv from '../components/NavbarInv.vue'
 import DataTableInv from '../components/DataTableInv.vue'
 import InputInv from '../components/form/inputText.vue'
-import Message from '../components/Message.vue' 
+import Message from '../components/Message.vue'
+import Footer from '../components/Footer.vue' 
 import { BASE_URL } from '@/config'
 
 export default {
@@ -56,8 +57,8 @@ export default {
         NavbarInv,
         DataTableInv,
         InputInv,
-        Message
-
+        Message,
+        Footer
     },
     props: {
         placeholder:"S/N ou Nota"
@@ -150,3 +151,10 @@ export default {
     }
 }
 </script>
+
+
+<style scoped>
+    main{
+        padding-top: 80px;
+    }
+</style>

@@ -16,6 +16,8 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
+        <Footer />
+
     </div>
     
 </template>
@@ -25,6 +27,7 @@
     import DataTableLog from '../components/DataTableLog.vue'
     import InputLog from '../components/form/inputText.vue'
     import Message from '../components/Message.vue'
+    import Footer from '../components/Footer.vue'
     import { BASE_URL } from '@/config'
 
 export default {
@@ -32,7 +35,8 @@ export default {
         NavbarLog,
         DataTableLog,
         InputLog,
-        Message
+        Message,
+        Footer
     },
     data () {
         return {
