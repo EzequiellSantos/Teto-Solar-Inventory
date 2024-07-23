@@ -53,7 +53,7 @@ const routes = [
   {
     path: '/editLog/:id',
     name: "editlog",
-    component: () => import(/* webpackChunkName: "EditInv" */ '../views/EditLog.vue')
+    component: () => import(/* webpackChunkName: "EditLog" */ '../views/EditLog.vue')
   }
 ]
 

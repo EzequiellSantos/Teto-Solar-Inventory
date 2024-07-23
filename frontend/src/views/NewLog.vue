@@ -1,8 +1,6 @@
 <template>
     <div class="new-log">
 
-        <NavbarLogs />
-
         <h1>Registrar Movimentos</h1>
         
         <LogForm :log="{}" page="registerLog" btnText="Registrar"/>

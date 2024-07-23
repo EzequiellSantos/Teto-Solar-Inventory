@@ -75,7 +75,7 @@ export default {
                     } else {
 
                         this.msg = data.msg
-                        this.msgClass =  'error'
+                        this.msgClass =  'sucess'
 
                     }
 
@@ -83,7 +83,7 @@ export default {
 
                         this.msg = null
 
-                        let inputValue = this.inputTextoBusca
+                        let inputValue = this.inputBusca
 
                         if(inputValue == "" || inputValue.length == 0){
                             this.getLogs()
@@ -140,5 +140,7 @@ export default {
     main{
         padding-top: 80px;
     }
+
+
 
 </style>

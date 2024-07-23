@@ -22,6 +22,6 @@ const InverterSchema = new mongoose.Schema({
     }
 })
 
-InverterSchema.index({ sn: "text", invoice: "text"})
+InverterSchema.index({ sn: "text", invoice: "text", description:"text"})
 
 module.exports = mongoose.model('Inverter', InverterSchema);

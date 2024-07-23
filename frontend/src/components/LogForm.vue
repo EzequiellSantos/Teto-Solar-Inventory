@@ -10,7 +10,7 @@
         <div class="input-container-logs">
 
             <label for="sn">Inversor:</label>
-            <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" >
+            <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" placeholder="SN do inversor" >
 
             <p class="title-description">SN:</p>
             <p class="text-description">{{ this.textSn }}</p>
@@ -26,7 +26,7 @@
 
         </div>
 
-        <div class="iinput-container-logs">
+        <div class="input-container-logs">
 
             <label for="movements">Tipo de Movimentos:</label>
             <select name="movements" id="movements" v-model="movements" required>
@@ -44,7 +44,7 @@
 
         <div class="input-container-logs">
             <label for="client">Nome do Cliente:</label>
-            <input type="text" name="client" id="client" v-model="client" required>
+            <input type="text" name="client" id="client" v-model="client" required placeholder="Nome e Sobrenome">
         </div>
 
         <div class="input-container-logs">
@@ -54,10 +54,10 @@
 
         </div>
 
-        <div class="input-container-text">
+        <div class="input-container-logs">
 
             <label for="obs">Observações:</label>
-            <textarea name="obs" id="obs" cols="15" rows="0" v-model="obs">
+            <textarea name="obs" id="obs" cols="15" rows="0" v-model="obs" placeholder="Nao obrigatório">
 
             </textarea>
             
@@ -171,7 +171,7 @@ export default {
                 }
 
                 window.scrollTo({
-                    top: 100,
+                    top: 0,
                     behavior: 'smooth'
                 })
 
@@ -264,24 +264,28 @@ export default {
 
 <style scoped>
 
-    .new-log  > #nav2{
-        display: none;
-    }
 
     #formLogs{
         width: calc(100% - 20px);
         max-width: 900px;
         margin: auto;
-        background-color: aquamarine;
     }
 
-    #invForm{
+    #logForm{
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;   
     }
 
+    .title-description{
+        margin: 10px 5px 0 0 ;
+    }
+
+    .text-description{
+        color: #818181;
+        padding: 4px 0 0 0;
+    }
 
     .input-container-logs{
         margin: 13px 0;
@@ -315,6 +319,17 @@ export default {
         max-width: 300px;
     }
 
+    .input-container-logs > input[type='date']{
+        border-radius: 20px;
+        outline: 0;
+        border: none;
+        padding: 6px 10px;
+
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+    }
+
     .input-container-logs > select{
         font-size: clamp(0.625rem, 0.5417rem + 0.4444vw, 0.875rem);
         outline: none;
@@ -328,6 +343,33 @@ export default {
         min-width: 220px;
         max-width: 327px;
         background-color: #fff;
+    }
+
+    #containerText{
+        margin: 13px 0;
+        padding: 15px;
+        border-radius: 17px ;
+        background-color: rgba(199, 209, 233, 0.616);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 70px;
+    }
+
+    .input-container-logs > textarea{
+        margin: 0;
+        border-radius: 20px;
+        padding:  6px 10px;
+        text-transform: uppercase;
+
+        min-width: 200px;
+        max-width: 327px;
+    }
+
+    textarea:focus{
+        outline: 0;
+        box-shadow: 0em 0em 0.4em rgba(0, 0, 0, 0.411);
     }
 
     @media (width >= 780px) {

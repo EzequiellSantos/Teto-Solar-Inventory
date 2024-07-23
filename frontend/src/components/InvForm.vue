@@ -24,14 +24,14 @@
             <div class="input-container">
 
                 <label for="description">Descrição:</label>
-                <input type="text" name="description" id="description" required v-model="description">
+                <input type="text" name="description" id="description" required v-model="description" placeholder="Descrição do inversor">
 
             </div>
 
             <div class="input-container">
 
                 <label for="type">Tipo:</label>
-                <select name="type" id="type" v-model="type" aria-placeholder="Tste">
+                <select name="type" id="type" v-model="type">
                                        
                     <optgroup label="Escolha o tipo do Inversor">
                         <option value="ESTOQUE">Estoque da loja</option>

@@ -31,7 +31,9 @@
 
 <script>
 export default {
+
     name:"NavbarLog"
+    
 }
 </script>
 

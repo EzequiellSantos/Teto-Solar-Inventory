@@ -1,6 +1,6 @@
 <template>
     
-    <div id="data-container">
+    <div class="data-container">
 
         <Message :msg="msg" :msgClass="msgClass"/>
 
@@ -41,9 +41,7 @@
 
                     <div class="data-type-container">
                         <p>{{ log.logDate }}</p>
-                    </div>
-
-                    
+                    </div>                   
 
                 </router-link>
 
