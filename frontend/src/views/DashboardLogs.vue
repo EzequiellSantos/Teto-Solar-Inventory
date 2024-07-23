@@ -4,17 +4,15 @@
 
         <NavbarLog />
 
-        <div id="search-container">
-            <input type="text" @input="inputTextoBusca" v-model="inputBusca">
-        </div>
-
-        <div>
-
-            <DataTableLog :logs="logs" />
-
-        </div>
-
-        <Message :msg="msg" :msgClass="msgClass" />
+        <main>
+            <div id="search-container">
+                <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Cliente">
+            </div>
+            <div>
+                <DataTableLog :logs="logs" />
+            </div>
+            <Message :msg="msg" :msgClass="msgClass" />
+        </main>
 
         <Footer />
 
@@ -136,3 +134,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+    main{
+        padding-top: 80px;
+    }
+
+</style>

@@ -14,6 +14,16 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "frontend/src/components/LogForm.vue",
+			"bookmarks": [
+				{
+					"line": 281,
+					"column": 28,
+					"label": ""
+				}
+			]
 		}
 	]
 }

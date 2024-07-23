@@ -1,6 +1,6 @@
 <template>
     
-    <div id="form"></div>
+    <h1>Nada</h1>
 
 </template>
 <script>

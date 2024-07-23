@@ -1,7 +1,9 @@
 <template>
     <div class="editInverter">
 
-        <h1>Editando o Inversor</h1>
+        <div class="title">
+            <h1>Editando o Inversor</h1>
+        </div>
         <InvForm :inverter="inverter" page="editInv" btnText="Editar Inv" :key="componentKey" />
 
     </div>
@@ -58,3 +60,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+    h1{
+        padding-top: 15px;
+    }
+
+</style>

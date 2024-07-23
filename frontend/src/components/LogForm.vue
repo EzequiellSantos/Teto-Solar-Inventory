@@ -1,5 +1,5 @@
 <template>
-    <div id="form">
+    <div id="formLogs">
 
         <Message :msg="msg" :msgClass="msgClass"/>
 
@@ -7,7 +7,7 @@
 
         <input type="hidden" id="id" name="id" v-model="id">
 
-        <div class="input-container">
+        <div class="input-container-logs">
 
             <label for="sn">Inversor:</label>
             <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" >
@@ -26,7 +26,7 @@
 
         </div>
 
-        <div class="input-container">
+        <div class="iinput-container-logs">
 
             <label for="movements">Tipo de Movimentos:</label>
             <select name="movements" id="movements" v-model="movements" required>
@@ -42,12 +42,12 @@
 
         </div>
 
-        <div class="input-container">
+        <div class="input-container-logs">
             <label for="client">Nome do Cliente:</label>
             <input type="text" name="client" id="client" v-model="client" required>
         </div>
 
-        <div class="input-container">
+        <div class="input-container-logs">
 
             <label for="logDate">Data do Movimento:</label>
             <input type="date" name="logDate" id="logDate" v-model="logDate" required>
@@ -99,19 +99,6 @@ export default {
             movements: this.log.movements || null,
             client: this.log.client || null,
             logDate: this.log.logDate || null,
-
-            /* 
-                               
-                adicionar as configurações de update para atualizar os inversores
-
-                adicionar as funções de busca do input de logs por sn, nota, cliente
-
-                adiconar o campo de description ao index de busca dos inversores
-
-                adicionar msg de retorno e msgClass ao registrar ou editar um registro
-
-            */
-
             obs: this.log.obs || "",
             msg: null,
             msgClass: null,
@@ -274,3 +261,81 @@ export default {
 
 }
 </script>
+
+<style scoped>
+
+    .new-log  > #nav2{
+        display: none;
+    }
+
+    #formLogs{
+        width: calc(100% - 20px);
+        max-width: 900px;
+        margin: auto;
+        background-color: aquamarine;
+    }
+
+    #invForm{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;   
+    }
+
+
+    .input-container-logs{
+        margin: 13px 0;
+        padding: 15px;
+        border-radius: 17px ;
+        background-color: rgba(199, 209, 233, 0.616);
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .input-container-logs > label, select{
+        cursor: pointer;
+        margin-bottom: 6px;
+        font-size: 1.1em;
+    }
+
+    /* VVVVVVV ISSUE IS HERE VVVVVVV */
+
+    .input-container-logs > input[type='text']{
+        outline: none;
+        border: none;
+        padding: 6px 10px;
+        margin:0;
+        border-radius: 30px;
+        text-transform: uppercase;
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+    }
+
+    .input-container-logs > select{
+        font-size: clamp(0.625rem, 0.5417rem + 0.4444vw, 0.875rem);
+        outline: none;
+        border: none;
+        padding: 6px 10px;
+        margin:0;
+        border-radius: 30px;
+        text-transform: uppercase;
+        width: 33vw;
+        padding: 6px 15px;
+        min-width: 220px;
+        max-width: 327px;
+        background-color: #fff;
+    }
+
+    @media (width >= 780px) {
+        
+        input, select{
+            padding: 14px;
+        }
+
+    }
+
+</style>

@@ -62,7 +62,7 @@ export default {
 
 <style>
 
-    input{
+    input[type="text"]{
         background-color: rgb(255, 255, 255);
         border: 1px solid rgba(218, 218, 218, 0.116);
         width: 35vw;
@@ -73,13 +73,13 @@ export default {
         outline: none;
     }
 
-    input::placeholder{
+    input[type="text"]::placeholder{
         text-align: center;
         text-transform: none;
         font-size: clamp(0.8125rem, 0.7292rem + 0.4444vw, 1.0625rem);
     }
 
-    input:focus{
+    input[type="text"]:focus{
         box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.116);
     }
 

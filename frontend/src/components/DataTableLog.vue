@@ -13,11 +13,11 @@
             </div>
 
             <div class="data-description-heading">
-                Descrição:
+                Movimento:
             </div>
 
             <div class="data-type-heading">
-                Movimento:
+                Data:
             </div>
         </div>
 
@@ -33,6 +33,14 @@
 
                     <div class="data-sn-container">
                         <p>{{ log.sn }}</p>
+                    </div>
+
+                    <div class="data-description-container">
+                        <p>{{ log.movements }}</p>
+                    </div>
+
+                    <div class="data-type-container">
+                        <p>{{ log.logDate }}</p>
                     </div>
 
                     
@@ -76,3 +84,12 @@ export default {
     }            
 }
 </script>
+
+<style scoped>
+
+
+    a:active{
+        color: rgb(255, 230, 119);
+    }
+
+</style>

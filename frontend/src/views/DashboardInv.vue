@@ -6,7 +6,7 @@
 
         <main>
             <div id="search-container">
-                <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Descrição">
+                <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Nota Fiscal">
             </div>
             <div>
                 <DataTableInv :inverters="inverters"  />

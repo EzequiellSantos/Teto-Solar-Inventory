@@ -2,24 +2,15 @@
   <div>
 
     <router-view class="container"></router-view>
-    
-     
+      
   </div>
 
 </template>
 
 <script>
 
-  import Footer from './components/Footer.vue'
-  import Navbar from './components/NavbarInv.vue'
-
   export default {
-      name: "App",
-      components: {
-        Footer,
-        Navbar
-      }
-      
+    name: "App",  
   }
 </script>
 
@@ -30,6 +21,7 @@
   *{
     margin: 0;
     padding: 0;
+    cursor: default;
   }
 
   html{
@@ -38,9 +30,10 @@
   }
 
   :root{
-    --color-for-client: #ff00ff;
-    --color-for-inventory: #00ff00;
-    --color-for-backup: #0000ff ;
+    --color-for-client: #a2fdb6;
+    --color-for-inventory: #80d5fd;
+    --color-for-backup: #d470fc ;
+    --color-for-garanted: #faf888 ;
 
     --color-main00: #F9AB01;
     --color-main01: #0054a7;
@@ -60,13 +53,23 @@
     text-transform: uppercase;
   }
 
+  input[type=text]{
+    cursor: text;
+  }
+
   #search-container{
     position: fixed;
     width: 100%;
+    max-width: 250px;
+    margin: auto;
     right: 50%;
     margin-top: 10px;
     transform: translateX(50%);
     top: 10px;
+  }
+
+  a:active{
+    color: #fff;
   }
 
   nav {
@@ -106,16 +109,55 @@
   /* configurações de notificação de resposta */
 
   .sucess{
+    position: fixed;
+    top: 50px;
+    right: 50%;
+    transform: translateX(50%);
+
     max-width: 300px;
-    border-radius: 30px;
-    border-color: #42b983;
+    border-radius: 6px 20px 6px 20px;
+    background-color: #9affb3;
+    color: rgb(15, 71, 15);
+    border-color: #30ff15;
     box-shadow: 
-      0em 0em 3em #2cff61af,
-      inset 0em 0em 0.2em #777777
+      0em 0em 0.8em #7aff9bbb,
+      inset 0em 0em 0.2em #7777777c
     ;
     margin: auto;
-    margin-top: 50px;
-    padding: 20px;
+    padding: 13px 20px;
+    font-size: 1.2em;
+    animation: born 0.3s  ease-in-out;
+  }
+
+  .error{
+    position: fixed;
+    top: 50px;
+    right: 50%;
+    transform: translateX(50%);
+
+    max-width: 300px;
+    border-radius: 6px 20px 6px 20px;
+    background-color: #ffacac;
+    color: rgb(71, 15, 15);
+    border-color: #ff1515;
+    box-shadow: 
+      0em 0em 0.8em #ff7a7abb,
+      inset 0em 0em 0.2em #7777777c
+    ;
+    margin: auto;
+    padding: 13px 20px;
+    font-size: 1.2em;
+    animation: born 0.3s ease-in-out;
+}
+
+  @keyframes born {
+    0%{
+      top: 20px;
+    }
+
+    100%{
+      top: 50px;
+    }
   }
 
   /* configurações dos DataTable de Inv + Log */
@@ -144,6 +186,7 @@
     margin: auto;
     max-width: 800px;
     margin-top: 40px;
+    text-transform: uppercase;
   }
 
   #data-row{
@@ -153,7 +196,7 @@
     align-items: center;
     align-content: center;
 
-    margin: 30px 0;
+    margin: 20px 0;
     padding: 10px;
     border-radius: 30px;
     border: 1px thin ;
@@ -164,17 +207,26 @@
 
   .color-for-CLIENTE{
     border-color: var(--color-for-client);
-    box-shadow: 0.0em 0.0em 0.4em var(--color-for-client);
+    background-color: var(--color-for-client);
+    color: #000;
   }
 
   .color-for-ESTOQUE{
     border-color: var(--color-for-inventory);
-    box-shadow: 0.0em 0.0em 0.4em var(--color-for-inventory);
+    background-color: var(--color-for-inventory);
+    color: #000;
   }
 
   .color-for-BACKUP{
     border-color: var(--color-for-backup);
-    box-shadow: 0.0em 0.0em 0.4em var(--color-for-backup);
+    background-color: var(--color-for-backup);
+    color: #fff;
+  }
+
+  .color-for-GARANTIA{
+    border-color: var(--color-for-garanted);
+    background-color: var(--color-for-garanted);
+    color: #000;
   }
 
   .data-sn-container{
@@ -199,9 +251,9 @@
     align-content: center;
 
     padding: 3px;
-    background-color: #e4e4e4;
+    background-color: #f2f2f2;
     color: #4b4b4b;
-    width: calc(100%);
+    width: calc(100% - 10px);
     max-width: 810px;
     margin: auto;
     margin-top: 20px ;
@@ -235,7 +287,7 @@
     margin: auto;
   }
 
-  @media (600px > width){
+  @media (600px >= width){
 
     .data-description-container, .data-type-container, .data-sn-container, .index-container{
       font-size: clamp(0.625rem, 0.3125rem + 1.6667vw, 0.9375rem);
