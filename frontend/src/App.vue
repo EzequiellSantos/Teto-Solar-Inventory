@@ -30,10 +30,13 @@
   }
 
   :root{
-    --color-for-client: #a2fdb6;
+    --color-for-client: #a5fda2;
     --color-for-inventory: #80d5fd;
     --color-for-backup: #d470fc ;
-    --color-for-garanted: #faf888 ;
+    --color-for-garanted: #88faca ;
+    --color-for-new-system: #88a3fa;
+    --color-for-autorizaded: #fa8891;
+    
 
     --color-main00: #F9AB01;
     --color-main01: #0054a7;
@@ -87,6 +90,7 @@
 
   .container{
     margin-top: 0px;
+    position: relative;
   }
 
   .links-menu-container{
@@ -228,6 +232,18 @@
     color: #000;
   }
 
+  .color-for-SISTEMA-NOVO{
+    border-color: var(--color-for-new-system);
+    background-color: var(--color-for-new-system);
+    color: #fff;
+  }
+
+  .color-for-AUTORIZADA{
+    border-color: var(--color-for-autorizaded);
+    background-color: var(--color-for-autorizaded);
+    color: #fff;
+  }
+
   .data-sn-container{
     width: 100px;
     margin: auto;
@@ -351,6 +367,16 @@
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(219, 219, 219) 10%, var(--color-for-backup));
+    height: 100vh;
+  }
+
+  .background-for-SISTEMA-NOVO{
+    background: linear-gradient(150deg, rgb(219, 219, 219) 10%, var(--color-for-new-system));
+    height: 100vh;
+  }
+
+  .background-for-AUTORIZADA{
+    background: linear-gradient(150deg, rgb(219, 219, 219) 10%, var(--color-for-autorizaded));
     height: 100vh;
   }
 
