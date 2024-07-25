@@ -1,27 +1,25 @@
 {
   "version": 2,
+  "name": "frontend",
   "builds": [
     {
-      "src": "frontend/package.json",
+      "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "frontend/dist" }
-    },
-    {
-      "src": "backend/(.*).js",
-      "use": "@vercel/node"
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/server.js" },
     {
-      "src": "/(.*).js",
+      "src": "frontend/(.*).js",
       "headers": { "content-type": "application/javascript" },
-      "dest": "/frontend/$1.js"
+      "dest": "/$1.js"
     },
     {
-      "src": "frontend/(.*).css",
+      "src": "frontend/(.*).js",
       "headers": { "content-type": "text/css" },
-      "dest": "frontend/$1.css"
+      "dest": "frotend/$1.css"
     },
     {
       "handle": "filesystem"
@@ -32,5 +30,4 @@
     }
   ]
 }
-
 
