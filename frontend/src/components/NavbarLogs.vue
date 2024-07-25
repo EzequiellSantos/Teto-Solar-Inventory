@@ -45,7 +45,6 @@ export default {
         padding: 10px;
         height: 50px;
         background-color: var(--color-main00);
-        opacity: 0.8;
     }
 
     #register2{

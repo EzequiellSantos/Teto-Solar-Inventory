@@ -87,7 +87,7 @@ export default {
 
 
     a:active{
-        color: rgb(255, 230, 119);
+        color: rgb(250, 250, 250);
     }
 
 </style>

@@ -32,6 +32,7 @@
             <select name="movements" id="movements" v-model="movements" required>
                 <optgroup label="Escolha o tipo de Movimento">
                     <option value="AUTORIZADA">Saiu para autorizada</option>
+                    <option value="CLIENTE">Saiu para cliente</option>
                     <option value="ESTOQUE">Chegou de compra ou autorizada</option>
                     <option value="SISTEMA-NOVO">Novo sistema</option>
                     <option value="BACKUP">Saiu para backup</option>
@@ -159,28 +160,43 @@ export default {
                 body: jsonData
 
             })
-            .then((resp) => resp.json)
+            .then((resp) => resp.json())
             .then((data) => {
 
                 if(data.error){
-                    this.msg = data.error
+
+                    this.msg = data.error,
                     this.msgClass = 'error'
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                
+                    }, 2000)
+
                 } else {
-                    this.msg = data.msg
+
+                    this.msg = data.msg,
                     this.msgClass = 'sucess'
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push("/logs")
+                
+                    }, 2000)
+
                 }
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                })
-
-                setTimeout(() => {
-
-                    this.msg = null
-                    this.$router.push("/logs")
-            
-                }, 2000)
 
             })
             .catch((error) => {
@@ -225,24 +241,35 @@ export default {
                     this.msg = data.error,
                     this.msgClass = 'error'
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                
+                    }, 2000)                    
+
                 } else{
 
                     this.msg = data.msg,
                     this.msgClass = 'sucess'
 
-                }
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    })
 
-                window.scrollTo({
-                    top: 100,
-                    behavior: "smooth"
-                })
+                    setTimeout(() => {
 
-                setTimeout(() => {
+                        this.msg = null
+                        this.$router.push("/logs")
+                
+                    }, 2000)
 
-                    this.msg = null
-                    this.$router.push("/logs")
-            
-                }, 2000)               
+                }               
 
             })
             .catch((err) => {
