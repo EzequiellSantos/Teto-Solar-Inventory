@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 
 const app = express();
+app.use(cors())
 
 // Middlewares
 app.use(bodyParser.json());
@@ -23,8 +24,6 @@ mongoose.connect(`mongodb+srv://${DBUser}:${DBPassword}@cluster0.t9g7g6t.mongodb
 const userRoutes = require('./routes/userRoutes');
 const invertersRoutes = require('./routes/invertersRoutes')
 const logRoutes = require('./routes/logRoutes')
-
-app.use(cors())
 
 app.use('/api/users', userRoutes);
 app.use('/api/inverters', invertersRoutes)
