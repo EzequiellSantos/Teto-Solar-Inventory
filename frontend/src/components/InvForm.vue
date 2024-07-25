@@ -114,24 +114,35 @@ export default {
                     this.msg = data.error
                     this.msgClass = "error"
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        // window.location.reload(true)
+                
+                    }, 2000)
+
                 } else {
 
                     this.msg = data.msg
                     this.msgClass = 'sucess'
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push("/inverters")
+                
+                    }, 2000)
                 }
-
-                window.scrollTo({
-                    top: 100,
-                    behavior: 'smooth'
-                })
-
-                setTimeout(() => {
-
-                    this.msg = null
-                    this.$router.push("/inverters")
-            
-                }, 2000)
 
             })
             .catch((error) => {
@@ -169,24 +180,35 @@ export default {
                     this.msg = data.error
                     this.msgClass = 'error'
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                
+                    }, 2000)
+
                 } else {
 
                     this.msg = data.msg
                     this.msgClass = 'sucess'
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push("/inverters")
+                
+                    }, 2000)
+
                 }
-
-                window.scrollTo({
-                    top: 100,
-                    behavior: "smooth"
-                })
-
-                setTimeout(() => {
-
-                    this.msg = null
-                    this.$router.push("/inverters")
-            
-                }, 2000)
 
             })
             .catch((err) => {

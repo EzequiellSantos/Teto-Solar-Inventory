@@ -14,12 +14,6 @@
             <Message :msg="msg" :msgClass="msgClass" />
         </main>
 
-        <!-- <div v-else>
-
-            <p>Cadastre Inversores...</p>
-
-        </div> -->
-
         <Footer/>
 
     </div>

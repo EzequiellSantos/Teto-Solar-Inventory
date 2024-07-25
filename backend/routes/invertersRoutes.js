@@ -65,8 +65,10 @@ router.get("/:id", async (req, res) => {
         }
 
     } catch (error) {
+
         console.log(error)
         res.status(400).json({error: "Erro ao buscar inversor" })
+
     }
 
 })
@@ -76,13 +78,23 @@ router.post('/', async (req, res) => {
 
     const { invoice, sn, description, type } = req.body
 
+    const snExists = await Inverter.findOne({sn: sn})
+
+    if(snExists){
+
+        return res.status(400).json({error: 'Ja existe um Inversor com este SN '})
+
+    }
+
     try {
+
         const inverter = new Inverter({ invoice, sn, description, type})
         await inverter.save()
         res.status(201).json({error: null, msg:'Inversor Registrado!', data: inverter})
+
     } catch (error) {
         
-        res.status(400).json({ error: "Erro ao cadastrar" });
+        res.status(400).json({ error: error });
         console.log(error)
 
     }

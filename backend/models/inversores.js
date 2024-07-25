@@ -5,12 +5,10 @@ const InverterSchema = new mongoose.Schema({
     invoice: {
         type: String,
         required: true,
-        unique: true
     },
     sn: {
         type: String,
         required: true,
-        unique: true
     },
     description: {
         type: String,
