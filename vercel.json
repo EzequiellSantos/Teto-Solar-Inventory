@@ -12,7 +12,7 @@
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/index.js" },
+    { "src": "/api/(.*)", "dest": "/backend/server.js" },
     {
       "src": "/(.*).js",
       "headers": { "content-type": "application/javascript" },
