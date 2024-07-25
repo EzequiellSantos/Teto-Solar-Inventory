@@ -19,14 +19,6 @@
         </section>
       </router-link>
 
-<!--       <router-link to="/logs">
-        <section class="card">
-
-          <p>Registros</p>
-          
-        </section>
-      </router-link> -->
-
     </div>
 
     <footer>
@@ -43,55 +35,6 @@ import {BASE_URL} from '@/config'
 
 export default {
   name: 'HomeView',
-  data() {
-
-    return {
-        inverters: [],
-        apiURL: BASE_URL
-    }
-
-  },
-  created() {
-
-    this.getInverters()
-
-  },
-  methods: {
-
-    async getInverters() {
-
-        try {
-            
-            const response = await fetch(`${this.apiURL}/api/inverters/all`, {
-
-                method: "GET",
-                headers: {
-
-                    "Content-Type": "application/json"
-
-                }
-
-            })
-
-            if (!response.ok) {
-
-                throw new Error(`error HTTP status: ${response.status}`)
-
-            }
-            
-            const data = await response.json()
-
-
-        } catch (error) {
-            
-            console.error('Erro ao carregar os inversores:', error);
-
-        }
-
-    }
-
-  }  
-
 }
 </script>
 
@@ -197,11 +140,50 @@ export default {
     bottom: 3px;
   }
 
+  @media (800px <= width <= 1100px){
+
+    #header::before{
+      top: -1000px;
+      width: 470px;
+      height: 1800px;
+    }
+
+    /*  top: -900px;
+    right: 45%;
+    width: 440px;
+    height: 1600px; */
+
+    #header::after{
+      top: -1170px;
+      width: 530px;
+      height: 2000px;
+      right: 10%;
+    }
+
+  }
+
 
   @media (800px < width) {
     
     h1{
       font-size: 2.5em;
+    }
+
+  }
+
+  @media (1100px < width){
+
+
+    #header::before{
+      top: -1000px;
+      width: 470px;
+      height: 1800px;
+      right: 40%;
+    }
+
+    #header::after{
+      top: -1040px; 
+      right: 20%;
     }
 
   }

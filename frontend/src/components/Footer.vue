@@ -74,9 +74,9 @@ export default ({
         height: 55px;        
         padding: 0px;
         border-radius: 30px;
-        backdrop-filter: blur(15px);
+        backdrop-filter: blur(10px);
         color: rgb(0, 0, 160);
-        background-color: rgba(228, 228, 228, 0.705);
+        background-color: rgba(155, 155, 155, 0.123);
     }
 
     .section-nav > a{
