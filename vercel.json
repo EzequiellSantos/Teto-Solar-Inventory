@@ -13,7 +13,23 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/backend/index.js" },
-    { "src": "/(.*)", "dest": "/frontend/$1" }
+    {
+      "src": "/(.*).js",
+      "headers": { "content-type": "application/javascript" },
+      "dest": "/frontend/$1.js"
+    },
+    {
+      "src": "frontend/(.*).css",
+      "headers": { "content-type": "text/css" },
+      "dest": "frontend/$1.css"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/index.html"
+    }
   ]
 }
 
