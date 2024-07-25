@@ -7,7 +7,7 @@
       "config": { "distDir": "frontend/dist" }
     },
     {
-      "src": "backend/server.js",
+      "src": "backend/(.*).js",
       "use": "@vercel/node"
     }
   ],
