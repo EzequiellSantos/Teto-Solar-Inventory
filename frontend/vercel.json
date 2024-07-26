@@ -1,0 +1,32 @@
+{
+"version": 2,
+"name": "frontend",
+"builds": [
+    {
+    "src": "package.json",
+    "use": "@vercel/static-build",
+    "config": {
+        "distDir": "dist"
+    }
+    }
+],
+"routes": [
+    {
+    "src": "/(.*).js",
+    "headers": { "content-type": "application/javascript" },
+    "dest": "/$1.js"
+    },
+    {
+    "src": "/(.*).css",
+    "headers": { "content-type": "text/css" },
+    "dest": "/$1.css"
+    },
+    {
+    "handle": "filesystem"
+    },
+    {
+    "src": "/(.*)",
+    "dest": "/index.html"
+    }
+]
+}
