@@ -448,7 +448,7 @@
     text-transform: uppercase;
     z-index: 1;
     margin: 0 0 20px 0;
-    width: 50%;
+    width: 70%;
     margin: auto;
     padding: 15px;
     color: #000;

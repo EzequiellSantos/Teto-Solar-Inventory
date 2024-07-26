@@ -45,7 +45,7 @@
 
         <div class="input-container-logs">
             <label for="client">Nome do Cliente:</label>
-            <input type="text" name="client" id="client" v-model="client" required placeholder="Nome e Sobrenome">
+            <input type="text" name="client" id="client" v-model="client"   placeholder="Nome e Sobrenome">
         </div>
 
         <div class="input-container-logs">

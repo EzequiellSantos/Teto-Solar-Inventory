@@ -3,7 +3,7 @@
 
     <div id="body" :class="getClassForType(inverter.type)">
         <div class="inverter">
-            <h1 class="invoice" v-if="inverter.invoice">
+            <h1 class="invoice" v-if="inverter.invoice != 0">
                 {{ inverter.invoice }}
             </h1>
             <h1 class="invoice" v-else>
