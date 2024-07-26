@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://192.168.0.29:3000'
+export const BASE_URL = 'https://backend-teto-solar.vercel.app'

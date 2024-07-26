@@ -5,7 +5,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 
 const app = express();
-app.use(cors())
+
+const corsOptions = {
+  origin: '*', // Substitua pelo domínio do frontend
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions))
+app.options('/api/inverters/all', cors(corsOptions)); // Habilita CORS para requisições OPTIONS
+
 
 // Middlewares
 app.use(bodyParser.json());
