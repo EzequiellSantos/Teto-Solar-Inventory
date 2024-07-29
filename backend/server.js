@@ -7,7 +7,7 @@ const cors = require('cors')
 const app = express();
 
 const corsOptions = {
-  origin: 'https://teto-solar.vercel.app/', // Substitua pelo domínio do frontend
+  origin: '*', // Substitua pelo domínio do frontend
   optionsSuccessStatus: 200
 };
 
