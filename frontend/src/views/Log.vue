@@ -10,6 +10,19 @@
                 <p> {{ this.textDescription}} </p>
                 <p> {{ this.textType }} </p>
             </div>
+
+            <div v-if="log.sn === undefined">
+
+                <div class="spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+            </div>
+  
             <div class="log-container">
         
                 <div class="details">
@@ -175,5 +188,8 @@ export default {
 
     }
 
+    .spinner{
+        top: 55%;
+    }
 
 </style>
