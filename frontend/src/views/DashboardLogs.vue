@@ -8,7 +8,19 @@
             <div id="search-container">
                 <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Cliente">
             </div>
-            <div>
+            <div> 
+
+                <div v-if="logs.length == 0">
+                    <div class="spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+
+
                 <DataTableLog :logs="logs" />
             </div>
             <Message :msg="msg" :msgClass="msgClass" />

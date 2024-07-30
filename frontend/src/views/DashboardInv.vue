@@ -9,6 +9,17 @@
                 <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Nota Fiscal">
             </div>
             <div>
+
+                <div v-if="inverters.length == 0">
+                    <div class="spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+
                 <DataTableInv :inverters="inverters"  />
             </div>
             <Message :msg="msg" :msgClass="msgClass" />
@@ -148,7 +159,9 @@ export default {
 
 
 <style scoped>
+
     main{
         padding-top: 80px;
     }
+
 </style>
