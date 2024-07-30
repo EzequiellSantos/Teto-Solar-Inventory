@@ -9,6 +9,19 @@
             <h1 class="invoice" v-else>
                 Sem Nota Fiscal
             </h1>
+
+            <div v-if="this.inverter._id == null">
+
+                <div class="spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+            </div>
+            
             <div class="inverter-container">
                 <div class="details">
                     <section class="paragraph">
@@ -126,6 +139,10 @@ export default {
 
     footer{
         display: none;
+    }
+
+    .spinner{
+        top: 55%;
     }
 
 </style>

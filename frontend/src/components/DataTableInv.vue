@@ -140,13 +140,4 @@ export default {
 
 <style scoped>
 
-    /* .data-table-body{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        min-width: 100%;
-    } */
-
-
 </style>
