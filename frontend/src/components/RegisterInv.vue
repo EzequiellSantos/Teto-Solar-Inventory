@@ -1,6 +1,6 @@
 <template>
 
-    <h1>Pagina de Registrar Inversores</h1>    
+    <h1>none</h1>    
 
 </template>
 

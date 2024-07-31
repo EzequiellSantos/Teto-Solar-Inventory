@@ -1,6 +1,6 @@
 <template>
     
-    <h1>Nada</h1>
+    <h1>none</h1>
 
 </template>
 <script>
