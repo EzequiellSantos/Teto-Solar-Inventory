@@ -3,6 +3,7 @@
     <footer>
 
         <section class="section-nav">
+
             <router-link to="/inverters" :class="getLinkClass('/inverters', '/registerInv', '/inverter/')">
             
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="35" height="35" viewBox="0 0 100.000000 100.000000" preserveAspectRatio="xMidYMid meet">
@@ -17,6 +18,7 @@
                 </svg>
 
             </router-link>
+
             <router-link to="/logs" :class="getLinkClass('/logs', '/registerLog')">
 
                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 128 128">
@@ -24,27 +26,28 @@
                 </svg>
 
             </router-link>
-        </section>
 
-        <!-- <p><small>Teto Solar 2024 &copy; </small></p> -->
+        </section>
 
     </footer>
 
 </template>
 
 <script>
-export default ({
 
-    name: "Footer",
-    methods: {
-        getLinkClass(route, routeTw, routeTr){
-            return {
-                'active-link': this.$route.path === route || this.$route.path === routeTw || this.$route.path === routeTr
+    export default ({
+
+        name: "Footer",
+        methods: {
+            getLinkClass(route, routeTw, routeTr){
+                return {
+                    'active-link': this.$route.path === route || this.$route.path === routeTw || this.$route.path === routeTr
+                }
             }
         }
-    }
 
-})
+    })
+
 </script>
 
 <style scoped>
@@ -81,7 +84,6 @@ export default ({
 
     .section-nav > a{
         padding: 5px 15px ;
-
         border-radius: 30px;
         color: #2e2e2e;
 
@@ -97,7 +99,6 @@ export default ({
     }
 
     .active-link{        
-/*         width: 40px; */
         border-radius: 30px;
         background-color: var(--color-main01);
         transition: background .7s ease-in-out;

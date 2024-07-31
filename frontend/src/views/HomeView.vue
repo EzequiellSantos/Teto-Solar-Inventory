@@ -2,21 +2,24 @@
   <div class="home">
 
     <div id="header">
+
       <h1>Teto Solar</h1>
       <h2>Energia Renovável</h2>
       <p><small>Conectamos você ao sol</small></p>
+
     </div>
 
     <div id="card-links">
 
       <router-link to="/inverters">
+
         <section class="card">
 
           <img class="icon-links" src="../inverter_img100.png" alt="inverter">
-
           <p>Inversores</p>
           
         </section>
+
       </router-link>
 
     </div>
@@ -29,13 +32,15 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-import {BASE_URL} from '@/config'
 
-export default {
-  name: 'HomeView',
-}
+  // @ is an alias to /src
+  import HelloWorld from '@/components/HelloWorld.vue'
+  import {BASE_URL} from '@/config'
+
+  export default {
+    name: 'HomeView',
+  }
+
 </script>
 
 <style scoped>
@@ -97,7 +102,6 @@ export default {
   }
 
   #card-links{
-
     margin: auto;
     margin-top: 100px;
     padding: 10px;
@@ -107,7 +111,6 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 40px;
-
   }
 
   a{
@@ -130,7 +133,6 @@ export default {
     align-items: center;
   }
 
-
   footer{ 
     width: 100%;
     text-align: center;
@@ -148,11 +150,6 @@ export default {
       height: 1800px;
     }
 
-    /*  top: -900px;
-    right: 45%;
-    width: 440px;
-    height: 1600px; */
-
     #header::after{
       top: -1170px;
       width: 530px;
@@ -161,7 +158,6 @@ export default {
     }
 
   }
-
 
   @media (800px < width) {
     
@@ -172,7 +168,6 @@ export default {
   }
 
   @media (1100px < width){
-
 
     #header::before{
       top: -1000px;

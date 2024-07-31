@@ -13,10 +13,11 @@
     import LogForm from '../components/LogForm.vue'
     import NavbarLogs from '../components/NavbarLogs.vue'
 
-export default {
-    components: {
-        LogForm,
-        NavbarLogs
+    export default {
+        components: {
+            LogForm,
+            NavbarLogs
+        }
     }
-}
+    
 </script>

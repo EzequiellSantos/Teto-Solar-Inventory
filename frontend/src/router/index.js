@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/registerInv',
     name:'registerInv',
-    component: () => import(/* webpackChunkName: "register" */ '../views/NewInv.vue')
+    component: () => import(/* webpackChunkName: "invForm" */ '../views/NewInv.vue')
   },
   {
     path: '/inverter/:id',
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/log/:id',
     name:'log',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/Log.vue')
+    component: () => import(/* webpackChunkName: "log" */ '../views/Log.vue')
   },
   {
     path: '/editInverter/:id',

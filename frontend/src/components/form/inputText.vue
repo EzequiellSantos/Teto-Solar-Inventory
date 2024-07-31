@@ -3,34 +3,34 @@
     <input class="input-search" type="text" name="nputTextBuca" id="inputTextoBusca" @input="coletarPesquisa" 
     v-model="inputValue" :placeholder="placeholder">
 
-
 </template>
 
 <script>
 
-import {BASE_URL} from '@/config'
+    import {BASE_URL} from '@/config'
 
-export default {
-    name: "InputText",
-    data(){
+    export default {
+        name: "InputText",
+        data(){
 
-        return {
-            apiURL: BASE_URL,
-            
-        }
+            return {
+                apiURL: BASE_URL,
+                
+            }
 
-    },
-    props: ['inverters'],
-    methods: {
-
-        coletarPesquisa(event){
-            const search = event.target.value
-            console.log(search);
-            return search
         },
+        props: ['inverters'],
+        methods: {
 
-        async inputTextoBusca(){
-            // console.log("Input foi mudado", event.target.value) 
+            coletarPesquisa(event){
+
+                const search = event.target.value
+                console.log(search);
+                return search
+                
+            },
+
+            async inputTextoBusca(){
 
                 const data = {
                     search: this.search
@@ -51,13 +51,11 @@ export default {
 
                 })
 
-
-            
+            }
 
         }
-
     }
-}
+
 </script>
 
 <style>

@@ -19,6 +19,7 @@
             <div class="data-type-heading">
                 Data:
             </div>
+
         </div>
 
         <div class="data-table-body">
@@ -49,42 +50,42 @@
 
         </div>
 
-
     </div>
 
 </template>
+
 <script>
 
-import Message from '../components/Message.vue'
-import {BASE_URL} from '@/config'
+    import Message from '../components/Message.vue'
+    import {BASE_URL} from '@/config'
 
-export default {
-    name: "DataTableLog",
-    props: ['logs'],
-    components: {
-        Message
-    },
-    data () {
-        return {
+    export default {
+        name: "DataTableLog",
+        props: ['logs'],
+        components: {
+            Message
+        },
+        data () {
+            return {
 
-            msg: null,
-            msgClass: null,
-            apiURL: BASE_URL
+                msg: null,
+                msgClass: null,
+                apiURL: BASE_URL
 
-        }
-    },
-    methods: {
+            }
+        },
+        methods: {
 
-        getClassForType(type){
-            return `color-for-${type}`
-        }
+            getClassForType(type){
+                return `color-for-${type}`
+            }
 
-    }            
-}
+        }            
+    }
+
 </script>
 
 <style scoped>
-
 
     a:active{
         color: rgb(250, 250, 250);

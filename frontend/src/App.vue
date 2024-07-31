@@ -1,4 +1,5 @@
 <template>
+
   <div>
 
     <router-view class="container"></router-view>
@@ -12,6 +13,7 @@
   export default {
     name: "App",  
   }
+
 </script>
 
 <style>
@@ -105,9 +107,7 @@
   }
 
   .links-menu-container  span {
-
     margin: 0px 15px ;
-
   }
 
   /* configurações de notificação de resposta */
@@ -152,7 +152,7 @@
     padding: 13px 20px;
     font-size: 1.2em;
     animation: born 0.3s ease-in-out;
-}
+  }
 
   @keyframes born {
     0%{
@@ -175,7 +175,6 @@
     top: 50px;
     right: 50%;
     transform: translateX(50%);
-
   }
 
   .data-description-heading{
@@ -205,9 +204,7 @@
     margin: 20px 0;
     padding: 10px;
     border-radius: 30px;
-
     text-decoration: none;
-
   }
 
   .color-for-CLIENTE{
@@ -304,6 +301,8 @@
 
   @media (600px >= width){
 
+    /* settings for media queries (tablets ands computers) */
+
     .data-description-container, .data-type-container, .data-sn-container, .index-container{
       font-size: clamp(0.625rem, 0.3125rem + 1.6667vw, 0.9375rem);
     }
@@ -314,38 +313,7 @@
 
   }
 
-  /* configs for edit and navigation log and inverter */
-
-  #navigation{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    max-width: 500px;
-    margin: auto;
-  }
-
-  .editButton, .voltarButton{
-    background-color: rgba(255, 255, 255, 0.952);
-    width: 50px;
-    height: 48px;
-    margin: auto;
-    margin-top: 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .voltarButton > a{
-    margin-top: 5px;
-    margin-right: 2px;
-  }
-
-  a:active > svg{
-    transform: scale(1.2);
-  }
-
+  /* colors for each type */
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-backup));
@@ -382,6 +350,40 @@
     height: 100vh;
   }
 
+  /* configs for edit and navigation log and inverter */
+
+  #navigation{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 500px;
+    margin: auto;
+  }
+
+  .editButton, .voltarButton{
+    background-color: rgba(255, 255, 255, 0.952);
+    width: 50px;
+    height: 48px;
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .voltarButton > a{
+    margin-top: 5px;
+    margin-right: 2px;
+  }
+
+  a:active > svg{
+    transform: scale(1.2);
+  }
+
+  /* settings for views unique */
+
   .inverter{
     padding: 15px;
     max-width: 800px;
@@ -408,8 +410,9 @@
     
     color: #000;
     box-shadow: 
-        0 0.3em 2em rgba(119, 119, 119, 0.178),
-        0em 0.03em 0.2em inset rgba(202, 202, 202, 0.144);
+      0 0.3em 2em rgba(119, 119, 119, 0.178),
+      0em 0.03em 0.2em inset rgba(202, 202, 202, 0.144)
+    ;
     background-color: #fff;
     margin-top: 50px;
     border-radius: 20px;
@@ -462,7 +465,6 @@
     height: 10.7px;
     left: 50%;
     top: 170%;
-   /*  transform: translate(50%, 50%); */
   }
 
   .spinner div {

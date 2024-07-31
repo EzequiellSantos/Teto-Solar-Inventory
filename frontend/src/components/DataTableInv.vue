@@ -25,9 +25,10 @@
         <div class="data-table-body">
 
             
-                <div v-for="(inverter, index) in inverters" :key="index" >
+            <div v-for="(inverter, index) in inverters" :key="index" >
 
-                    <router-link id="data-row" :class="getClassForType(inverter.type)" :to="`/inverter/${ inverter._id }`" >  
+                <router-link id="data-row" :class="getClassForType(inverter.type)" :to="`/inverter/${ inverter._id }`" >
+                  
                     <div class="index-container">
                         <p>{{ index + 1}}</p>
                     </div>
@@ -37,9 +38,7 @@
                     </div>
 
                     <div class="data-description-container">
-                        
                         <p>{{ inverter.description }}</p>
-                        
                     </div>
 
                     <div class="data-type-container">
@@ -54,10 +53,10 @@
                         <button class="remove-btn" @click="remove(inverter._id)">Remover Inversor</button> -->
 
                     </div>
-                    </router-link>
-                </div>
-            
 
+                </router-link>
+
+            </div>
 
         </div>
 
@@ -66,76 +65,80 @@
 </template>
 
 <script>
-import Message from "../components/Message.vue"
-import {BASE_URL} from '@/config'
 
-export default {
-    name:"DataTableInv", 
-    props: ['inverters'],
-    components: {
-        Message
-    },
-    data() {
-        return {
-            msgClass: null,
-            msg: null,
-            apiURL: BASE_URL
-        }
-    },
-    methods: {
+    import Message from "../components/Message.vue"
+    import {BASE_URL} from '@/config'
 
-        async remove(id){
+    export default {
+        name:"DataTableInv", 
+        props: ['inverters'],
+        components: {
+            Message
+        },
+        data() {
 
-            const data = {
-
-                id: id
-
+            return {
+                msgClass: null,
+                msg: null,
+                apiURL: BASE_URL
             }
+            
+        },
+        methods: {
 
-            const jsonData = JSON.stringify(data)
+            async remove(id){
 
-            await fetch(`${this.apiURL}/api/inverters/`, {
-                method: "DELETE",
-                headers: {
-                    "Content-type":"application/json"
-                },
-                body: jsonData
-            })
-            .then((resp) => resp.json())
-            .then((data)=> {
+                const data = {
 
-                if(data.error){
-                    this.msg = data.error
-                    this.msgClass = 'error'
-                } else {
-
-                    this.msg = data.msg
-                    this.msgClass = 'sucess'
+                    id: id
 
                 }
 
-                setTimeout(() => {
+                const jsonData = JSON.stringify(data)
 
-                    this.msg = null   
-                    this.$parent.getInverters()     
+                await fetch(`${this.apiURL}/api/...key....`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type":"application/json"
+                    },
+                    body: jsonData
+                })
+                .then((resp) => resp.json())
+                .then((data)=> {
 
-                }, 1000)
+                    if(data.error){
+                        this.msg = data.error
+                        this.msgClass = 'error'
+                    } else {
 
-            })
-            .catch((error) => {
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
 
-                console.log(error);
+                    }
 
-            })
+                    setTimeout(() => {
 
-        },
+                        this.msg = null   
+                        this.$parent.getInverters()     
 
-        getClassForType(type) {
-            return `color-for-${type}`
+                    }, 1000)
+
+                })
+                .catch((error) => {
+
+                    console.log(error);
+
+                })
+
+            },
+
+            getClassForType(type) {
+                return `color-for-${type}`
+            }
+
         }
-
     }
-}
+
 </script>
 
 <style scoped>

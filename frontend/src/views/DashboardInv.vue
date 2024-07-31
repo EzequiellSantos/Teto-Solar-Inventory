@@ -5,9 +5,11 @@
         <NavbarInv />
 
         <main>
+
             <div id="search-container">
                 <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Nota Fiscal">
             </div>
+
             <div>
 
                 <div v-if="inverters.length == 0">
@@ -21,8 +23,11 @@
                 </div>
 
                 <DataTableInv :inverters="inverters"  />
+
             </div>
+
             <Message :msg="msg" :msgClass="msgClass" />
+
         </main>
 
         <Footer/>
@@ -33,128 +38,135 @@
 
 <script>
 
-import NavbarInv from '../components/NavbarInv.vue'
-import DataTableInv from '../components/DataTableInv.vue'
-import InputInv from '../components/form/inputText.vue'
-import Message from '../components/Message.vue'
-import Footer from '../components/Footer.vue' 
-import { BASE_URL } from '@/config'
+    import NavbarInv from '../components/NavbarInv.vue'
+    import DataTableInv from '../components/DataTableInv.vue'
+    import InputInv from '../components/form/inputText.vue'
+    import Message from '../components/Message.vue'
+    import Footer from '../components/Footer.vue' 
+    import { BASE_URL } from '@/config'
 
-export default {
-    data() {
+    export default {
+        data() {
 
-        return {
-            inputBusca: '',
-            inverters: [],
-            apiURL : BASE_URL,
-            loading: false,
-            msg: null,
-            msgClass: null
-        }
+            return {
+                inputBusca: '',
+                inverters: [],
+                apiURL : BASE_URL,
+                loading: false,
+                msg: null,
+                msgClass: null
+            }
 
-    },
-    created() {
+        },
+        created() {
 
-        this.getInverters()
+            this.getInverters()
 
-    },
-    components: {
-        NavbarInv,
-        DataTableInv,
-        InputInv,
-        Message,
-        Footer
-    },
-    props: {
-        placeholder:"S/N ou Nota"
-    },
-    methods: {
+        },
+        components: {
+            NavbarInv,
+            DataTableInv,
+            InputInv,
+            Message,
+            Footer
+        },
+        methods: {
 
-        async inputTextoBusca () {
+            async inputTextoBusca () {
 
-            this.loading = true
-            this.inverters = []
+                this.loading = true
+                this.inverters = []
 
-            try {
-                
-                await fetch(`${this.apiURL}/api/inverters/search?query=${this.inputBusca}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-type":"application/json"
-                    }
-                } )
-                .then((resp) => resp.json())
-                .then((data) => {
-                   
-                    if(data.error){
+                try {
+                    
+                    await fetch(`${this.apiURL}/api/inverters/search?query=${this.inputBusca}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-type":"application/json"
+                        }
+                    } )
+                    .then((resp) => resp.json())
+                    .then((data) => {
+                    
+                        if(data.error){
 
-                        this.msg = data.error
-                        this.msgClass = 'error'
+                            this.msg = data.error
+                            this.msgClass = 'error'
 
-                    }  else {
+                        }  else {
 
-                        this.msg = data.msg
-                        this.msgClass = 'sucess'
+                            this.msg = data.msg
+                            this.msgClass = 'sucess'
 
-                    }
+                        }
+
+                        setTimeout(() => {
+
+                            this.msg = null
+
+                            let inputValue = this.inputBusca
+
+                            if(inputValue == "" || inputValue.length == 0){
+                                this.getInverters()
+                            }
+
+                        }, 2000)
+
+                        this.inverters = data.inverter
+
+                    })
+
+                } catch (error) {
+                    
+                    console.log(error)
+
+                    this.msg = data.error
+                    this.msgClass = 'error'
 
                     setTimeout(() => {
 
                         this.msg = null
-
-                        let inputValue = this.inputBusca
-
-                        if(inputValue == "" || inputValue.length == 0){
-                            this.getInverters()
-                        }
+                        this.msgClass = null
 
                     }, 2000)
 
-                    this.inverters = data.inverter
+                }
 
-                })
+            },
 
-            } catch (error) {
-                
-                console.log(error)
+            async getInverters() {
 
-            }
+                try {
+                    
+                    await fetch(`${this.apiURL}/api/inverters/all`, {
 
-        },
+                        method: "GET",
+                        headers: {
 
-        async getInverters() {
+                            "Content-Type": "application/json"
 
-            try {
-                
-                await fetch(`${this.apiURL}/api/inverters/all`, {
+                        }
 
-                    method: "GET",
-                    headers: {
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
 
-                        "Content-Type": "application/json"
-
-                    }
-
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
-
-                    this.inverters = data.inverters
+                        this.inverters = data.inverters
 
 
-                })
+                    })
 
 
-            } catch (error) {
-                
-                console.error('Erro ao carregar os inversores:', error);
+                } catch (error) {
+                    
+                    console.error('Erro ao carregar os inversores:', error);
+
+                }
 
             }
 
         }
-
     }
-}
 </script>
 
 

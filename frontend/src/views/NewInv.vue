@@ -1,5 +1,4 @@
 <template>
-
     
     <div class="new-inv">
 
@@ -13,13 +12,13 @@
 
 <script>
 
-import InvForm from '../components/InvForm.vue'
+    import InvForm from '../components/InvForm.vue'
 
-export default {
+    export default {
 
-components: {
-    InvForm
-}
+        components: {
+            InvForm
+        }
 
-}
+    }
 </script>

@@ -5,18 +5,19 @@
 </template>
 
 <script>
-export default {
-    name: "InputSubmit",
-    props: {
-        text: ""
+
+    export default {
+        name: "InputSubmit",
+        props: {
+            text: ""
+        }
     }
-}
+    
 </script>
 
 <style scoped>
 
     input[type="submit"]{
-
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -34,7 +35,6 @@ export default {
         text-transform: capitalize;
         letter-spacing: 0.5px;
         font-size: 1.02em;
-
     }
 
     input:hover{
