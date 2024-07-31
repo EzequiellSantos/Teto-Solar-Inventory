@@ -12,7 +12,7 @@
 
             <div>
 
-                <div v-if="inverters.length == 0">
+                <div v-if="inverters == null || inverters.length == 0">
                     <div class="spinner">
                         <div></div>
                         <div></div>

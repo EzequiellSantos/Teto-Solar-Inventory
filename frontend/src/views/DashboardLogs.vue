@@ -12,7 +12,7 @@
             
             <div> 
 
-                <div v-if="logs.length == 0">
+                <div v-if="logs == null || logs.length == 0">
                     <div class="spinner">
                         <div></div>
                         <div></div>
