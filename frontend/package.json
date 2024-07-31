@@ -7,6 +7,7 @@
     "build": "vue-cli-service build --output public"
   },
   "dependencies": {
+    "@vercel/speed-insights": "^1.0.12",
     "core-js": "^3.8.3",
     "date-fns": "^3.6.0",
     "vue": "^3.2.13",
