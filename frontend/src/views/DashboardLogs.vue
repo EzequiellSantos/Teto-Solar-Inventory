@@ -7,7 +7,7 @@
         <main>
 
             <div id="search-container">
-                <input type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Cliente">
+                <input id="inputLogs" type="text" @input="inputTextoBusca" v-model="inputBusca" placeholder="SN ou Cliente">
             </div>
             
             <div> 
