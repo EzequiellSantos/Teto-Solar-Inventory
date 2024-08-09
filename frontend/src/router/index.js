@@ -1,20 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import store from '../store/index'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
-    meta: {
-      requireAuth: true
-    }
-  },
-  {
-    path: '/login',
-    name:'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+    component: HomeView
   },
   {
     path: '/about',
@@ -27,99 +18,48 @@ const routes = [
   {
     path: '/inverters',
     name:'inverters',
-    component: () => import(/* webpackChunkName: "inverters" */ '../views/DashboardInv.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "inverters" */ '../views/DashboardInv.vue')
   },
   {
     path: '/logs',
     name:'logs',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/DashboardLogs.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "logs" */ '../views/DashboardLogs.vue')
   },
   {
     path: '/registerLog',
     name:'registerLog',
-    component: () => import(/* webpackChunkName: "logForm" */ '../views/NewLog.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "logForm" */ '../views/NewLog.vue')
   },
   {
     path: '/registerInv',
     name:'registerInv',
-    component: () => import(/* webpackChunkName: "register" */ '../views/NewInv.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "invForm" */ '../views/NewInv.vue')
   },
   {
     path: '/inverter/:id',
     name:'inverter',
-    component: () => import(/* webpackChunkName: "inverter" */ '../views/Inverter.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "inverter" */ '../views/Inverter.vue')
   },
   {
     path: '/log/:id',
     name:'log',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/Log.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "log" */ '../views/Log.vue')
   },
   {
     path: '/editInverter/:id',
     name: "editinverter",
-    component: () => import(/* webpackChunkName: "EditInv" */ '../views/EditInverter.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "EditInv" */ '../views/EditInverter.vue')
   },
   {
     path: '/editLog/:id',
     name: "editlog",
-    component: () => import(/* webpackChunkName: "EditLog" */ '../views/EditLog.vue'),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "EditLog" */ '../views/EditLog.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
-
-router.beforeEach((to, from, next) => {
-
-  if(to.matched.some(record => record.meta.requireAuth)){
-
-    if(store.getters.authenticated === false){
-
-      next({
-
-        path: '/login',
-        params: {nextUrl: to.fullPath}
-
-      })
-
-    } else {
-
-      next()
-
-    }
-
-  } else {
-
-    next()
-
-  }
-
 })
 
 export default router

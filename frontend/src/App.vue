@@ -62,6 +62,10 @@
     color: #2c3e50;
   }
 
+  input {
+    text-transform: uppercase;
+  }
+
   input[type=text]{
     cursor: text;
   }
