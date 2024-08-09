@@ -26,7 +26,7 @@
 
             <div v-for="(log, index) in logs" :key="index">
 
-                <router-link id="data-row" :class="getClassForType(log.movements)" :to="`/log/${log._id}`">
+                <router-link id="data-row" :to="`/log/${log._id}`">
 
                     <div class="index-container">
                         <p>{{ index + 1 }}</p>
@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="data-description-container">
-                        <p>{{ log.movements }}</p>
+                        <p :class="getClassForType(log.movements)">{{ log.movements }}</p>
                     </div>
 
                     <div class="data-type-container">

@@ -183,7 +183,7 @@
   }
 
   .data-description-heading{
-    width: 200px;
+    width: 190px;
   }
 
   .data-type-heading{
@@ -252,18 +252,32 @@
   }
 
   .data-sn-container{
-    width: 100px;
+    width: 140px;
     margin: auto;
   }
 
   .data-description-container{
-    width: 300px;
+    width: 200px;
     margin: auto;
     text-align: center;
   }
 
+  @media (width >= 700px) {
+
+    .data-description-container{
+      width: 340px;
+    }
+  }
+
+  .data-description-container > p{
+    padding: 6px 8px;
+    margin: auto;
+    max-width: 100px;
+    border-radius: 40px;
+  }
+
   .data-type-container {
-    width: 150px;
+    width: 120px;
   }
 
   .data-type-container > p {
@@ -297,7 +311,7 @@
   }
 
   .index-container{
-    width: 15%;
+    width: 13%;
     min-width: 20px;
     border-radius: 5px;
     margin: 0 15px 0 10px;
