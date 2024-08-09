@@ -34,7 +34,7 @@ export default createStore({
     },
     logout(state){
 
-      state.authenticated = null
+      state.authenticated = false
       state.token = null
       state.userId = null
 
