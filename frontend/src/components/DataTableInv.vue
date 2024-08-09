@@ -27,8 +27,7 @@
             
             <div v-for="(inverter, index) in inverters" :key="index" >
 
-                <router-link id="data-row" :class="getClassForType(inverter.type)" :to="`/inverter/${ inverter._id }`" >
-                  
+                    <router-link id="data-row" :to="`/inverter/${ inverter._id }`" >  
                     <div class="index-container">
                         <p>{{ index + 1}}</p>
                     </div>
@@ -42,7 +41,7 @@
                     </div>
 
                     <div class="data-type-container">
-                        <p> {{ inverter.type }}</p>
+                        <p :class="getClassForType(inverter.type)"> {{ inverter.type }}</p>
                     </div>
 
                     <div class="data-actions-container">

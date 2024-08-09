@@ -1,5 +1,4 @@
 <template>
-
     <div id="form">
 
         <Message :msg="msg" :msgClass="msgClass"/>
@@ -40,17 +39,46 @@
                         <option value="GARANTIA">Vai para autorizada</option>
                         <option value="CLIENTE">Está indo para clientes</option>
                     </optgroup>
-
                 </select>
 
             </div>
 
+            <div class="input-container">
+
+                <label for="state">Estado:</label>
+                <select name="state" id="state" v-model="state">
+                             
+                    <optgroup v-if="this.type == 'ESTOQUE'" label="Escolha o estatus do Inversor">
+                        <option value="Vai para cliente">Aguardando Instalação</option>
+                        <option value="Está na loja">Estoque da Loja</option>
+                        <option value="Recondicionado">Chegou da Autorizada</option>
+                    </optgroup>
+
+                    <optgroup v-if="this.type == 'CLIENTE'" label="Escolha o estatus do Inversor">
+                        <option value="Está no cliente">Foi para o Cliente</option>
+                    </optgroup>
+
+                    <optgroup v-if="this.type == 'GARANTIA'" label="Escolha o estatus do Inversor">
+                        <option value="Em espera">Em espera</option>
+                        <option value="Foi enviado">Foi enviado</option>
+                    </optgroup>
+
+                    <optgroup v-if="this.type == 'BACKUP'" label="Escolha o estatus do Inversor">
+                        <option value="Backup em uso">Backup em Uso</option>
+                        <option value="Backup em Estoque">Backup em estoque</option>
+                    </optgroup>                   
+
+                </select>
+
+            </div>            
+
             <InputSubmit :text="btnText"/>
 
-        </form>
- 
-    </div>
 
+        </form>
+
+        
+    </div>
 </template>
 
 <script>
@@ -59,166 +87,172 @@
     import InputSubmit from '../components/form/inputSubmit.vue'
     import {BASE_URL} from '@/config'
 
-    export default {
-        name: "invForm",
-        data() {
-            return {
-                id: this.inverter._id || null,
-                invoice: this.inverter.invoice || null,
-                sn: this.inverter.sn || null,
-                description:this.inverter.description || null,
-                type: this.inverter.type || null,
-                msg: null,
-                msgClass: null,
-                apiURL: BASE_URL
+export default {
+    name: "invForm",
+    data() {
+        return {
+            id: this.inverter._id || null,
+            invoice: this.inverter.invoice || null,
+            sn: this.inverter.sn || null,
+            description:this.inverter.description || null,
+            type: this.inverter.type || null,
+            state: this.inverter.state || null,
+            msg: null,
+            msgClass: null,
+            apiURL: BASE_URL
+        }
+    },
+    components: {
+        Message,
+        InputSubmit
+    },
+    props: ["inverter", "page", "btnText"],
+    text: "Cadastrar",
+    methods: {
+
+
+        async register(e) {
+
+            e.preventDefault()
+
+            const data = {
+
+                invoice: this.invoice,
+                sn: this.sn,
+                description: this.description,
+                type: this.type,
+                state: this.state
+
             }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/inverters/`, {
+
+                method: "POST",
+                headers: {"Content-type":"application/json"},
+                body: jsonData
+
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                    this.msg = data.error
+                    this.msgClass = "error"
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        // window.location.reload(true)
+                
+                    }, 2000)
+
+                } else {
+
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push("/inverters")
+                
+                    }, 2000)
+                }
+
+            })
+            .catch((error) => {
+                console.log(error, " Erro ao Cadastrar")
+                this.msg = error
+                this.msgClass = 'error'
+            })
+
         },
-        components: {
-            Message,
-            InputSubmit
-        },
-        props: ["inverter", "page", "btnText"],
-        text: "Cadastrar",
-        methods: {
+        async update(e){
 
-            async register(e) {
+            e.preventDefault()
 
-                e.preventDefault()
+            const data = {
+                id: this.id,
+                invoice: this.invoice,
+                sn: this.sn,
+                description: this.description,
+                type: this.type,
+                state: this.state
 
-                const data = {
+            }
 
-                    invoice: this.invoice,
-                    sn: this.sn,
-                    description: this.description,
-                    type: this.type
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/inverters`, {
+                method: "PUT",
+                headers: { "Content-type":"application/json" },
+                body: jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                    this.msg = data.error
+                    this.msgClass = 'error'
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                
+                    }, 2000)
+
+                } else {
+
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push(`/inverter/${this.id}`)
+                
+                    }, 2000)
 
                 }
 
-                const jsonData = JSON.stringify(data)
+            })
+            .catch((err) => {
 
-                await fetch(`${this.apiURL}/api/inverters/`, {
+                this.msg = err.message || "Error.. "
+                this.msgClass = 'error'
+                console.log(err)
+                
 
-                    method: "POST",
-                    headers: {"Content-type":"application/json"},
-                    body: jsonData
-
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
-
-                    if(data.error){
-
-                        this.msg = data.error
-                        this.msgClass = "error"
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-
-                        setTimeout(() => {
-
-                            this.msg = null
-                    
-                        }, 2000)
-
-                    } else {
-
-                        this.msg = data.msg
-                        this.msgClass = 'sucess'
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-
-                        setTimeout(() => {
-
-                            this.msg = null
-                            this.$router.push("/inverters")
-                    
-                        }, 2000)
-                    }
-
-                })
-                .catch((error) => {
-                    console.log(error, " Erro ao Cadastrar")
-                    this.msg = error
-                    this.msgClass = 'error'
-                })
-
-            },
-            async update(e){
-
-                e.preventDefault()
-
-                const data = {
-                    id: this.id,
-                    invoice: this.invoice,
-                    sn: this.sn,
-                    description: this.description,
-                    type: this.type
-                }
-
-                const jsonData = JSON.stringify(data)
-
-                await fetch(`${this.apiURL}/api/inverters`, {
-                    method: "PUT",
-                    headers: { "Content-type":"application/json" },
-                    body: jsonData
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
-
-                    if(data.error){
-
-                        this.msg = data.error
-                        this.msgClass = 'error'
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-
-                        setTimeout(() => {
-
-                            this.msg = null
-                    
-                        }, 2000)
-
-                    } else {
-
-                        this.msg = data.msg
-                        this.msgClass = 'sucess'
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-
-                        setTimeout(() => {
-
-                            this.msg = null
-                            this.$router.push("/inverters")
-                    
-                        }, 2000)
-
-                    }
-
-                })
-                .catch((err) => {
-
-                    this.msg = err.message || "Error.. "
-                    this.msgClass = 'error'
-                    console.log(err)
-                    
-                })
-
-            }
+            })
 
         }
-    }
 
+    }
+}
 </script>
 
 <style scoped>
@@ -235,6 +269,7 @@
         justify-content: center;
         align-items: center;
     }
+
 
     .input-container{
         margin: 13px 0;
@@ -253,6 +288,8 @@
         margin-bottom: 6px;
         font-size: 1.1em;
     }
+
+    /* VVVVVVV ISSUE IS HERE VVVVVVV */
 
     .input-container > input[type='text']{
         outline: none;
