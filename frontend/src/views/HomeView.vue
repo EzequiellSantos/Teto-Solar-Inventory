@@ -101,9 +101,9 @@ export default {
     right: 10%;
     width: 500px;
     height: 1800px;
-    opacity: 0.3;
+    opacity: 0.6;
     transform: rotate(80deg);
-    background-color: #0054a7;
+    background-color: #005db9;
     z-index: -2;
   }
 
@@ -115,7 +115,7 @@ export default {
     right: 45%;
     width: 440px;
     height: 1600px;
-    opacity: 0.8;
+    opacity: 0.9;
     transform: rotate(-84deg);
     background-color: #F9AB01;
     z-index: -1;
@@ -172,7 +172,7 @@ export default {
 
     #header::after{
       top: -1170px;
-      width: 530px;
+      width: 650px;
       height: 2000px;
       right: 10%;
     }
@@ -198,7 +198,8 @@ export default {
 
     #header::after{
       top: -1040px; 
-      right: 20%;
+      right: 40%;
+      height: 1900px;
     }
 
   }
