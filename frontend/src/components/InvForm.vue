@@ -270,7 +270,6 @@ export default {
         align-items: center;
     }
 
-
     .input-container{
         margin: 13px 0;
         padding: 15px;
@@ -288,8 +287,6 @@ export default {
         margin-bottom: 6px;
         font-size: 1.1em;
     }
-
-    /* VVVVVVV ISSUE IS HERE VVVVVVV */
 
     .input-container > input[type='text']{
         outline: none;
