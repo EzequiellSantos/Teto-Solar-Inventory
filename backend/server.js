@@ -32,10 +32,12 @@ mongoose.connect(`mongodb+srv://${DBUser}:${DBPassword}@cluster0.t9g7g6t.mongodb
 const userRoutes = require('./routes/userRoutes');
 const invertersRoutes = require('./routes/invertersRoutes')
 const logRoutes = require('./routes/logRoutes')
+const authRoutes = require('./routes/authRoutes') 
 
 app.use('/api/users', userRoutes);
 app.use('/api/inverters', invertersRoutes)
 app.use('/api/logs', logRoutes)
+app.use('/api/auth', authRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;
