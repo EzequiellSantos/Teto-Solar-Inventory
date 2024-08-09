@@ -26,21 +26,41 @@
 
     <footer>
       <p>&copy; 2024</p>
+      <button id="logout" @click="logout($event)" v-show="authenticated">Sair</button>
     </footer>
 
   </div>
 </template>
 
 <script>
+// @ is an alias to /src
+import HelloWorld from '@/components/HelloWorld.vue'
+import {BASE_URL} from '@/config'
+import { mapState } from 'vuex'
 
-  // @ is an alias to /src
-  import HelloWorld from '@/components/HelloWorld.vue'
-  import {BASE_URL} from '@/config'
+export default {
+  name: 'HomeView',
+  methods:{
+    logout(e){
 
-  export default {
-    name: 'HomeView',
+      e.preventDefault()
+  
+      // emit event for auth an user
+      this.$store.commit('logout') //enviando os dados para o state() ./store
+
+      // redirect
+      this.$router.push('/login')
+
+    }
+    
+  },
+  computed:{
+    ...mapState([
+      'authenticated'
+    ])
   }
 
+}
 </script>
 
 <style scoped>
@@ -181,6 +201,20 @@
       right: 20%;
     }
 
+  }
+
+  #logout{
+    padding: 4px;
+    width: 80px;
+    margin: 5px;
+    outline: 0;
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+
+  #logout:is(:focus, :active){
+    background-color: #d6d6d6;
   }
 
 </style>
