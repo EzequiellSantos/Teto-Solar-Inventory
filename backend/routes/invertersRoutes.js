@@ -76,7 +76,7 @@ router.get("/:id", async (req, res) => {
 // enviando inverter
 router.post('/', async (req, res) => {
 
-    const { invoice, sn, description, type, state } = req.body
+    const { invoice, sn, description, type } = req.body
 
     const snExists = await Inverter.findOne({sn: sn})
 
@@ -88,7 +88,7 @@ router.post('/', async (req, res) => {
 
     try {
 
-        const inverter = new Inverter({ invoice, sn, description, type, state})
+        const inverter = new Inverter({ invoice, sn, description, type})
         await inverter.save()
         res.status(201).json({error: null, msg:'Inversor Registrado!', data: inverter})
 
@@ -125,7 +125,6 @@ router.put("/", async (req, res) => {
     const sn = req.body.sn
     const description = req.body.description
     const type =  req.body.type
-    const state = req.body.state
     const inverterId = req.body.id
 
     const inverter = {
@@ -133,8 +132,7 @@ router.put("/", async (req, res) => {
         invoice: invoice,
         sn: sn,
         description: description,
-        type: type,
-        state: state
+        type: type
     }
 
     try {

@@ -41,10 +41,6 @@
                         <p class="bold">Tipo:</p>
                         <p class="type-text">{{ inverter.type }}</p>
                     </section>
-                    <section class="paragraph">
-                        <p class="bold">Estado:</p>
-                        <p class="type-text">{{ inverter.state }}</p>
-                    </section>
         
                 </div>
         

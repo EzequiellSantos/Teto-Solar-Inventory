@@ -41,36 +41,10 @@
                     </optgroup>
                 </select>
 
+                
+                <!-- <input type="text" name="type" id="type" v-model="type" required > -->
+
             </div>
-
-            <div class="input-container">
-
-                <label for="state">Estado:</label>
-                <select name="state" id="state" v-model="state">
-                             
-                    <optgroup v-if="this.type == 'ESTOQUE'" label="Escolha o estatus do Inversor">
-                        <option value="Vai para cliente">Aguardando Instalação</option>
-                        <option value="Está na loja">Estoque da Loja</option>
-                        <option value="Recondicionado">Chegou da Autorizada</option>
-                    </optgroup>
-
-                    <optgroup v-if="this.type == 'CLIENTE'" label="Escolha o estatus do Inversor">
-                        <option value="Está no cliente">Foi para o Cliente</option>
-                    </optgroup>
-
-                    <optgroup v-if="this.type == 'GARANTIA'" label="Escolha o estatus do Inversor">
-                        <option value="Em espera">Em espera</option>
-                        <option value="Foi enviado">Foi enviado</option>
-                    </optgroup>
-
-                    <optgroup v-if="this.type == 'BACKUP'" label="Escolha o estatus do Inversor">
-                        <option value="Backup em uso">Backup em Uso</option>
-                        <option value="Backup em Estoque">Backup em estoque</option>
-                    </optgroup>                   
-
-                </select>
-
-            </div>            
 
             <InputSubmit :text="btnText"/>
 
@@ -96,7 +70,6 @@ export default {
             sn: this.inverter.sn || null,
             description:this.inverter.description || null,
             type: this.inverter.type || null,
-            state: this.inverter.state || null,
             msg: null,
             msgClass: null,
             apiURL: BASE_URL
@@ -120,8 +93,7 @@ export default {
                 invoice: this.invoice,
                 sn: this.sn,
                 description: this.description,
-                type: this.type,
-                state: this.state
+                type: this.type
 
             }
 
@@ -189,8 +161,7 @@ export default {
                 invoice: this.invoice,
                 sn: this.sn,
                 description: this.description,
-                type: this.type,
-                state: this.state
+                type: this.type
 
             }
 
@@ -233,7 +204,7 @@ export default {
                     setTimeout(() => {
 
                         this.msg = null
-                        this.$router.push(`/inverter/${this.id}`)
+                        this.$router.push("/inverters")
                 
                     }, 2000)
 

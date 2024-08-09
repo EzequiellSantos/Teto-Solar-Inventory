@@ -17,10 +17,6 @@ const InverterSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true
-    },
-    state: {
-        type: String,
-        required: true
     }
 })
 
