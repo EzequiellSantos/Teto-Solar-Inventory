@@ -79,7 +79,7 @@
         border-radius: 30px;
         backdrop-filter: blur(10px);
         color: rgb(0, 0, 160);
-        background-color: rgba(155, 155, 155, 0.199);
+        background-color: rgba(155, 155, 155, 0.123);
     }
 
     .section-nav > a{

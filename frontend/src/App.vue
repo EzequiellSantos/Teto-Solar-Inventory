@@ -40,12 +40,12 @@
   }
 
   :root{
-    --color-for-client: #a5fda2be;
-    --color-for-inventory: #80d5fdc4;
-    --color-for-backup: #cf6cf7bb ;
-    --color-for-garanted: #faf888ce ;
-    --color-for-new-system: #88a3fac7;
-    --color-for-autorizaded: #faf888d5;
+    --color-for-client: #a5fda2;
+    --color-for-inventory: #80d5fd;
+    --color-for-backup: #d470fc ;
+    --color-for-garanted: #faf888 ;
+    --color-for-new-system: #88a3fa;
+    --color-for-autorizaded: #faf888;
     
 
     --color-main00: #F9AB01;
@@ -210,8 +210,6 @@
     padding: 10px;
     border-radius: 30px;
     text-decoration: none;
-    background-color: #f0f0f071;
-    color: #000;
 
   }
 
@@ -230,7 +228,7 @@
   .color-for-BACKUP{
     border-color: var(--color-for-backup);
     background-color: var(--color-for-backup);
-    color: #ffffff;
+    color: #fff;
   }
 
   .color-for-GARANTIA{
@@ -264,12 +262,6 @@
 
   .data-type-container {
     width: 150px;
-  }
-
-  .data-type-container > p {
-    max-width: 110px;
-    padding: 3px 0;
-    border-radius: 20px;
   }
 
   .data-table-heading{
@@ -350,17 +342,17 @@
   }
 
   .background-for-BACKUP{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-backup));
+    background: linear-gradient(150deg, rgb(219, 219, 219) 10%, var(--color-for-backup));
     height: 100vh;
   }
 
   .background-for-SISTEMA-NOVO{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-new-system));
+    background: linear-gradient(150deg, rgb(219, 219, 219) 10%, var(--color-for-new-system));
     height: 100vh;
   }
 
   .background-for-AUTORIZADA{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-autorizaded));
+    background: linear-gradient(150deg, rgb(219, 219, 219) 10%, var(--color-for-autorizaded));
     height: 100vh;
   }
 
