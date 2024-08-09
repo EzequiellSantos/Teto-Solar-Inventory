@@ -55,7 +55,7 @@ router.post("/login", async (req, res) => {
     const user = req.body.user
     const password = req.body.password
 
-    const userIsPresent = await User.findOne({ user: user})
+    const userIsPresent = await User.findOne({ user: user })
 
     if(!userIsPresent){
         return res.status(400).json({

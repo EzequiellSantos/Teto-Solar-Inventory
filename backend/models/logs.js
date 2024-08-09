@@ -7,25 +7,17 @@ const logSchema = new mongoose.Schema({
         required: true
     },
     movements: {
-
         type: String,
         required: true
-
     },
     client: {
-
         type: String
-
     },
     logDate: {
-
         type: String
-
     },
     obs: {
-
         type: String
-
     }
     
 })
