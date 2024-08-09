@@ -27,12 +27,8 @@
             
             <div v-for="(inverter, index) in inverters" :key="index" >
 
-<<<<<<< HEAD
-                    <router-link id="data-row" :class="getClassForType(inverter.type)" :to="`/inverter/${ inverter._id }`" >  
-=======
                 <router-link id="data-row" :class="getClassForType(inverter.type)" :to="`/inverter/${ inverter._id }`" >
                   
->>>>>>> parent of e92f3b7 (Merge branch 'features-test')
                     <div class="index-container">
                         <p>{{ index + 1}}</p>
                     </div>

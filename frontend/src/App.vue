@@ -210,10 +210,6 @@
     padding: 10px;
     border-radius: 30px;
     text-decoration: none;
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of e92f3b7 (Merge branch 'features-test')
   }
 
   .color-for-CLIENTE{
