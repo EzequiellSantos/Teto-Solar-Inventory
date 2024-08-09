@@ -1,4 +1,5 @@
 <template>
+
     <div id="form">
 
         <Message :msg="msg" :msgClass="msgClass"/>
@@ -39,6 +40,7 @@
                         <option value="GARANTIA">Vai para autorizada</option>
                         <option value="CLIENTE">Está indo para clientes</option>
                     </optgroup>
+
                 </select>
 
                 
@@ -48,11 +50,10 @@
 
             <InputSubmit :text="btnText"/>
 
-
         </form>
-
-        
+ 
     </div>
+
 </template>
 
 <script>
@@ -61,6 +62,7 @@
     import InputSubmit from '../components/form/inputSubmit.vue'
     import {BASE_URL} from '@/config'
 
+<<<<<<< HEAD
 export default {
     name: "invForm",
     data() {
@@ -95,76 +97,46 @@ export default {
                 description: this.description,
                 type: this.type
 
+=======
+    export default {
+        name: "invForm",
+        data() {
+            return {
+                id: this.inverter._id || null,
+                invoice: this.inverter.invoice || null,
+                sn: this.inverter.sn || null,
+                description:this.inverter.description || null,
+                type: this.inverter.type || null,
+                msg: null,
+                msgClass: null,
+                apiURL: BASE_URL
+>>>>>>> parent of e92f3b7 (Merge branch 'features-test')
             }
-
-            const jsonData = JSON.stringify(data)
-
-            await fetch(`${this.apiURL}/api/inverters/`, {
-
-                method: "POST",
-                headers: {"Content-type":"application/json"},
-                body: jsonData
-
-            })
-            .then((resp) => resp.json())
-            .then((data) => {
-
-                if(data.error){
-
-                    this.msg = data.error
-                    this.msgClass = "error"
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    })
-
-                    setTimeout(() => {
-
-                        this.msg = null
-                        // window.location.reload(true)
-                
-                    }, 2000)
-
-                } else {
-
-                    this.msg = data.msg
-                    this.msgClass = 'sucess'
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    })
-
-                    setTimeout(() => {
-
-                        this.msg = null
-                        this.$router.push("/inverters")
-                
-                    }, 2000)
-                }
-
-            })
-            .catch((error) => {
-                console.log(error, " Erro ao Cadastrar")
-                this.msg = error
-                this.msgClass = 'error'
-            })
-
         },
-        async update(e){
+        components: {
+            Message,
+            InputSubmit
+        },
+        props: ["inverter", "page", "btnText"],
+        text: "Cadastrar",
+        methods: {
 
-            e.preventDefault()
+            async register(e) {
 
+<<<<<<< HEAD
             const data = {
                 id: this.id,
                 invoice: this.invoice,
                 sn: this.sn,
                 description: this.description,
                 type: this.type
+=======
+                e.preventDefault()
+>>>>>>> parent of e92f3b7 (Merge branch 'features-test')
 
-            }
+                const data = {
 
+<<<<<<< HEAD
             const jsonData = JSON.stringify(data)
 
             await fetch(`${this.apiURL}/api/inverters`, {
@@ -207,23 +179,140 @@ export default {
                         this.$router.push("/inverters")
                 
                     }, 2000)
+=======
+                    invoice: this.invoice,
+                    sn: this.sn,
+                    description: this.description,
+                    type: this.type
+>>>>>>> parent of e92f3b7 (Merge branch 'features-test')
 
                 }
 
-            })
-            .catch((err) => {
+                const jsonData = JSON.stringify(data)
 
-                this.msg = err.message || "Error.. "
-                this.msgClass = 'error'
-                console.log(err)
-                
+                await fetch(`${this.apiURL}/api/inverters/`, {
 
-            })
+                    method: "POST",
+                    headers: {"Content-type":"application/json"},
+                    body: jsonData
+
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = "error"
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+
+                        setTimeout(() => {
+
+                            this.msg = null
+                    
+                        }, 2000)
+
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+
+                        setTimeout(() => {
+
+                            this.msg = null
+                            this.$router.push("/inverters")
+                    
+                        }, 2000)
+                    }
+
+                })
+                .catch((error) => {
+                    console.log(error, " Erro ao Cadastrar")
+                    this.msg = error
+                    this.msgClass = 'error'
+                })
+
+            },
+            async update(e){
+
+                e.preventDefault()
+
+                const data = {
+                    id: this.id,
+                    invoice: this.invoice,
+                    sn: this.sn,
+                    description: this.description,
+                    type: this.type
+                }
+
+                const jsonData = JSON.stringify(data)
+
+                await fetch(`${this.apiURL}/api/inverters`, {
+                    method: "PUT",
+                    headers: { "Content-type":"application/json" },
+                    body: jsonData
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+
+                        setTimeout(() => {
+
+                            this.msg = null
+                    
+                        }, 2000)
+
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+
+                        setTimeout(() => {
+
+                            this.msg = null
+                            this.$router.push("/inverters")
+                    
+                        }, 2000)
+
+                    }
+
+                })
+                .catch((err) => {
+
+                    this.msg = err.message || "Error.. "
+                    this.msgClass = 'error'
+                    console.log(err)
+                    
+                })
+
+            }
 
         }
-
     }
-}
+
 </script>
 
 <style scoped>
