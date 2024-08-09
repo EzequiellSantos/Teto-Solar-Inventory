@@ -13,11 +13,11 @@
             </div>
 
             <div class="data-description-heading">
-                Movimento:
+                Data:
             </div>
 
             <div class="data-type-heading">
-                Data:
+                Movimento:
             </div>
 
         </div>
@@ -37,12 +37,12 @@
                     </div>
 
                     <div class="data-description-container">
-                        <p :class="getClassForType(log.movements)">{{ log.movements }}</p>
-                    </div>
+                        <p>{{ log.logDate }}</p>
+                    </div> 
 
                     <div class="data-type-container">
-                        <p>{{ log.logDate }}</p>
-                    </div>                   
+                        <p :class="getClassForType(log.movements)">{{ log.movements }}</p>
+                    </div>                  
 
                 </router-link>
 

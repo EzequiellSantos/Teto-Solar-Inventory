@@ -207,7 +207,7 @@
     align-content: center;
 
     margin: 20px 0;
-    padding: 10px;
+    padding: 3px;
     border-radius: 30px;
     text-decoration: none;
     background-color: #f0f0f071;
@@ -257,33 +257,31 @@
   }
 
   .data-description-container{
-    width: 200px;
+    width: 400px;
     margin: auto;
     text-align: center;
   }
 
-  @media (width >= 700px) {
-
-    .data-description-container{
-      width: 340px;
-    }
-  }
-
   .data-description-container > p{
-    padding: 6px 8px;
+    padding: 8px 8px;
     margin: auto;
-    max-width: 100px;
     border-radius: 40px;
   }
 
   .data-type-container {
     width: 120px;
+    padding: 4px 6px;
   }
 
   .data-type-container > p {
     max-width: 110px;
-    padding: 3px 0;
+    padding: 8px;
+    margin: 0;
     border-radius: 20px;
+  }
+
+  .data-date-container{
+    width: 100px;
   }
 
   .data-table-heading{
@@ -325,6 +323,17 @@
     width: calc(100% - 30px);
     margin: auto;
     margin-bottom: 100px;
+  }
+
+  @media (width >= 700px) {
+
+    .data-description-container{
+      width: 340px;
+    }
+
+    .data-type-container > p {
+      padding: 5px;
+    }
   }
 
   @media (600px >= width){
