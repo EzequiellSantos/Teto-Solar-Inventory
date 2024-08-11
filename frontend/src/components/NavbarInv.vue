@@ -14,7 +14,6 @@
 
             </section>
 
-            <LeitorQrCodeVue/>
                 
             <section id="register">
 
@@ -39,14 +38,10 @@
 </template>
 
 <script>
-    import LeitorQrCodeVue from './LeitorQrCode.vue'
     
     export default {
         
         name:"NavbarInv",
-        components:{
-            LeitorQrCodeVue
-        }
 
     }
 
