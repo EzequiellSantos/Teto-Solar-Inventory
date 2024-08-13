@@ -190,9 +190,9 @@ export default {
   @media (1100px < width){
 
     #header::before{
-      top: -1000px;
+      top: -1100px;
       width: 470px;
-      height: 1800px;
+      height: 2000px;
       right: 40%;
     }
 
