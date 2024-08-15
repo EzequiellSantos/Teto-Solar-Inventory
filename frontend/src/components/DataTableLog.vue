@@ -26,7 +26,7 @@
 
             <div v-for="(log, index) in logs" :key="index">
 
-                <router-link id="data-row" :to="`/log/${log._id}`">
+                <router-link :id="log.sn" class="data-row" :to="`/log/${log._id}`">
 
                     <div class="index-container">
                         <p>{{ index + 1 }}</p>

@@ -32,6 +32,7 @@ const routes = [
       requireAuth: true
     }
   },
+
   {
     path: '/logs',
     name:'logs',
@@ -91,8 +92,36 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+  history: createWebHistory(),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return new Promise((resolve) => {
+      if (to.hash) {
+        const checkExist = setInterval(() => {
+          const element = document.getElementById(to.hash.slice(1));
+          if (element) {
+            clearInterval(checkExist);
+
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - 100; // 200px de margem do topo
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+
+            resolve();
+          }
+        }, 100); // Verifica a cada 100ms
+      } else if (savedPosition) {
+        resolve(savedPosition);
+      } else {
+        resolve({ x: 0, y: 0 });
+      }
+    });
+  }
+
+  
 })
 
 router.beforeEach((to, from, next) => {

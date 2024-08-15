@@ -54,7 +54,7 @@
 
                 <div class="voltarButton">
 
-                    <router-link to="/inverters">
+                    <router-link :to="{name: 'inverters', hash:`#${inverter.sn}`}">
 
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="37" height="37" viewBox="0 0 50.000000 50.000000" preserveAspectRatio="xMidYMid meet">
 

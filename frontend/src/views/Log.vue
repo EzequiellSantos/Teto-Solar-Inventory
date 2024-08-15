@@ -57,7 +57,7 @@
 
                 <div class="voltarButton">
 
-                    <router-link to="/logs">
+                    <router-link :to="{name:'logs', hash:`#${log.sn}` }">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="37" height="37" viewBox="0 0 50.000000 50.000000" preserveAspectRatio="xMidYMid meet">
                         <g transform="translate(0.000000,50.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
                         <path d="M235 360 l-110 -110 112 -112 c90 -89 115 -110 125 -100 10 10 -8 33 -87 112 l-100 100 99 99 c86 86 108 121 78 121 -4 0 -57 -50 -117 -110z"/>

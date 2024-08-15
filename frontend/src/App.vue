@@ -202,7 +202,7 @@
     text-transform: uppercase;
   }
 
-  #data-row{
+  .data-row{
     display: flex;
     flex-direction: row;
     justify-content: space-around;

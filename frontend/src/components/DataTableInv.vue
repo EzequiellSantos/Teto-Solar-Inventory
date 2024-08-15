@@ -25,9 +25,9 @@
         <div class="data-table-body">
 
             
-            <div v-for="(inverter, index) in inverters" :key="index" >
+            <div v-for="(inverter, index) in inverters" :key="inverter.sn"  >
 
-                    <router-link id="data-row" :to="`/inverter/${ inverter._id }`" >  
+                    <router-link :id="inverter.sn" class="data-row" :to="`/inverter/${ inverter._id }`" >  
                     <div class="index-container">
                         <p>{{ index + 1}}</p>
                     </div>
