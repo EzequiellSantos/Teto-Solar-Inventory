@@ -68,13 +68,16 @@
 
   #search-container{
     position: fixed;
+    display: flex;
+    flex-direction: row;
     width: 100%;
     max-width: 250px;
     margin: auto;
-    right: 50%;
+    left: 50%;
     margin-top: 10px;
-    transform: translateX(50%);
+    transform: translateX(-50%);
     top: 10px;
+    z-index: 1;
   }
 
   a:active{
@@ -334,6 +337,10 @@
     .data-type-container > p {
       padding: 5px;
     }
+
+    #startButton > img{
+      cursor: pointer;
+    }
   }
 
   @media (600px >= width){
@@ -346,6 +353,15 @@
 
     a{
       cursor: default;
+    }
+
+  }
+
+  @media (450px >= width){
+
+    #search-container{
+      left: 55%;
+      margin-left: 10px;
     }
 
   }
