@@ -632,4 +632,49 @@
     }
   }
 
+  /* settings for scaner qrcode */
+  div#reader{
+    display: none;
+    margin: auto;
+    border: none;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    width: 250%;
+    max-width: 600px;
+    min-width: 300px;
+    margin-left: -200px;
+  }
+
+  video{
+    border-radius: 15px;
+  }
+
+  #qr-shaded-region{
+    border-radius: 15px;
+  }
+
+  @media (520px >= width <= 720px){
+
+    div#reader{
+      min-width: 500px;
+    }
+
+  }
+  
+  @media (width >= 720px) {
+
+    div#reader{
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 600px;
+    }
+
+  }
+
+  #reader #html5-qrcode-button-camera-stop{
+    display: none;
+  }
+
 </style>
