@@ -11,10 +11,15 @@
         <div class="input-container-logs">
 
             <label for="sn">Inversor:</label>
-            <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" placeholder="SN do inversor" >
+            <section id="snSection">
+                <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" placeholder="SN do inversor" >
+                <button id="addingSn" @click="addingSn">
+                    <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
+                </button>
+            </section>
 
             <p class="title-description">SN:</p>
-            <p class="text-description">{{ this.textSn }}</p>
+            <p class="text-description" v-for="(eachSn) in this.allSn" :key="eachSn">{{ eachSn }}</p>
             <input type="hidden" id="textSn" name="textSn" v-model="textSn">
 
             <p class="title-description">Descrição:</p>
@@ -35,10 +40,9 @@
                 <optgroup label="Escolha o tipo de Movimento">
                     <option value="AUTORIZADA">Saiu para autorizada</option>
                     <option value="CLIENTE">Saiu para cliente</option>
-                    <option value="ESTOQUE">Chegou de compra ou autorizada</option>
+                    <option value="ESTOQUE">Chegou no estoque da loja</option>
                     <option value="SISTEMA-NOVO">Novo sistema</option>
                     <option value="BACKUP">Saiu para backup</option>
-
                 </optgroup>
                 
             </select>
@@ -97,12 +101,13 @@
                 originalDate: '',
                 formattedDate: '',
 
+                allSn:  [],
                 textSn: this.textSn || null,
                 textDescription: this.textDescription || null,
                 textType: this.textType || null,
 
                 id: this.log._id || null,
-                sn: this.log.sn || null,
+                sn: this.log.sn || [],
                 movements: this.log.movements || null,
                 client: this.log.client || null,
                 logDate: this.log.logDate || null,
@@ -119,9 +124,19 @@
         },
         methods:{
 
+            addingSn(){
+
+                this.allSn.push(this.sn)
+                console.log(this.allSn[0]);
+                this.inverterIdBusca()
+                
+
+            },
+
             async inverterIdBusca () {
 
-                await fetch(`${this.apiURL}/api/inverters/search?query=${this.sn}`, {
+                // this.sn[0]
+                await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[0]}`, {
                     method: "GET",
                     headers: {
                         "Content-type":"application/json"  
@@ -149,7 +164,7 @@
 
                 const data = {
 
-                    sn: this.sn,
+                    sn: this.allSn,
                     movements: this.movements,
                     client: this.client,
                     logDate: this.logDate,
@@ -222,7 +237,7 @@
                 const data = {
 
                     id: this.id,
-                    sn: this.sn,
+                    sn: this.allSn,
                     movements: this.movements,
                     client: this.client,
                     logDate: this.logDate, // testar formatISO aqui
@@ -347,6 +362,33 @@
         width: 30vw;
         min-width: 200px;
         max-width: 300px;
+    }
+
+    #snSection{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+        margin: 0 10px;
+    }
+
+    #snSection > input{
+        outline: none;
+        border: none;
+        padding: 6px 10px;
+        margin:0;
+        border-radius: 30px;
+        text-transform: uppercase;
+    }
+
+    #snSection > button, img{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
     }
 
     .input-container-logs > input[type='date']{

@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const logSchema = new mongoose.Schema({
 
     sn: {
-        type: String,
+        type: [String],
         required: true
     },
     movements: {

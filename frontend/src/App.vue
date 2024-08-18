@@ -366,43 +366,6 @@
 
   }
 
-  /* colors for each type */
-
-  .background-for-BACKUP{
-    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-backup));
-    height: 100vh;
-  }
-
-  .background-for-CLIENTE{
-    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-client));
-    height: 100vh;
-  }
-
-  .background-for-ESTOQUE{
-    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-inventory));
-    height: 100vh;
-  }
-
-  .background-for-GARANTIA{
-    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-garanted));
-    height: 100vh;
-  }
-
-  .background-for-BACKUP{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-backup));
-    height: 100vh;
-  }
-
-  .background-for-SISTEMA-NOVO{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-new-system));
-    height: 100vh;
-  }
-
-  .background-for-AUTORIZADA{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-autorizaded));
-    height: 100vh;
-  }
-
   /* configs for edit and navigation log and inverter */
 
   #navigation{
@@ -435,40 +398,34 @@
     transform: scale(1.2);
   }
 
+  /* colors for each type */
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-backup));
-    height: 100vh;
   }
 
   .background-for-CLIENTE{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-client));
-    height: 100vh;
   }
 
   .background-for-ESTOQUE{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-inventory));
-    height: 100vh;
   }
 
   .background-for-GARANTIA{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-garanted));
-    height: 100vh;
   }
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-backup));
-    height: 100vh;
   }
 
   .background-for-SISTEMA-NOVO{
     background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-new-system));
-    height: 100vh;
   }
 
   .background-for-AUTORIZADA{
-    background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-autorizaded));
-    height: 100vh;
+    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-autorizaded));
   }
 
   /* configs for edit and navigation log and inverter */
@@ -514,9 +471,9 @@
   }
 
   .log{
-
     max-width: 800px;
     margin: auto;
+    padding-bottom: 200px ;
     font-size: clamp(0.9375rem, 0.8144rem + 0.597vw, 1.1875rem);
     opacity: 1.1;
   }
@@ -528,16 +485,16 @@
     margin: auto;
     gap: 20px;
     min-width: 250px;
-    
+
     color: #000;
     box-shadow: 
-      0 0.3em 2em rgba(119, 119, 119, 0.178),
+      0.1em 0em 1em rgba(119, 119, 119, 0.151),
       0em 0.03em 0.2em inset rgba(202, 202, 202, 0.144)
     ;
     background-color: #fff;
     margin-top: 50px;
     border-radius: 20px;
-    padding: 50px;
+    padding: 30px;
   }
 
   .inverter-container, .log-container{

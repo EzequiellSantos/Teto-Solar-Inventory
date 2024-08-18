@@ -1,14 +1,13 @@
 <template>
 
-    <div id="body" :class="getClassForType(log.movements)">
-
         <div class="log">
-        
-            <h1 class="sn">
-                {{ log.sn }}
-            </h1>
             
             <div class="inverter-details">
+
+                <section id="allSn">
+                    <p class="sn" v-for="(eachSn) in log.sn" :key="eachSn" >{{ eachSn }}</p>
+                </section>
+
                 <p> {{ this.textDescription}} </p>
                 <p> {{ this.textType }} </p>
             </div>
@@ -25,9 +24,9 @@
 
             </div>
   
-            <div class="log-container">
+            <div class="log-container" >
         
-                <div class="details">
+                <div class="details" :class="getClassForType(log.movements)">
 
                     <section class="paragraph">
                         <p class="bold">Movimento:</p>
@@ -83,7 +82,6 @@
 
         </div>
 
-    </div>
 
 </template>
 
@@ -142,6 +140,8 @@
 
                     this.log = data.log
                     this.inverterIdBusca()
+                    console.log(this.log.sn[0]);
+                    
 
                 } catch (error) {
                     
@@ -186,19 +186,16 @@
 </script>
 
 <style scoped>
-        
-    .sn{
-        padding: 10px 0;    
-    }
 
     .inverter-details{
-        background-color: rgba(255, 255, 255, 0.377);
+        background-color: rgba(241, 241, 241, 0.562);
         border-radius: 20px;
-        width: 20vw;
+        width: 60vw;
         min-width: 150px;
-        max-width: 300px;
+        max-width: 500px;
         margin: auto;
-        padding: 1px 0;
+        margin-top: 20px;
+        padding: 10px 0;   
         text-transform: uppercase;
     }
 
@@ -210,6 +207,23 @@
 
     .spinner{
         top: 55%;
+    }
+
+    #allSn{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .sn{
+        display: inline;
+        width: 100%;
+    }
+
+    .sn::after{
+        content: ',';
     }
 
 </style>

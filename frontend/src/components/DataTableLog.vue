@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="data-sn-container">
-                        <p>{{ log.sn }}</p>
+                        <p>{{ log.client }}</p>
                     </div>
 
                     <div class="data-description-container">
