@@ -230,19 +230,4 @@
         padding-top: 80px;
     }
 
-    #startButton{
-        background-color: transparent;
-        border: none;
-        margin: 0 -50px 0 10px;
-        width: 30px;
-        min-width: 30px;
-        height: 30px;
-    }
-
-    #startButton > img{
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-
 </style>
