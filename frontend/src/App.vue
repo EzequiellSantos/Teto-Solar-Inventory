@@ -463,16 +463,18 @@
   /* settings for views unique */
 
   .inverter{
-    padding: 15px;
-    max-width: 800px;
+    width: 100%;
     margin: auto;
+    padding-top: 20px;
+    padding-bottom: 200px ;
     font-size: clamp(1.125rem, 1rem + 0.6667vw, 1.5rem);
     opacity: 1.1;
   }
 
   .log{
-    max-width: 800px;
+    width: 100%;
     margin: auto;
+    padding-top: 20px;
     padding-bottom: 200px ;
     font-size: clamp(0.9375rem, 0.8144rem + 0.597vw, 1.1875rem);
     opacity: 1.1;

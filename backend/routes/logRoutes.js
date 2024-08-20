@@ -71,7 +71,6 @@ router.get('/:id', async (req, res) => {
 
 })
 
-
 // enviando registros
 router.post('/', async (req, res) => {
 
@@ -110,11 +109,19 @@ router.put("/", async (req, res) => {
         logDate: logDate,
         obs: obs
     }
-
+    
     try{
 
-        const updateLog = await Logs.findOneAndUpdate({ _id: logId, sn: sn}, {$set: log}, { new: true })
-        res.status(201).json({ error: null, msg: "Registro atualizado com sucesso", data: updateLog })
+        if(log.sn.length != 0){ 
+
+            const updateLog = await Logs.findOneAndUpdate({ _id: logId}, {$set: log}, { new: true })
+            res.status(201).json({ error: null, msg: "Registro atualizado com sucesso", data: updateLog })
+
+        } else {
+
+            res.status(400).json({ error: "Insira um SN"})
+
+        }
 
     }catch(error){
 

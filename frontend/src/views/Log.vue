@@ -1,6 +1,6 @@
 <template>
 
-        <div class="log">
+        <div class="log" :class="getClassForType(log.movements)">
             
             <div class="inverter-details">
 
@@ -26,7 +26,7 @@
   
             <div class="log-container" >
         
-                <div class="details" :class="getClassForType(log.movements)">
+                <div class="details">
 
                     <section class="paragraph">
                         <p class="bold">Movimento:</p>
@@ -139,9 +139,7 @@
                     const data = await response.json()
 
                     this.log = data.log
-                    this.inverterIdBusca()
-                    console.log(this.log.sn[0]);
-                    
+                    this.inverterIdBusca()                    
 
                 } catch (error) {
                     
@@ -188,13 +186,12 @@
 <style scoped>
 
     .inverter-details{
-        background-color: rgba(241, 241, 241, 0.562);
+        background-color: rgba(255, 255, 255, 0.87);
         border-radius: 20px;
-        width: 60vw;
+        width: 70vw;
         min-width: 150px;
-        max-width: 500px;
+        max-width: 350px;
         margin: auto;
-        margin-top: 20px;
         padding: 10px 0;   
         text-transform: uppercase;
     }

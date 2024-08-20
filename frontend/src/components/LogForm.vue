@@ -12,15 +12,26 @@
 
             <label for="sn">Inversor:</label>
             <section id="snSection">
-                <input type="text" @input="inverterIdBusca" id="sn"  name="sn" v-model="sn" placeholder="SN do inversor" >
-                <button id="addingSn" @click="addingSn">
+
+                <button id="startButtonForm" @click="lerqrcode">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC7ElEQVR4nO2bX47TMBDGs30ByjnKZVjgAk3PsH9ACCSkPHID1F0tL6vlErzuLSgcgeUGP2TV2XWT1HHGdtO6/iS/uIln5suMO/bYRdEA8BJ4B1wAHy3tA/CqGBlKB62LTddz4C0wtQ10ogf6hztWO7W2W+/fA/R9AC6Vrc1BJsCPAQMdKgE17jZIYP3lNwwDlsBXS/sCzEa1fq37TOti03WpbTJxYca86fbXwLMiMSibgJtGOEwLPTnU+JWi8Q0SzJA5VZ3vjY5vReLQ4fAUBkBldFRF4mjZSyaA7AE4hIDOFcqejMts6tmJo1vWY7feCS1XHALAguEoHQlYbHsntFwfAiqBIk6Tqk2H0HJDEXBvybruIxLgLbeLgM9GxyeJkpLnhAR4y23Zy3o5udJtdgQEONmbLAFikAkgewA5BB7x05KJqd+2xfO2rM72jrfcGHOAKypBVhc1EfIhoBQoMhcYMw8tNxQBEzVwz96b2eYdC5u+rK7rHW+5ewOObOndQiaA7AGVawj0lLz2oiwX1QMcKj6jV6XGJoBil6CdxfW6YYcbO2drlpLXaAQshrphz1cU/Q2OSUAZmABRtjZ2CMyHVIctbizO1hokem3HHyQIuB2/N7AVRoQHIsIvhmLCVhgRHIjY38XQNuQUmbxGqPZ+mUzc6rCtLhBN7iBErg7bCIgmdxBSqQ6LQSLV4VAEVL7PHWVtEP/CyMETsKAfSRNQeRZTwhPAetfmj15kRD0gISyMxDgg8WQvOzwiE3qCDHVEphIIkFaHfQnwrg63dGCHx+QCECCSG4qAUqCIrdLrtGkRujrsQ8AkQHW4HsN50yJ0dVhMQCrIBJA9oGqGwKXRsSwSB3Bl2HuuOt4YHavEL00911lgjdeqc6qvkNW4SZEEbfx3w86/wIv6RzMM0HnyMqG7w1eNL69w1rw3rK6TDsWhXp297bo/fKJvjD8kTIBy+7OW8cXmgGpOUBOjunKeyt1hZcvpY8wb+A96SmrlZD0kzgAAAABJRU5ErkJggg==">
+                </button> 
+                
+                <div id="reader"></div>
+                <input type="text" id="sn"  name="sn" v-model="sn" placeholder="SN do inversor" >
+                <button id="addingSn" @click="addingSn($event)">
                     <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
                 </button>
+
             </section>
 
             <p class="title-description">SN:</p>
-            <p class="text-description" v-for="(eachSn) in this.allSn" :key="eachSn">{{ eachSn }}</p>
-            <input type="hidden" id="textSn" name="textSn" v-model="textSn">
+            <p class="text-description" id="pSnArray" v-for="(eachSn, index) in this.allSn" :key="index">
+                
+                {{ eachSn }} 
+                <button id="removingSn" @click="removingSn($event, index)"><img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/></button>
+
+            </p>
 
             <p class="title-description">Descrição:</p>
             <p class="text-description">{{ this.textDescription}}</p>
@@ -38,11 +49,15 @@
             <select name="movements" id="movements" v-model="movements" required>
 
                 <optgroup label="Escolha o tipo de Movimento">
+
+                    <option value="ESTOQUE">Entrou para estoque ou backup </option>
+                    <option value="AGUARDANDO">Chegou e vai para clientes</option>
                     <option value="AUTORIZADA">Saiu para autorizada</option>
+                    <option value="RECONDICIONADO">Chegou da Autorizada</option>
                     <option value="CLIENTE">Saiu para cliente</option>
-                    <option value="ESTOQUE">Chegou no estoque da loja</option>
-                    <option value="SISTEMA-NOVO">Novo sistema</option>
-                    <option value="BACKUP">Saiu para backup</option>
+                    <!-- <option value="SISTEMA-NOVO">Novo sistema</option> -->
+                    <option value="BACKUP">Saiu como backup</option>
+
                 </optgroup>
                 
             </select>
@@ -101,13 +116,12 @@
                 originalDate: '',
                 formattedDate: '',
 
-                allSn:  [],
-                textSn: this.textSn || null,
+                allSn: this.log.sn ||  [],
                 textDescription: this.textDescription || null,
                 textType: this.textType || null,
 
                 id: this.log._id || null,
-                sn: this.log.sn || [],
+                sn: null,
                 movements: this.log.movements || null,
                 client: this.log.client || null,
                 logDate: this.log.logDate || null,
@@ -124,31 +138,40 @@
         },
         methods:{
 
-            addingSn(){
+            addingSn(e){
 
-                this.allSn.push(this.sn)
-                console.log(this.allSn[0]);
+                e.preventDefault()
+
+                if(this.sn !== null){
+
+                    this.allSn.push(this.sn)
+                    this.sn = null
+
+                }
+
+            },
+
+            removingSn(e, index){
+
+                e.preventDefault()
+                this.allSn.splice(index, 1)
                 this.inverterIdBusca()
-                
 
             },
 
             async inverterIdBusca () {
 
-                // this.sn[0]
                 await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[0]}`, {
                     method: "GET",
                     headers: {
                         "Content-type":"application/json"  
                     }
-
                 })
                 .then((resp) => resp.json())
                 .then((data) => {
                     
                     if(data.inverter){
 
-                        this.textSn = data.inverter[0].sn
                         this.textDescription = data.inverter[0].description
                         this.textType = data.inverter[0].type
 
@@ -240,7 +263,7 @@
                     sn: this.allSn,
                     movements: this.movements,
                     client: this.client,
-                    logDate: this.logDate, // testar formatISO aqui
+                    logDate: this.logDate,
                     obs: this.obs
 
                 }
@@ -286,7 +309,7 @@
                         setTimeout(() => {
 
                             this.msg = null
-                            this.$router.push("/logs")
+                            this.$router.push(`/logs`)
                     
                         }, 2000)
 
@@ -330,8 +353,13 @@
     }
 
     .text-description{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
         color: #818181;
-        padding: 4px 0 0 0;
+        padding: 7px 0 0 0;
     }
 
     .input-container-logs{
@@ -385,7 +413,7 @@
         text-transform: uppercase;
     }
 
-    #snSection > button, img{
+    button, img{
         background-color: transparent;
         border: none;
         cursor: pointer;
