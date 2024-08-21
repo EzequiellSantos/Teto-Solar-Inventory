@@ -46,6 +46,7 @@
     --color-for-garanted: #faf888ce ;
     --color-for-new-system: #88a3fac7;
     --color-for-autorizaded: #faf888d5;
+    --color-for-waiting: #bffa88d5;
     
 
     --color-main00: #F9AB01;
@@ -230,6 +231,12 @@
     color: #000;
   }
 
+  .color-for-REPOSICAO{
+    border-color: var(--color-for-inventory);
+    background-color: var(--color-for-inventory);
+    color: #000;
+  }
+
   .color-for-BACKUP{
     border-color: var(--color-for-backup);
     background-color: var(--color-for-backup);
@@ -251,6 +258,12 @@
   .color-for-AUTORIZADA{
     border-color: var(--color-for-autorizaded);
     background-color: var(--color-for-autorizaded);
+    color: #000;
+  }
+
+  .color-for-AGUARDANDO{
+    border-color: var(--color-for-waiting);
+    background-color: var(--color-for-waiting);
     color: #000;
   }
 
@@ -426,6 +439,14 @@
 
   .background-for-AUTORIZADA{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-autorizaded));
+  }
+
+  .background-for-REPOSICAO{
+    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-inventory));
+  }
+
+  .background-for-AGUARDANDO{
+    background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-waiting));
   }
 
   /* configs for edit and navigation log and inverter */
@@ -650,6 +671,61 @@
 
   #reader #html5-qrcode-button-camera-stop{
     display: none;
+  }
+
+  #snSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 30vw;
+    min-width: 200px;
+    max-width: 300px;
+    margin: 0 10px;
+  }
+
+  #snSection > input{
+    outline: none;
+    border: none;
+    padding: 6px 10px;
+    width: 80%;
+    margin: 10px 7px;
+    border-radius: 30px;
+    text-transform: uppercase;
+  }
+
+  button{
+    background-color: rgba(228, 228, 228, 0.651);
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+  }
+
+  #startButtonForm{
+    background-color: transparent;
+  }
+
+  #startButtonForm > img{
+    width: 35px;
+    height: 35px;
+  }
+
+  div#readerForm{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    min-width: 300px;
+
+  }
+
+  #logout{
+    background-color: #ececec;
   }
 
 </style>

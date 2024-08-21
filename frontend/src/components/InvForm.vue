@@ -4,6 +4,8 @@
 
         <Message :msg="msg" :msgClass="msgClass"/>
 
+        <div id="readerForm" style="position: fixed"></div>
+
         <form id="invForm" enctype="multipart/form-data" @submit="page === 'registerInv' ? register($event) : update($event)">
 
             <input type="hidden" id="id" name="id" v-model="id">
@@ -18,7 +20,12 @@
             <div class="input-container">
 
                 <label for="sn">S/N:</label>
-                <input type="text" name="sn" id="sn" v-model="sn" required placeholder="Número S/N">
+                <section id="snSection">
+                    <input type="text" name="sn" id="sn" v-model="sn" required placeholder="Número S/N">
+                    <button id="startButtonForm" @click="lerqrcode($event)">
+                        <img width="35" height="35" src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png" alt="qr-code--v2"/>
+                    </button>
+                </section>
 
             </div>
 
@@ -87,6 +94,7 @@
     import Message from '../components/Message.vue'
     import InputSubmit from '../components/form/inputSubmit.vue'
     import {BASE_URL} from '@/config'
+    import { Html5QrcodeScanner } from 'html5-qrcode'
 
 export default {
     name: "invForm",
@@ -111,78 +119,124 @@ export default {
     text: "Cadastrar",
     methods: {
 
+        lerqrcode(e){
 
-            async register(e) {
+            e.preventDefault()
 
-                e.preventDefault()
+            const divReader = document.getElementById("readerForm")
+            divReader.style.display = "block"
+            divReader.style.position = "fixed"
 
-                const data = {
+            const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
 
-                invoice: this.invoice,
-                sn: this.sn,
-                description: this.description,
-                type: this.type,
-                state: this.state
+                this.sn = decodedText;
+                console.log("Lido :))", decodedText)
+                divReader.style.display = "none"
 
+                try{
+
+                    html5QrcodeScanner.clear();
+                    html5QrcodeScanner.resume()
+
+                } catch(err){
+
+                    console.error(err);
+                    
                 }
 
-                const jsonData = JSON.stringify(data)
+            };
 
-                await fetch(`${this.apiURL}/api/inverters/`, {
+            const qrCodeErrorCallback = (errorMessage) => {
+                // console.warn(`QR Code scan error: ${errorMessage}`);
+            };
 
-                    method: "POST",
-                    headers: {"Content-type":"application/json"},
-                    body: jsonData
+            const config = { 
+                fps: 1, 
+                qrbox: { width: window.innerWidth / 100 * 40, height: 170 },
+                experimentalFeatures: {
+                    useBarCodeDetectorIfSupported: true
+                },
+                rememberLastUsedCamera: true
+            };
 
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
+            const html5QrcodeScanner = new Html5QrcodeScanner(
+                "readerForm", config, false);   
+            html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
 
-                    if(data.error){
+        },
 
-                        this.msg = data.error
-                        this.msgClass = "error"
 
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
+        async register(e) {
 
-                        setTimeout(() => {
+            e.preventDefault()
 
-                            this.msg = null
-                    
-                        }, 2000)
+            const data = {
 
-                    } else {
+            invoice: this.invoice,
+            sn: this.sn,
+            description: this.description,
+            type: this.type,
+            state: this.state
 
-                        this.msg = data.msg
-                        this.msgClass = 'sucess'
+            }
 
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
+            const jsonData = JSON.stringify(data)
 
-                        setTimeout(() => {
+            await fetch(`${this.apiURL}/api/inverters/`, {
 
-                            this.msg = null
-                            this.$router.push("/inverters")
-                    
-                        }, 2000)
-                    }
+                method: "POST",
+                headers: {"Content-type":"application/json"},
+                body: jsonData
 
-                })
-                .catch((error) => {
-                    console.log(error, " Erro ao Cadastrar")
-                    this.msg = error
-                    this.msgClass = 'error'
-                })
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
 
-            },
-            async update(e){
+                if(data.error){
 
-                e.preventDefault()
+                    this.msg = data.error
+                    this.msgClass = "error"
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                
+                    }, 2000)
+
+                } else {
+
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
+
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push("/inverters")
+                
+                    }, 2000)
+                }
+
+            })
+            .catch((error) => {
+                console.log(error, " Erro ao Cadastrar")
+                this.msg = error
+                this.msgClass = 'error'
+            })
+
+        },
+        async update(e){
+
+            e.preventDefault()
 
             const data = {
                 id: this.id,
@@ -194,64 +248,64 @@ export default {
 
             }
 
-                const jsonData = JSON.stringify(data)
+            const jsonData = JSON.stringify(data)
 
-                await fetch(`${this.apiURL}/api/inverters`, {
-                    method: "PUT",
-                    headers: { "Content-type":"application/json" },
-                    body: jsonData
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
+            await fetch(`${this.apiURL}/api/inverters`, {
+                method: "PUT",
+                headers: { "Content-type":"application/json" },
+                body: jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
 
-                    if(data.error){
+                if(data.error){
 
-                        this.msg = data.error
-                        this.msgClass = 'error'
+                    this.msg = data.error
+                    this.msgClass = 'error'
 
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
 
-                        setTimeout(() => {
-
-                            this.msg = null
-                    
-                        }, 2000)
-
-                    } else {
-
-                        this.msg = data.msg
-                        this.msgClass = 'sucess'
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-
-                        setTimeout(() => {
+                    setTimeout(() => {
 
                         this.msg = null
-                        this.$router.push(`/inverter/${this.id}`)
                 
                     }, 2000)
 
-                    }
+                } else {
 
-                })
-                .catch((err) => {
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
 
-                    this.msg = err.message || "Error.. "
-                    this.msgClass = 'error'
-                    console.log(err)
-                    
-                })
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    })
 
-            }
+                    setTimeout(() => {
+
+                    this.msg = null
+                    this.$router.push(`/inverter/${this.id}`)
+            
+                }, 2000)
+
+                }
+
+            })
+            .catch((err) => {
+
+                this.msg = err.message || "Error.. "
+                this.msgClass = 'error'
+                console.log(err)
+                
+            })
 
         }
+
     }
+}
 
 </script>
 

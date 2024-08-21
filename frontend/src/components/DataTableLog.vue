@@ -9,7 +9,7 @@
             <div class="indexes-number"> # </div>
 
             <div class="data-sn-heading">
-                S/N:
+                Cliente:
             </div>
 
             <div class="data-description-heading">

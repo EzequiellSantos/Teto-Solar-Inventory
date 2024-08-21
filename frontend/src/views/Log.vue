@@ -219,8 +219,4 @@
         width: 100%;
     }
 
-    .sn::after{
-        content: ',';
-    }
-
 </style>

@@ -4,6 +4,8 @@
 
         <Message :msg="msg" :msgClass="msgClass"/>
 
+        <div id="readerForm" style="position: fixed"></div>
+
         <form id="logForm" enctype="multipart/form-data" @submit="page === 'registerLog' ? register($event) : update($event)">
 
         <input type="hidden" id="id" name="id" v-model="id">
@@ -13,12 +15,11 @@
             <label for="sn">Inversor:</label>
             <section id="snSection">
 
-                <button id="startButtonForm" @click="lerqrcode">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC7ElEQVR4nO2bX47TMBDGs30ByjnKZVjgAk3PsH9ACCSkPHID1F0tL6vlErzuLSgcgeUGP2TV2XWT1HHGdtO6/iS/uIln5suMO/bYRdEA8BJ4B1wAHy3tA/CqGBlKB62LTddz4C0wtQ10ogf6hztWO7W2W+/fA/R9AC6Vrc1BJsCPAQMdKgE17jZIYP3lNwwDlsBXS/sCzEa1fq37TOti03WpbTJxYca86fbXwLMiMSibgJtGOEwLPTnU+JWi8Q0SzJA5VZ3vjY5vReLQ4fAUBkBldFRF4mjZSyaA7AE4hIDOFcqejMts6tmJo1vWY7feCS1XHALAguEoHQlYbHsntFwfAiqBIk6Tqk2H0HJDEXBvybruIxLgLbeLgM9GxyeJkpLnhAR4y23Zy3o5udJtdgQEONmbLAFikAkgewA5BB7x05KJqd+2xfO2rM72jrfcGHOAKypBVhc1EfIhoBQoMhcYMw8tNxQBEzVwz96b2eYdC5u+rK7rHW+5ewOObOndQiaA7AGVawj0lLz2oiwX1QMcKj6jV6XGJoBil6CdxfW6YYcbO2drlpLXaAQshrphz1cU/Q2OSUAZmABRtjZ2CMyHVIctbizO1hokem3HHyQIuB2/N7AVRoQHIsIvhmLCVhgRHIjY38XQNuQUmbxGqPZ+mUzc6rCtLhBN7iBErg7bCIgmdxBSqQ6LQSLV4VAEVL7PHWVtEP/CyMETsKAfSRNQeRZTwhPAetfmj15kRD0gISyMxDgg8WQvOzwiE3qCDHVEphIIkFaHfQnwrg63dGCHx+QCECCSG4qAUqCIrdLrtGkRujrsQ8AkQHW4HsN50yJ0dVhMQCrIBJA9oGqGwKXRsSwSB3Bl2HuuOt4YHavEL00911lgjdeqc6qvkNW4SZEEbfx3w86/wIv6RzMM0HnyMqG7w1eNL69w1rw3rK6TDsWhXp297bo/fKJvjD8kTIBy+7OW8cXmgGpOUBOjunKeyt1hZcvpY8wb+A96SmrlZD0kzgAAAABJRU5ErkJggg==">
+                <button id="startButtonForm" @click="lerqrcode($event)">
+                    <img width="35" height="35" src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png" alt="qr-code--v2"/>
                 </button> 
-                
-                <div id="reader"></div>
-                <input type="text" id="sn"  name="sn" v-model="sn" placeholder="SN do inversor" >
+
+                <input type="text" id="sn"  name="sn" v-model="sn" placeholder="SN do Inver." >
                 <button id="addingSn" @click="addingSn($event)">
                     <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
                 </button>
@@ -53,7 +54,7 @@
                     <option value="ESTOQUE">Entrou para estoque ou backup </option>
                     <option value="AGUARDANDO">Chegou e vai para clientes</option>
                     <option value="AUTORIZADA">Saiu para autorizada</option>
-                    <option value="RECONDICIONADO">Chegou da Autorizada</option>
+                    <option value="REPOSICAO">Chegou da Autorizada</option>
                     <option value="CLIENTE">Saiu para cliente</option>
                     <!-- <option value="SISTEMA-NOVO">Novo sistema</option> -->
                     <option value="BACKUP">Saiu como backup</option>
@@ -102,6 +103,7 @@
     import InputSubmit from '../components/form/inputSubmit.vue'
     import { BASE_URL } from '@/config'
     import { parseISO, format, parse } from 'date-fns'
+    import { Html5QrcodeScanner } from 'html5-qrcode'
 
     export default {
         name: "LogForm",
@@ -137,6 +139,53 @@
 
         },
         methods:{
+
+            lerqrcode(e){
+
+                e.preventDefault()
+
+                const divReader = document.getElementById("readerForm")
+                divReader.style.display = "block"
+                divReader.style.position = "fixed"
+
+                const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+    
+                    this.allSn.push(decodedText);
+                    console.log("Lido :))", decodedText)
+                    this.inverterIdBusca()
+                    divReader.style.display = "none"
+
+                    try{
+
+                        html5QrcodeScanner.clear();
+                        html5QrcodeScanner.resume()
+
+                    } catch(err){
+
+                        console.error(err);
+                        
+                    }
+
+                };
+
+                const qrCodeErrorCallback = (errorMessage) => {
+                    // console.warn(`QR Code scan error: ${errorMessage}`);
+                };
+
+                const config = { 
+                    fps: 1, 
+                    qrbox: { width: window.innerWidth / 100 * 40, height: 170 },
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true
+                    },
+                    rememberLastUsedCamera: true
+                };
+
+                const html5QrcodeScanner = new Html5QrcodeScanner(
+                    "readerForm", config, false);   
+                html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
+
+            },
 
             addingSn(e){
 
@@ -392,33 +441,6 @@
         max-width: 300px;
     }
 
-    #snSection{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-content: center;
-        align-items: center;
-        width: 30vw;
-        min-width: 200px;
-        max-width: 300px;
-        margin: 0 10px;
-    }
-
-    #snSection > input{
-        outline: none;
-        border: none;
-        padding: 6px 10px;
-        margin:0;
-        border-radius: 30px;
-        text-transform: uppercase;
-    }
-
-    button, img{
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-    }
-
     .input-container-logs > input[type='date']{
         border-radius: 20px;
         outline: 0;
@@ -477,6 +499,19 @@
         input, select{
             padding: 14px;
         }
+
+    }
+
+    #formLogs > div#readerForm{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: none;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 600px;
+        min-width: 300px;
 
     }
 
