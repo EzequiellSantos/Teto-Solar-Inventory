@@ -502,17 +502,4 @@
 
     }
 
-    #formLogs > div#readerForm{
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-        border: none;
-        border-radius: 20px;
-        width: 100%;
-        max-width: 600px;
-        min-width: 300px;
-
-    }
-
 </style>
