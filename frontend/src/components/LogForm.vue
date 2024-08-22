@@ -51,13 +51,14 @@
 
                 <optgroup label="Escolha o tipo de Movimento">
 
-                    <option value="ESTOQUE">Entrou para estoque ou backup </option>
+                    <option value="ESTOQUE">Entrou para estoque</option>
                     <option value="AGUARDANDO">Chegou e vai para clientes</option>
                     <option value="GARANTIA">Chegou para fazer garantia</option>
                     <option value="AUTORIZADA">Saiu para autorizada</option>
                     <option value="REPOSICAO">Chegou da Autorizada</option>
                     <option value="CLIENTE">Saiu para cliente</option>
                     <!-- <option value="SISTEMA-NOVO">Novo sistema</option> -->
+                    <option value="BACKUP ">Chegou de backup</option>
                     <option value="BACKUP">Saiu como backup</option>
 
                 </optgroup>
@@ -157,7 +158,7 @@
                         break
 
                     case "AUTORIZADA":
-                        this.type = "GARANTIA"
+                        this.type = "AUTORIZADA"
                         this.state = "Foi enviado"
                         break
 
@@ -171,6 +172,11 @@
                         this.state = "Está no cliente"
                         break
 
+                    case "BACKUP ":
+                        this.type = "BACKUP"
+                        this.state = "Backup em estoque"
+                        break
+
                     case "BACKUP":
                         this.type = "BACKUP"
                         this.state = "Backup em uso"
@@ -182,7 +188,7 @@
                         break
 
                     case "AGUARDANDO":
-                        this.type = "ESTOQUE"
+                        this.type = "AGUARDANDO"
                         this.state = "Vai para cliente"
                         break
                     default: 
