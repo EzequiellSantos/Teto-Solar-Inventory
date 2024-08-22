@@ -47,12 +47,13 @@
         <div class="input-container-logs">
 
             <label for="movements">Tipo de Movimentos:</label>
-            <select name="movements" id="movements" v-model="movements" required>
+            <select name="movements" id="movements" v-model="movements" @change="selecionarOpcao" required>
 
                 <optgroup label="Escolha o tipo de Movimento">
 
                     <option value="ESTOQUE">Entrou para estoque ou backup </option>
                     <option value="AGUARDANDO">Chegou e vai para clientes</option>
+                    <option value="GARANTIA">Chegou para fazer garantia</option>
                     <option value="AUTORIZADA">Saiu para autorizada</option>
                     <option value="REPOSICAO">Chegou da Autorizada</option>
                     <option value="CLIENTE">Saiu para cliente</option>
@@ -128,6 +129,11 @@
                 client: this.log.client || null,
                 logDate: this.log.logDate || null,
                 obs: this.log.obs || "",
+
+                idInverter: [],
+                type: null,
+                state: null,
+
                 msg: null,
                 msgClass: null,
                 apiURL: BASE_URL,
@@ -140,6 +146,52 @@
         },
         methods:{
 
+            // condição para atualizar os inversores com base no movimento feito
+            selecionarOpcao(){
+
+                switch(this.movements){
+
+                    case "ESTOQUE":
+                        this.type = "ESTOQUE"
+                        this.state = "Está na loja"
+                        break
+
+                    case "AUTORIZADA":
+                        this.type = "GARANTIA"
+                        this.state = "Foi enviado"
+                        break
+
+                    case "GARANTIA":
+                        this.type = "GARANTIA"
+                        this.state = "Em espera"
+                        break
+
+                    case "CLIENTE":
+                        this.type = "CLIENTE"
+                        this.state = "Está no cliente"
+                        break
+
+                    case "BACKUP":
+                        this.type = "BACKUP"
+                        this.state = "Backup em uso"
+                        break
+
+                    case "REPOSICAO":
+                        this.type = "ESTOQUE"
+                        this.state = "Recondicionado"
+                        break
+
+                    case "AGUARDANDO":
+                        this.type = "ESTOQUE"
+                        this.state = "Vai para cliente"
+                        break
+                    default: 
+                    this.type   
+                }
+
+            },
+
+            // scanner de QRcode para facilitar a busca por sn
             lerqrcode(e){
 
                 e.preventDefault()
@@ -187,6 +239,7 @@
 
             },
 
+            // adicionar sn na array
             addingSn(e){
 
                 e.preventDefault()
@@ -195,11 +248,13 @@
 
                     this.allSn.push(this.sn)
                     this.sn = null
+                    this.inverterIdBusca()
 
                 }
 
             },
 
+            // remover sn da array
             removingSn(e, index){
 
                 e.preventDefault()
@@ -208,6 +263,7 @@
 
             },
 
+            // função para buscar as informações dos inversores com base em seus SNs
             async inverterIdBusca () {
 
                 await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[0]}`, {
@@ -220,7 +276,7 @@
                 .then((data) => {
                     
                     if(data.inverter){
-
+                        
                         this.textDescription = data.inverter[0].description
                         this.textType = data.inverter[0].type
 
@@ -230,6 +286,7 @@
 
             }, 
 
+            // resgistrar movimentos
             async register(e) {
 
                 e.preventDefault()
@@ -284,12 +341,7 @@
                             behavior: 'smooth'
                         })
 
-                        setTimeout(() => {
-
-                            this.msg = null
-                            this.$router.push("/logs")
-                    
-                        }, 2000)
+                        this.collectingIds()
 
                     }
 
@@ -302,6 +354,7 @@
 
             },
 
+            // atualizar registro
             async update(e){
 
                 e.preventDefault()
@@ -343,7 +396,7 @@
 
                             this.msg = null
                     
-                        }, 2000)                    
+                        }, 1000)                    
 
                     } else{
 
@@ -355,12 +408,7 @@
                             behavior: "smooth"
                         })
 
-                        setTimeout(() => {
-
-                            this.msg = null
-                            this.$router.push(`/logs`)
-                    
-                        }, 2000)
+                        this.collectingIds()
 
                     }               
 
@@ -372,6 +420,89 @@
                     console.log(err)
 
                 })
+
+            },
+
+            // função para coletar todos os ids correspondente aos SNs presentes no registro
+            async collectingIds(){
+                
+                this.idInverter = []
+
+                for(let v = 0 ; v < this.allSn.length ; v++){
+
+                    await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[v]}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-type":"application/json"  
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.inverter){
+
+                            this.idInverter.push(data.inverter[0]._id)
+
+                        }
+
+                    })
+                    
+                }
+
+                this.updateInverters()
+                this.msg = null
+
+            },
+
+            // função para atualizar os inversores coletados de acordo com os movimentos sofridos
+            async updateInverters(){
+
+                for(let v = 0; v < this.idInverter.length ; v++){
+
+                    const data = {
+                        id: this.idInverter[v],
+                        type: this.type,
+                        state: this.state
+                    }
+
+                    const jsonData = JSON.stringify(data)
+
+                    await fetch(`${this.apiURL}/api/inverters`, {
+                        method: "PUT",
+                        headers: { "Content-type":"application/json" },
+                        body: jsonData
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.error){
+
+                            this.msg = data.error,
+                            this.msgClass = 'error'
+                            console.log(data.error)
+
+                        } else {
+
+                            this.msg = "Inversor(es) atualizado(s) com sucesso!"
+                            this.msgClass = 'sucess'
+
+                            setTimeout(() => {
+
+                                this.msg = null
+                                this.$router.push(`/logs#${this.log.sn}`)
+                    
+                            }, 2000)
+
+                        }
+
+                    })
+                    .catch((error) => {
+
+                        console.log(error, " Erro no backend")
+
+                    })
+
+                }
 
             }
 
