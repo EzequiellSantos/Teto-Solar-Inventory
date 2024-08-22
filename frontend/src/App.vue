@@ -45,8 +45,8 @@
     --color-for-backup: #cf6cf7bb ;
     --color-for-garanted: #faf888ce ;
     --color-for-new-system: #88a3fac7;
-    --color-for-autorizaded: #faf888d5;
-    --color-for-waiting: #bffa88d5;
+    --color-for-autorizaded: #ff9f9fd4;
+    --color-for-waiting: #9fffedd4;
     
 
     --color-main00: #F9AB01;
