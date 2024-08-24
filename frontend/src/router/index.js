@@ -95,11 +95,20 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
+
+    /*
+      salvar posição em forma de hash do item clicado  e levar
+      até a posição dele quando a hash estiver presente na url 
+    */
+
     return new Promise((resolve) => {
+
       if (to.hash) {
         const checkExist = setInterval(() => {
           const element = document.getElementById(to.hash.slice(1));
+
           if (element) {
+
             clearInterval(checkExist);
 
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
@@ -111,17 +120,24 @@ const router = createRouter({
             });
 
             resolve();
+
           }
         }, 100); // Verifica a cada 100ms
+
       } else if (savedPosition) {
+
         resolve(savedPosition);
+
       } else {
+
         resolve({ x: 0, y: 0 });
+
       }
+
     });
+
   }
 
-  
 })
 
 router.beforeEach((to, from, next) => {

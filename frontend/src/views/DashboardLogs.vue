@@ -80,6 +80,7 @@
         },
         methods: {
 
+            // realizar uma query de busca de logs
             async inputTextoBusca(){
                 this.loading = true
                 this.logs = []
@@ -140,6 +141,7 @@
 
             },
 
+            // trazer todos os logs
             async getLogs() {
 
                 try {
@@ -166,6 +168,8 @@
                 }
 
             },
+
+            // acionar QRCode scanner
             lerqrcode() {
 
                 const divReader = document.getElementById("reader")

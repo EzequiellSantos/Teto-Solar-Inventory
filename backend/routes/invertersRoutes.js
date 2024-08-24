@@ -47,6 +47,7 @@ router.get("/search", async (req, res) => {
 
 })
 
+// realizando busca de um unico inverter
 router.get("/:id", async (req, res) => {
 
     try {

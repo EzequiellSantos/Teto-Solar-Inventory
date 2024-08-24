@@ -520,7 +520,7 @@
 
 <style scoped>
 
-
+    /* configurações do formulário de registros */
     #formLogs{
         width: calc(100% - 20px);
         max-width: 900px;

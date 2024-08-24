@@ -6,7 +6,9 @@
 
         <div class="data-table-heading">
 
-            <div class="indexes-number"> # </div>
+            <div class="indexes-number">
+                #
+            </div>
 
             <div class="data-sn-heading">
                 S/N:
@@ -24,7 +26,6 @@
 
         <div class="data-table-body">
 
-            
             <div v-for="(inverter, index) in inverters" :key="inverter.sn"  >
 
                     <router-link :id="inverter.sn" class="data-row" :to="`/inverter/${ inverter._id }`" >  
@@ -45,11 +46,8 @@
                     </div>
 
                     <div class="data-actions-container">
-
-                        <!-- <router-link :to="`/editInverter/${inverter._id}`" class="edit-btn">
-                            editar inv  
-                        </router-link>
-                        <button class="remove-btn" @click="remove(inverter._id)">Remover Inversor</button> -->
+                          
+                        <!-- <button class="remove-btn" @click="remove(inverter._id)">Remover Inversor</button> -->
 
                     </div>
 
@@ -85,6 +83,7 @@
         },
         methods: {
 
+            //deletar inversor
             async remove(id){
 
                 const data = {

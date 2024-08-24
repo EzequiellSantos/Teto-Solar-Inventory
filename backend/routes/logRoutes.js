@@ -45,6 +45,7 @@ router.get('/search', async (req, res) => {
 
 })
 
+// realizando busca de um unico lo
 router.get('/:id', async (req, res) => {
 
     try {

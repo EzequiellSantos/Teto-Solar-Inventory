@@ -37,6 +37,7 @@
         },
         methods: {
 
+            // preencher os inputs com os valores do log selecionado
             async getLog(){
 
                 const id = this.$route.params.id

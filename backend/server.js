@@ -7,7 +7,7 @@ const cors = require('cors')
 const app = express();
 
 const corsOptions = {
-  origin: '*', // Substitua pelo domínio do frontend
+  origin: '*',
   optionsSuccessStatus: 200
 };
 
@@ -29,12 +29,10 @@ mongoose.connect(`mongodb+srv://${DBUser}:${DBPassword}@cluster0.t9g7g6t.mongodb
   .catch(err => console.log(err, "Erro de Conexão no MONGODB"));
 
 // Routes
-const userRoutes = require('./routes/userRoutes');
 const invertersRoutes = require('./routes/invertersRoutes')
 const logRoutes = require('./routes/logRoutes')
 const authRoutes = require('./routes/authRoutes') 
 
-app.use('/api/users', userRoutes);
 app.use('/api/inverters', invertersRoutes)
 app.use('/api/logs', logRoutes)
 app.use('/api/auth', authRoutes)

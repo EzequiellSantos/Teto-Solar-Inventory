@@ -34,6 +34,7 @@
         },
         methods: {
 
+            // Preencher os inputs com os valores correspondentes do inverter selecionado
             async getInverter() {
 
                 const id = this.$route.params.id

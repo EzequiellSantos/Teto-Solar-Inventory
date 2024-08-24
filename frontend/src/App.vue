@@ -18,7 +18,10 @@
 
     name: "App", 
     components:{
+
+      // recurso da vercel para medir desempenho do site
       SpeedInsights
+
     } 
 
   }
@@ -66,6 +69,8 @@
   input[type=text]{
     cursor: text;
   }
+
+  /* configurações do container de pesquisa */
 
   #search-container{
     position: fixed;
@@ -358,7 +363,7 @@
 
   @media (600px >= width){
 
-    /* settings for media queries (tablets ands computers) */
+    /* configurações de media queries para dashboards (tablets ands computers) */
 
     .data-description-container, .data-type-container, .data-sn-container, .index-container{
       font-size: clamp(0.625rem, 0.3125rem + 1.6667vw, 0.9375rem);
@@ -379,7 +384,7 @@
 
   }
 
-  /* configs for edit and navigation log and inverter */
+  /* configurações de navegação de logs e inveters */
 
   #navigation{
     display: flex;
@@ -411,7 +416,7 @@
     transform: scale(1.2);
   }
 
-  /* colors for each type */
+  /* cores para cada type */
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-backup));
@@ -458,39 +463,7 @@
     height: 80vh;
   }
 
-  /* configs for edit and navigation log and inverter */
-
-  #navigation{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    max-width: 500px;
-    margin: auto;
-  }
-
-  .editButton, .voltarButton{
-    background-color: rgba(255, 255, 255, 0.952);
-    width: 50px;
-    height: 48px;
-    margin: auto;
-    margin-top: 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .voltarButton > a{
-    margin-top: 5px;
-    margin-right: 2px;
-  }
-
-  a:active > svg{
-    transform: scale(1.2);
-  }
-
-  /* settings for views unique */
+  /* configurações de views únicas */
 
   .inverter{
     width: 100%;
@@ -567,7 +540,7 @@
     color: #000;
   }
 
-  /* settings for spinner load  */
+  /* configurações para o spinner de carregamento  */
 
   .spinner {
     position: absolute;
@@ -621,7 +594,7 @@
     }
   }
 
-  /* settings for scaner qrcode */
+  /* configurações para o scanner de QRCode */
   
   #startButton{
     background-color: transparent;
@@ -733,6 +706,7 @@
 
   }
 
+  /* botão de logout */
   #logout{
     background-color: #ececec;
   }

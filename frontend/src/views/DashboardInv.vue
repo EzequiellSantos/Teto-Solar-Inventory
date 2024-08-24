@@ -81,6 +81,7 @@
         },
         methods: {
 
+            // realizar query de busca de inversores
             async inputTextoBusca () {
 
                 this.loading = true
@@ -145,6 +146,7 @@
 
             },
 
+            // trazer todos os inversores
             async getInverters() {
 
                 try {
@@ -175,6 +177,8 @@
                 }
 
             },
+
+            // acionar QRCode scanner
             lerqrcode(){
 
                 const divReader = document.getElementById("reader")

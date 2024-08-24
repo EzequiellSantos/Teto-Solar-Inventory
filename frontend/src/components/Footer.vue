@@ -39,11 +39,14 @@
 
         name: "Footer",
         methods: {
+
             getLinkClass(route, routeTw, routeTr){
                 return {
+                    /* gerar um efeito de marcação quando a rota passada na função corresponder ao da veriricaçáo */
                     'active-link': this.$route.path === route || this.$route.path === routeTw || this.$route.path === routeTr
                 }
             }
+
         }
 
     })
@@ -51,6 +54,8 @@
 </script>
 
 <style scoped>
+
+    /* estilos do footer */
 
     footer{
         position: fixed;

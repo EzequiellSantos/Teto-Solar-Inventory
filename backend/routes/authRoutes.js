@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const secret = process.env.JWT_SECRET
 
+// registrar usuário
 router.post("/register", async (req, res) => {
 
     //area feita apenas por backend
@@ -50,6 +51,7 @@ router.post("/register", async (req, res) => {
 
 })
 
+// login
 router.post("/login", async (req, res) => {
 
     const user = req.body.user

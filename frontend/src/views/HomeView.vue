@@ -41,6 +41,8 @@ import { mapState } from 'vuex'
 export default {
   name: 'HomeView',
   methods:{
+
+    // realizar logout
     logout(e){
 
       e.preventDefault()

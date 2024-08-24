@@ -48,6 +48,7 @@
         },
         methods: {
 
+            // realizar login
             async login(e){
 
                 e.preventDefault()
