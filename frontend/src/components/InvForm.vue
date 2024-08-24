@@ -44,8 +44,10 @@
                     <optgroup label="Escolha o tipo do Inversor">
                         <option value="ESTOQUE">Estoque da loja</option>
                         <option value="BACKUP">Backup para Clientes</option>
-                        <option value="GARANTIA">Vai para autorizada</option>
-                        <option value="CLIENTE">Está indo para clientes</option>
+                        <option value="GARANTIA">Em espera da garantia</option>
+                        <option value="AUTORIZADA">Foi para a autorizada</option>
+                        <option value="AGUARDANDO">Aguardando ida para clente</option>
+                        <option value="CLIENTE">Está no cliente</option>
                     </optgroup>
 
                 </select>
@@ -55,7 +57,7 @@
             <div class="input-container">
 
                 <label for="state">Estado:</label>
-                <select name="state" id="state" v-model="state">
+                <select name="state" id="state" v-model="state" required>
                              
                     <optgroup v-if="this.type == 'ESTOQUE'" label="Escolha o estatus do Inversor">
                         <option value="Vai para cliente">Aguardando Instalação</option>
@@ -69,13 +71,20 @@
 
                     <optgroup v-if="this.type == 'GARANTIA'" label="Escolha o estatus do Inversor">
                         <option value="Em espera">Em espera</option>
-                        <option value="Foi enviado">Foi enviado</option>
                     </optgroup>
 
-                    <optgroup v-if="this.type == 'BACKUP'" label="Escolha o estatus do Inversor">
+                      <optgroup v-if="this.type == 'BACKUP'" label="Escolha o estatus do Inversor">
                         <option value="Backup em uso">Backup em Uso</option>
                         <option value="Backup em Estoque">Backup em estoque</option>
-                    </optgroup>                   
+                    </optgroup>  
+
+                    <optgroup v-if="this.type == 'AGUARDANDO'" label="Escolha o estatus do Inversor">
+                        <option value="Vai para clientes">Aguardando Instalação</option>
+                    </optgroup>
+
+                    <optgroup v-if="this.type == 'AUTORIZADA'" label="Escolha o estatus do Inversor">
+                        <option value="Foi enviado">Foi enviado para a autorizada</option>
+                    </optgroup>              
 
                 </select>
 
@@ -119,6 +128,7 @@ export default {
     text: "Cadastrar",
     methods: {
 
+        //acionar scanner de QRcode
         lerqrcode(e){
 
             e.preventDefault()
@@ -165,7 +175,7 @@ export default {
 
         },
 
-
+        // registrar inversor
         async register(e) {
 
             e.preventDefault()
@@ -234,6 +244,8 @@ export default {
             })
 
         },
+
+        //atualizando inversor
         async update(e){
 
             e.preventDefault()
@@ -311,6 +323,7 @@ export default {
 
 <style scoped>
 
+    /* configurações do formulario de inversores */
     #form{
         width: calc(100% - 20px);
         max-width: 900px;
