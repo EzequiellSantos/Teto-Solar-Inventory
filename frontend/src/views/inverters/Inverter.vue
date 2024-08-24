@@ -87,8 +87,8 @@
 <script>
 
     import {BASE_URL} from '@/config'
-    import NavbarInv from '../components/NavbarInv.vue'
-    import Footer from '../components/Footer.vue'
+    import NavbarInv from '@/components/inverters/NavbarInv.vue'
+    import Footer from '@/components/inverters/Footer.vue'
 
     export default {
 
@@ -111,6 +111,7 @@
         },
         methods: {
 
+            // coletar dados do inverter com base no seu id
             async getInverter() {
 
                 const id =  this.$route.params.id

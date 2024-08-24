@@ -34,7 +34,7 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import HelloWorld from '@/components/inverters/HelloWorld.vue'
 import {BASE_URL} from '@/config'
 import { mapState } from 'vuex'
 

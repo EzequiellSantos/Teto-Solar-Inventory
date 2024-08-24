@@ -56,7 +56,7 @@
 
 <script>
 
-    import Message from '../components/Message.vue'
+    import Message from '../Message.vue'
     import {BASE_URL} from '@/config'
 
     export default {

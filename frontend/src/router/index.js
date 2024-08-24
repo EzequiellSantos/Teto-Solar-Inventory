@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/login',
     name:'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+    component: () => import(/* webpackChunkName: "login" */ '../views/inverters/Login.vue')
   },
   {
     path: '/about',
@@ -22,12 +22,12 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/inverters/AboutView.vue'),
   },
   {
     path: '/inverters',
     name:'inverters',
-    component: () => import(/* webpackChunkName: "inverters" */ '../views/DashboardInv.vue'),
+    component: () => import(/* webpackChunkName: "inverters" */ '../views/inverters/DashboardInv.vue'),
     meta: {
       requireAuth: true
     }
@@ -36,7 +36,7 @@ const routes = [
   {
     path: '/logs',
     name:'logs',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/DashboardLogs.vue'),
+    component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/DashboardLogs.vue'),
     meta: {
       requireAuth: true
     }
@@ -44,7 +44,7 @@ const routes = [
   {
     path: '/registerLog',
     name:'registerLog',
-    component: () => import(/* webpackChunkName: "logForm" */ '../views/NewLog.vue'),
+    component: () => import(/* webpackChunkName: "logForm" */ '../views/inverters/NewLog.vue'),
     meta: {
       requireAuth: true
     }
@@ -52,7 +52,7 @@ const routes = [
   {
     path: '/registerInv',
     name:'registerInv',
-    component: () => import(/* webpackChunkName: "register" */ '../views/NewInv.vue'),
+    component: () => import(/* webpackChunkName: "register" */ '../views/inverters/NewInv.vue'),
     meta: {
       requireAuth: true
     }
@@ -60,7 +60,7 @@ const routes = [
   {
     path: '/inverter/:id',
     name:'inverter',
-    component: () => import(/* webpackChunkName: "inverter" */ '../views/Inverter.vue'),
+    component: () => import(/* webpackChunkName: "inverter" */ '../views/inverters/Inverter.vue'),
     meta: {
       requireAuth: true
     }
@@ -68,7 +68,7 @@ const routes = [
   {
     path: '/log/:id',
     name:'log',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/Log.vue'),
+    component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/Log.vue'),
     meta: {
       requireAuth: true
     }
@@ -76,7 +76,7 @@ const routes = [
   {
     path: '/editInverter/:id',
     name: "editinverter",
-    component: () => import(/* webpackChunkName: "EditInv" */ '../views/EditInverter.vue'),
+    component: () => import(/* webpackChunkName: "EditInv" */ '../views/inverters/EditInverter.vue'),
     meta: {
       requireAuth: true
     }
@@ -84,7 +84,7 @@ const routes = [
   {
     path: '/editLog/:id',
     name: "editlog",
-    component: () => import(/* webpackChunkName: "EditLog" */ '../views/EditLog.vue'),
+    component: () => import(/* webpackChunkName: "EditLog" */ '../views/inverters/EditLog.vue'),
     meta: {
       requireAuth: true
     }

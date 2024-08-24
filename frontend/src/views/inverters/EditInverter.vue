@@ -11,7 +11,7 @@
 </template>
 <script>
 
-    import InvForm from "../components/InvForm.vue"
+    import InvForm from "@/components/inverters/InvForm.vue"
     import {BASE_URL} from '@/config'
 
     export default {

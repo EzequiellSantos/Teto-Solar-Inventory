@@ -14,7 +14,7 @@
 
 <script>
 
-    import LogForm from '../components/LogForm.vue'
+    import LogForm from '@/components/inverters/LogForm.vue'
     import { BASE_URL } from '@/config'
 
     export default {

@@ -88,7 +88,7 @@
 <script>
 
     import {BASE_URL} from '@/config'
-    import NavbarLog from '../components/NavbarLogs.vue'
+    import NavbarLog from '@/components/inverters/NavbarLogs.vue'
 
     export default {
 
@@ -117,6 +117,7 @@
         },
         methods: {
 
+            // coletar dados do inverter com base no seu id
             async getLog(){
 
                 const id = this.$route.params.id
@@ -150,6 +151,7 @@
 
             },
 
+            // realizar uma query com os logs
             async inverterIdBusca () {
 
                 await fetch(`${this.apiURL}/api/inverters/search?query=${this.log.sn}`, {

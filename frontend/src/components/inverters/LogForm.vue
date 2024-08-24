@@ -101,8 +101,8 @@
 
 <script>
 
-    import Message from '../components/Message.vue'
-    import InputSubmit from '../components/form/inputSubmit.vue'
+    import Message from '../Message.vue'
+    import InputSubmit from '../form/inputSubmit.vue'
     import { BASE_URL } from '@/config'
     import { parseISO, format, parse } from 'date-fns'
     import { Html5QrcodeScanner } from 'html5-qrcode'

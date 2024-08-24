@@ -10,8 +10,8 @@
 
 <script>
 
-    import LogForm from '../components/LogForm.vue'
-    import NavbarLogs from '../components/NavbarLogs.vue'
+    import LogForm from '@/components/inverters/LogForm.vue'
+    import NavbarLogs from '@/components/inverters/NavbarLogs.vue'
 
     export default {
         components: {

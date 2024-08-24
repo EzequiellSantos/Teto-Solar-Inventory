@@ -28,8 +28,8 @@
 
 <script>
 
-    import Message from '../components/Message.vue'
-    import InputSubmit from '../components/form/inputSubmit.vue'
+    import Message from '@/components/Message.vue'
+    import InputSubmit from '@/components/form/inputSubmit.vue'
     import {BASE_URL} from '@/config'
 
     export default {

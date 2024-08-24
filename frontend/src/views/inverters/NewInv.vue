@@ -12,7 +12,7 @@
 
 <script>
 
-    import InvForm from '../components/InvForm.vue'
+    import InvForm from '@/components/inverters/InvForm.vue'
 
     export default {
 

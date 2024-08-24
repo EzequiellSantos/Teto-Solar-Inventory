@@ -46,11 +46,11 @@
 
 <script>
 
-    import NavbarInv from '../components/NavbarInv.vue'
-    import DataTableInv from '../components/DataTableInv.vue'
-    import InputInv from '../components/form/inputText.vue'
-    import Message from '../components/Message.vue'
-    import Footer from '../components/Footer.vue' 
+    import NavbarInv from '@/components/inverters/NavbarInv.vue'
+    import DataTableInv from '@/components/inverters/DataTableInv.vue'
+    import InputInv from '@/components/form/inputText.vue'
+    import Message from '@/components/Message.vue'
+    import Footer from '@/components/inverters/Footer.vue' 
     import { BASE_URL } from '@/config'
     import { Html5QrcodeScanner } from 'html5-qrcode'
 
