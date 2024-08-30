@@ -2,7 +2,7 @@
 
     <div id="Form">
 
-        <div id="headerLogin"><img src="logo_transparent_large.png" alt=""></div>
+        <div id="headerLogin"><img id="img-logo" src="../../public/logo_transparent_short.png" alt="Logo Teto Solar"></div>
 
         <Message :msg="msg" :msgClass="msgClass" />
 
@@ -137,16 +137,18 @@
     }
 
     #headerLogin{
-        background-color: rgb(231, 231, 231);
-        padding: 20px;
-        border-radius: 50%;
-        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         max-width: 500px;
-        width: 60px;
         margin: auto;
         margin-top: 30px;
         font-size: 1.3em;
         user-select: none;
+    }
+
+    #headerLogin > img{
+        width: 50%;
     }
 
     #loginForm{  
@@ -157,7 +159,7 @@
 
     .input-container{
         margin: auto;
-        background-color: rgba(233, 233, 233, 0.596);
+        background-color: rgba(233, 233, 233, 0.301);
         border-radius: 25px;
         width: 50%;
         min-width: 240px;
@@ -197,7 +199,7 @@
     input{
         border: none;
         border-bottom: 2px solid rgb(0, 140, 255);
-        background-color: rgba(252, 252, 252, 0.575);
+        background-color: rgb(252, 252, 252);
         padding: 5px 10px;
         border-radius: 5px 5px 0 0 ;
         transition: all 0.3s ease-in;
