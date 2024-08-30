@@ -361,7 +361,6 @@ export default {
         padding: 6px 10px;
         margin:0;
         border-radius: 30px;
-        text-transform: uppercase;
         width: 30vw;
         min-width: 200px;
         max-width: 300px;

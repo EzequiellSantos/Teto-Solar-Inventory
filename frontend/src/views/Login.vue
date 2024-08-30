@@ -2,23 +2,29 @@
 
     <div id="Form">
 
-        <div id="headerLogin"> Teto Solar Inventory </div>
+        <div id="headerLogin"></div>
 
         <Message :msg="msg" :msgClass="msgClass" />
 
         <form id="loginForm" @submit="login($event)">
 
             <div class="input-container">
-                <label for="user">Usuário:</label>
-                <input type="text" id="user" name="user" v-model="user" placeholder="Usuário" autocomplete="username">
+
+                <h2>Bem Vindo(a)!</h2>
+
+                <section class="area-input">
+                    <label for="user"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/user--v1.png" alt="user--v1"/></label>
+                    <input type="text" id="user" name="user" v-model="user" placeholder="Usuário" autocomplete="username">
+                </section>
+
+                <section class="area-input">
+                    <label for="password"><img width="26" height="26" src="https://img.icons8.com/ios-filled/50/password.png" alt="password"/></label>
+                    <input type="password" name="password" id="password" v-model="password" placeholder="Senha" autocomplete="current-password">
+                </section>
+
             </div>
 
-            <div class="input-container">
-                <label for="password">Senha:</label>
-                <input type="password" name="password" id="password" v-model="password" placeholder="Senha" autocomplete="current-password">
-            </div>
-
-            <InputSubmit text="  Entrar  " />
+            <InputSubmit text="  Login  " />
 
         </form>
 
@@ -133,28 +139,25 @@
     #headerLogin{
         background-color: rgb(231, 231, 231);
         padding: 20px;
-        border-radius: 20px;
-        height: 20px;
+        border-radius: 50%;
+        height: 60px;
         max-width: 500px;
-        width: 60%;
+        width: 60px;
         margin: auto;
-        margin-top: 40px;
-        margin-bottom: -50px;
+        margin-top: 30px;
         font-size: 1.3em;
         user-select: none;
     }
 
     #loginForm{  
         margin: auto;  
-        margin-top: 150px;  
+        margin-top: 20px;  
         max-width: 500px;    
     }
 
     .input-container{
         margin: auto;
-        margin-top: 30px;
-        margin-bottom: 30px;
-        background-color: rgba(233, 210, 126, 0.87);
+        background-color: rgba(233, 233, 233, 0.596);
         border-radius: 25px;
         width: 50%;
         min-width: 240px;
@@ -162,24 +165,71 @@
         flex-direction: column;
         align-content: flex-start;
         text-align: left;
-        padding: 24px 15px;
+        padding: 30px 30px;
+        margin-bottom: 25px;
         transition: width 0.8s ease-in-out;
     }
 
+    .input-container > h2{
+        margin: 0 0 20px 0;
+        text-align: center;
+    }
+
+    section.area-input{
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        width: 100%;
+    }
+
+    section.area-input > img{   
+        margin: 0;
+    }
+
     label{
-        margin: 5px 0;
-        font-size: 1.2em;
+        margin-right: 5px;
+        padding-bottom: -4px;
     }
 
     input{
         border: none;
-        padding: 10px;
-        border-radius: 10px;
+        border-bottom: 2px solid rgb(0, 140, 255);
+        background-color: rgba(252, 252, 252, 0.575);
+        padding: 5px 10px;
+        border-radius: 5px 5px 0 0 ;
+        transition: all 0.3s ease-in;
     }
 
     input:focus{
         outline: none;
         box-shadow: 0em 0.07em 0.6em rgba(0, 0, 0, 0.219);
+    }
+
+    @media (550px < width < 820px) {
+        
+        .input-container{
+            width: 70%;
+        }
+
+        input{
+            width: 50%;
+        }
+
+    }
+
+    @media (width > 820px) {
+        
+        .input-container{
+            width: 90%;
+        }
+
+        input{
+            width: 60%;
+        }
+
     }
 
 </style>

@@ -109,6 +109,27 @@
     position: relative;
   }
 
+  .container input{
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgba(218, 218, 218, 0.116);
+    width: 35vw;
+    max-width: 250px;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 20px;
+    outline: none;
+  }
+
+  .container input::placeholder{
+    text-align: center;
+    text-transform: none;
+    font-size: clamp(0.8125rem, 0.7292rem + 0.4444vw, 1.0625rem);
+  }
+
+  .container input:focus{
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.116);
+  }
+
   .links-menu-container{
     margin: auto;
     display: flex;

@@ -60,7 +60,7 @@
 
 <style>
 
-    input[type="text"]{
+    /*input[type="text"]{
         background-color: rgb(255, 255, 255);
         border: 1px solid rgba(218, 218, 218, 0.116);
         width: 35vw;
@@ -80,5 +80,6 @@
     input[type="text"]:focus{
         box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.116);
     }
+    */
 
 </style>

@@ -572,7 +572,6 @@
         padding: 6px 10px;
         margin:0;
         border-radius: 30px;
-        text-transform: uppercase;
         width: 30vw;
         min-width: 200px;
         max-width: 300px;
@@ -620,7 +619,6 @@
         margin: 0;
         border-radius: 20px;
         padding:  6px 10px;
-        text-transform: uppercase;
 
         min-width: 200px;
         max-width: 327px;
