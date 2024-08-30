@@ -2,7 +2,7 @@
 
     <div id="Form">
 
-        <div id="headerLogin"></div>
+        <div id="headerLogin"><img src="logo_transparent_large.png" alt=""></div>
 
         <Message :msg="msg" :msgClass="msgClass" />
 

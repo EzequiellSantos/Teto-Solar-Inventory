@@ -29,7 +29,7 @@
         border-radius: 30px;
         margin: auto;
         margin-top: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 30px;
         height: 37px;
         max-width: 100px;
         border: none;
