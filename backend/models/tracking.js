@@ -2,18 +2,27 @@ const mongoose = require('mongoose')
 
 const TrackingSchema = new mongoose.Schema({
 
-    input_date:{
+    invoice: {
         type: String
     },
-    input_checked:{
+    panelsCount:{
+        type: Number,
+    },
+    inputDate:{
         type: String
     },
-    output_date: {
+    inputChecked:{
         type: String
     },
-    output_checked: {
-        type: "String"
-    }    
+    outputDate: {
+        type: String
+    },
+    outputChecked: {
+        type: String
+    },
+    type: {
+        type: String
+    } 
 
 })
 

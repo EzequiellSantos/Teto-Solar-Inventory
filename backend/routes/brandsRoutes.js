@@ -2,6 +2,45 @@ const express = require('express')
 const router = express.Router()
 const Brand = require('../models/brands')
 
+// adicionar rota para buscar placas por lote específico
+router.get('/panels', async(req, res) => {
+
+    const invoice = req.body.invoice
+    const panelSn = req.body.panelSn
+
+    try{
+
+    //retorna apenas o embeded documento correspondente aos itens
+    const panels = await Brand.find(
+        {
+            "batchs.batch.invoice": invoice,
+            "batchs.batch.panels": panelSn 
+        }, 
+        {
+            "batchs": {
+                $elemMatch:{
+                    "batch.invoice": invoice, 
+                    "batch.panels": panelSn
+                }
+            }
+        })
+
+        //verifica se existe resultado para a query
+        if(panels[0]){
+            return res.status(200).json({ error: null, msg: "Placa encontrada", data: panels })           
+        }
+
+        res.status(200).json({ error: "A placa não corresponde ao lote!" })
+
+    } catch(error){
+
+        res.status(400).json({ error: "Erro ao buscar placa" })
+        console.log(error)
+
+    }
+
+})
+
 //rota de query por marca
 router.get('/unique', async (req, res) => {
 
@@ -45,7 +84,7 @@ router.post('/', async (req, res) => {
 
         const checkBrandExists = await Brand.findOne({brand: brand})
 
-        // verifica se já existeum lote da mesma marca e adiciona o lote ao mesmo
+        // verifica se já existeum lote da mesma marca e adiciona o lote
         if(checkBrandExists){
 
             const data = {
@@ -92,9 +131,14 @@ router.put('/', async(req, res) => {
     try {
 
         const updatebatch =  await Brand.findOneAndUpdate({'batchs.batch._id': batchId,}, { $set: {"batchs.$.batch": batchData} })
+/* 
 
-        // adicionar verificações de id, para saber se o mesmo existe
+    @ adicionar verificações de id, para saber se o mesmo existe
 
+    @ adicionar verificação se a marca foi alterada para fazer assim a migração
+      do lote para outra marca presente ou criar uma nova
+
+*/
         if(updatebatch === null){
 
            return res.json({ error: "Lote não encontrado"})
