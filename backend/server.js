@@ -29,11 +29,11 @@ mongoose.connect(`mongodb+srv://${DBUser}:${DBPassword}@cluster0.t9g7g6t.mongodb
   .catch(err => console.log(err, "Erro de Conexão no MONGODB"));
 
 // Routes
-const invertersRoutes = require('./routes/invertersRoutes')
-const logRoutes = require('./routes/logRoutes')
+const invertersRoutes = require('./routes/inverters/invertersRoutes')
+const logRoutes = require('./routes/inverters/logRoutes')
 const authRoutes = require('./routes/authRoutes') 
-const brandsRoutes = require('./routes/brandsRoutes')
-const trackingRoutes = require('./routes/trackingRoutes')
+const brandsRoutes = require('./routes/panels/brandsRoutes')
+const trackingRoutes = require('./routes/panels/trackingRoutes')
 
 app.use('/api/brands', brandsRoutes)
 app.use('/api/trackings', trackingRoutes)

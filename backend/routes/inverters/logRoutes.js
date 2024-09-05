@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const Logs = require('../models/logs')
+const Logs = require('../../models/inverters/logs')
 
 // pegando todos os registros
 router.get("/all", async (req, res) => {

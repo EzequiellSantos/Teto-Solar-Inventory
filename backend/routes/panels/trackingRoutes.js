@@ -1,6 +1,6 @@
 const express =  require('express')
 const router = express.Router()
-const Tracking = require('../models/tracking')
+const Tracking = require('../../models/panels/tracking')
 
 //coletando apenas os movimentos de entrada
 router.get('/input', async(req, res) => {

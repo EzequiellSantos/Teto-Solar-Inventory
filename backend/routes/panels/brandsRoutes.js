@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Brand = require('../models/brands')
+const Brand = require('../../models/panels/brands')
 
 // adicionar rota para buscar placas por lote específico
 router.get('/panels', async(req, res) => {
@@ -42,14 +42,14 @@ router.get('/panels', async(req, res) => {
 })
 
 //rota de query por marca
-router.get('/unique', async (req, res) => {
+router.get('/:brand', async (req, res) => {
 
-    const brandSearch =  req.body.brandSearch
+    const brand =  req.params.brand
     
     try {
         
-        const brand = await Brand.findOne({brand: brandSearch}) 
-        res.status(201).json({ error: null, msg: "Marca encontrada", data: brand })
+        const brandData = await Brand.findOne({brand: brand}) 
+        res.status(201).json({ error: null, msg: "Marca encontrada", data: brandData })
 
     } catch (error) {
        
@@ -132,8 +132,6 @@ router.put('/', async(req, res) => {
 
         const updatebatch =  await Brand.findOneAndUpdate({'batchs.batch._id': batchId,}, { $set: {"batchs.$.batch": batchData} })
 /* 
-
-    @ adicionar verificações de id, para saber se o mesmo existe
 
     @ adicionar verificação se a marca foi alterada para fazer assim a migração
       do lote para outra marca presente ou criar uma nova

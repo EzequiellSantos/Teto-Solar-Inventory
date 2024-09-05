@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Inverter = require('../models/inversores')
+const Inverter = require('../../models/inverters/inversores')
 
 //buscando todos os inverters
 router.get('/all', async (req, res) => {
