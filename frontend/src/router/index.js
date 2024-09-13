@@ -28,18 +28,12 @@ const routes = [
     path: '/inverters',
     name:'inverters',
     component: () => import(/* webpackChunkName: "inverters" */ '../views/inverters/DashboardInv.vue'),
-    meta: {
-      requireAuth: true
-    }
   },
 
   {
     path: '/logs',
     name:'logs',
     component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/DashboardLogs.vue'),
-    meta: {
-      requireAuth: true
-    }
   },
   {
     path: '/registerLog',
@@ -61,17 +55,11 @@ const routes = [
     path: '/inverter/:id',
     name:'inverter',
     component: () => import(/* webpackChunkName: "inverter" */ '../views/inverters/Inverter.vue'),
-    meta: {
-      requireAuth: true
-    }
   },
   {
     path: '/log/:id',
     name:'log',
     component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/Log.vue'),
-    meta: {
-      requireAuth: true
-    }
   },
   {
     path: '/editInverter/:id',
@@ -88,6 +76,16 @@ const routes = [
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path: '/brands',
+    name: "brands",
+    component: () => import(/* webpackChunkName: "brands" */ '../views/panels/DashboardBrands.vue'),
+  },
+  {
+    path: '/brands/:brand',
+    name: "brand",
+    component: () => import(/* webpackChunkName: "EditLog" */ '../views/panels/Brand.vue'),
   }
 ]
 
