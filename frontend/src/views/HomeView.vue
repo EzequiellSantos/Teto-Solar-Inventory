@@ -15,7 +15,7 @@
 
         <section class="card">
 
-          <img class="icon-links" src="../inverter_img100.png" alt="inverter">
+          <img class="icon-links" src="../../public/inverter_img100.png" alt="inverter">
           <p>Inversores</p>
           
         </section>
