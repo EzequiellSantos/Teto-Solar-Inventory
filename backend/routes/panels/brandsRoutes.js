@@ -41,6 +41,22 @@ router.get('/panels', async(req, res) => {
 
 })
 
+// resgatando todas as marcas
+router.get('/all', async (req, res) => {
+
+    try{
+
+        const brands = await Brand.find({})
+        res.json({error: null, brands: brands})
+
+    } catch (error){
+
+        res.status(400).json({ error: "Erro ao coletar marcas diferentes" })
+
+    }
+
+})
+
 //rota de query por marca
 router.get('/:brand', async (req, res) => {
 
@@ -56,22 +72,6 @@ router.get('/:brand', async (req, res) => {
         res.status(401).json({ error: "Falaha ao buscar marca" })
         console.log(error);
         
-    }
-
-})
-
-// resgatando todas as marcas
-router.get('/all', async (req, res) => {
-
-    try{
-
-        const brands = await Brand.find({})
-        res.json({error: null, brands: brands})
-
-    } catch (error){
-
-        res.status(400).json({ error: "Erro ao coletar marcas diferentes" })
-
     }
 
 })
