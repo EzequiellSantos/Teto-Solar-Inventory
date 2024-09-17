@@ -78,14 +78,14 @@ const routes = [
     }
   },
   {
-    path: '/brands',
-    name: "brands",
-    component: () => import(/* webpackChunkName: "brands" */ '../views/panels/DashboardBrands.vue'),
+    path: '/batchs',
+    name: "batchs",
+    component: () => import(/* webpackChunkName: "brands" */ '../views/panels/DashboardBatchs.vue'),
   },
   {
     path: '/brands/:brand',
     name: "brand",
-    component: () => import(/* webpackChunkName: "EditLog" */ '../views/panels/Brand.vue'),
+    component: () => import(/* webpackChunkName: "EditLog" */ '../views/panels/Batch.vue'),
   }
 ]
 

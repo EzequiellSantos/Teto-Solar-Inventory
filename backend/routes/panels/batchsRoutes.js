@@ -1,6 +1,33 @@
 const express = require('express')
 const router = express.Router()
-const Brand = require('../../models/panels/brands')
+const Batch = require('../../models/panels/batch')
+
+
+router.get('/power', async(req, res) => {
+
+    const power = req.body.power
+    const brand = req.body.brand
+    
+    try{
+
+        const result = await Batch.find({ "brand": brand, "power": power }) 
+
+        if(result.length === 0){
+
+            return res.status(201).json({ error:`potência da marca ${brand} não encontrada!` })
+
+        }
+        
+        res.status(200).json({error: null, msg:`${brand} ${power} encontradas`, batchs: result})
+
+    } catch (error) {
+
+        res.status(401).json({error: "Erro ao coletar as potências"})
+        console.log(error)
+
+    }
+
+})
 
 // adicionar rota para buscar placas por lote específico
 router.get('/panels', async(req, res) => {
@@ -10,20 +37,8 @@ router.get('/panels', async(req, res) => {
 
     try{
 
-    //retorna apenas o embeded documento correspondente aos itens
-    const panels = await Brand.find(
-        {
-            "batchs.batch.invoice": invoice,
-            "batchs.batch.panels": panelSn 
-        }, 
-        {
-            "batchs": {
-                $elemMatch:{
-                    "batch.invoice": invoice, 
-                    "batch.panels": panelSn
-                }
-            }
-        })
+    //retorna apenas o embeded document correspondente aos itens
+    const panels = await Batch.find({invoice: invoice, panels: panelSn})
 
         //verifica se existe resultado para a query
         if(panels[0]){
@@ -46,8 +61,8 @@ router.get('/all', async (req, res) => {
 
     try{
 
-        const brands = await Brand.find({})
-        res.json({error: null, brands: brands})
+        const batchs = await Batch.find({})
+        res.json({error: null, batchs: batchs})
 
     } catch (error){
 
@@ -64,8 +79,8 @@ router.get('/:brand', async (req, res) => {
     
     try {
         
-        const brandData = await Brand.findOne({brand: brand}) 
-        res.status(201).json({ error: null, msg: "Marca encontrada", data: brandData })
+        const batchData = await Batch.findOne({brand: brand}) 
+        res.status(201).json({ error: null, msg: "Marca encontrada", brand: batchData })
 
     } catch (error) {
        
@@ -76,31 +91,29 @@ router.get('/:brand', async (req, res) => {
 
 })
 
+//enviando dados
 router.post('/', async (req, res) => {
 
-    const { brand, batchs } = req.body
+    const { brand, invoice, client, power, panels } = req.body
 
     try{
 
-        const checkBrandExists = await Brand.findOne({brand: brand})
-
-        // verifica se já existeum lote da mesma marca e adiciona o lote
-        if(checkBrandExists){
-
-            const data = {
-                brand: brand,
-                batchs: batchs
-            }
-
-            const addInBrand = await Brand.findOneAndUpdate({brand: brand}, {$push: { batchs: data.batchs }})
-            return res.status(201).json({error: null, msg:"Lote Adicionado", data: addInBrand})
-             
+        const data = {
+            brand: brand,
+            invoice: invoice,
+            client: client,
+            power: power,
+            panels: panels,
+            panelsCount: null
         }
+       
 
         // caso não exista, cria uma nova marca
-        const brands = new Brand({ brand, batchs })
-        await brands.save()
-        res.status(201).json({error: null, msg:"Lote Registrado", data: brands})
+        const batch = new Batch({ brand: brand, invoice: invoice, client: client, power: power, panels: panels, panelsCount: panels.length })
+
+        await batch.save()
+
+        res.status(201).json({error: null, msg:"Lote Registrado", data: data})
 
     } catch(error){
 
@@ -115,6 +128,7 @@ router.post('/', async (req, res) => {
 router.put('/', async(req, res) => {
 
     const batchId = req.body.id
+    const brand = req.body.brand
     const invoice = req.body.invoice
     const client = req.body.client
     const power = req.body.power
@@ -122,15 +136,17 @@ router.put('/', async(req, res) => {
 
     const batchData = {
         id: batchId,
+        brand: brand,
         invoice: invoice,
         client: client,
         power: power,
-        panels: panels
+        panels: panels,
+        panelsCount: panels.length
     }
 
     try {
 
-        const updatebatch =  await Brand.findOneAndUpdate({'batchs.batch._id': batchId,}, { $set: {"batchs.$.batch": batchData} })
+        const updatebatch =  await Batch.findOneAndUpdate({_id: batchId,}, { $set: batchData },{ new: true })
 /* 
 
     @ adicionar verificação se a marca foi alterada para fazer assim a migração
@@ -160,7 +176,7 @@ router.delete('/', async (req, res) => {
 
     try {
 
-        await Brand.updateOne({"batchs.batch._id": id}, {$pull: {"batchs": {"batch._id": id}}})
+        await Batch.deleteOne({_id: id})
         res.status(201).json({ error: null, msg: "Lote apagado com sucesso"})
         
     } catch (error) {
