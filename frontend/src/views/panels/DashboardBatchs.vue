@@ -12,9 +12,13 @@
 
         <main>
 
-            <DataCardsBatchs :brands="brands" :batchs="batchs"/>
+            <DataCardsBatchs :brands="brands"/>
 
         </main>
+
+        <aside>
+            {{ this.totalPanelsCount }} placas no total
+        </aside>
 
     </div>
 
@@ -25,7 +29,6 @@
     import Message from '@/components/Message.vue'
     import DataCardsBatchs from '@/components/panels/DataCardsBatchs.vue'
     import { BASE_URL } from '@/config'
-import LogFormVue from '../../components/inverters/LogForm.vue'
 
     export default {
         components:{
@@ -41,7 +44,8 @@ import LogFormVue from '../../components/inverters/LogForm.vue'
                 batchs: {},
                 batchsCount: 0,
                 apiURL: BASE_URL,
-                brands: []
+                brands: [],
+                totalPanelsCount: 0
 
             }
 
@@ -174,19 +178,37 @@ import LogFormVue from '../../components/inverters/LogForm.vue'
                         //somando a quantidade de clientes de casa marca                    
                         this.brands[i].client += data.brand.length
 
+                        if(this.brands[i].client > 1){
+
+                            this.brands[i].client = `${this.brands[i].client} clientes`
+
+                        } else {
+
+                            this.brands[i].client = `${this.brands[i].client} cliente`
+
+                        }
+
                         //loop para a soma de todas as placas de cada marca
                         for(let j = 0 ; j < data.brand.length ; j++){
 
                             this.brands[i].panelsCount += data.brand[j].panelsCount
+                            
 
                         }
 
-                        console.log(data)
+                        this.totalPanelsCount += this.brands[i].panelsCount
 
                     })
                     .catch((error) => {
 
+                        this.msg = error
+                        this.msgClass = 'error'
                         console.log(error)
+                        setTimeout(() => {
+
+                            this.msg = null
+
+                        }, 1000)
 
                     })
 

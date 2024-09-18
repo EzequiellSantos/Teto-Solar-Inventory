@@ -1,19 +1,18 @@
 <template>
     
     <div class="data-cards-body">
+
         <div v-for="(data, brandIndex) in brands" :key="brandIndex">
 
             <router-link class="data-cards" :to="`/brands/${data.brand}`">
 
                 <h3 class="data-cards-title">{{ data.brand }}</h3>
-                <p class="data-cards-description">{{ data.client }} client</p>
+                <p class="data-cards-description">{{ data.client }}</p>
                 <p class="data-cards-description">{{ data.panelsCount }} Placas</p>
                 
             </router-link>
 
         </div>
-
-
 
     </div>
 
@@ -23,7 +22,7 @@
 
     export default {
         name:"DataCardsBrands",
-        props:['brands', 'batchs']
+        props:['brands']
     }
 
 </script>
