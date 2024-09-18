@@ -2,48 +2,58 @@
     
     <div id="Brand">
 
-        <section id="header">
+            <section id="header"  >
 
-            <h1 class="header-title">
-                {{ brand.brand}}
-            </h1>
+                <h1 class="header-title" >
 
-            <div class="input-header">
-                <!-- <input type="text" id="clientName" v-model="clientName"> -->
-            </div>
+                    {{ this.brand[0]?.brand }}
+                    
+                </h1>
 
-        </section>
+                <div class="input-header">
+                    <!-- <input type="text" id="clientName" v-model="clientName"> -->
+                </div>
 
-        <section class="power-types">
+            </section>
 
-            <div class="power-type" v-for="(batchs, powerIndex) in brand.batchs" :key="powerIndex">
+            <section class="power-types">
 
-                <input type="radio" name="power" :id="`${batchs.batch.power}`" v-model="inputRadio" @input="inputRadioChange" checked>
-                <label :for="`${batchs.batch.power}`">
-                    {{batchs.batch.power}}
-                </label>
+                <div v-for="(power, index1) in allPowers" :key="index1">  
 
-            </div>
+                    <input type="radio" name="power" :id="power" @click="searchPower(power)">
+                    <label class="power-type" :for="power"> {{ power }}</label>
 
-        </section>
+                </div>
 
-        <aside class="info">
+                <button @click="initialBatchs">All</button>
 
-            <div class="info-clients">
+            </section>
 
-                <p> {{ brand.clientsCount}} </p>
+            <aside class="info">
 
-            </div>
+                <div class="info-clients" >
 
-            <div class="info-panels">
+                    <p v-if="this.clientCount < 2"> {{ this.clientCount }} Cliente </p>
+                    <p v-else> {{ this.clientCount }} Clientes </p>
 
-                <p>{{ brand.panelsCount }} Placas</p>
+                </div>
 
-            </div>
+                <div class="info-panels">
 
-        </aside>
+                    <p>{{ this.panelsCount }} placas</p>
 
-        <main id="cardsPower" ></main>
+                </div>
+
+            </aside>
+
+            <main id="cardsPower" v-for="(batch, index) in brand" :key="index">
+
+                <p>{{ batch.power }}W</p>
+                <p>Nota: {{ batch.invoice }}</p>
+                <p>Cliente: {{ batch.client }}</p>
+                <p>Quant: {{ batch.panelsCount }} Placas</p>
+
+            </main>
 
     </div>
 
@@ -64,45 +74,23 @@
                 msg: null,
                 msgClass: null,
                 brand: {},
-                inputRadio: null,
-                inputsChecks: []
+                allPowers: [],
+                panelsCount:0,
+                clientCount:0
             }
         }, 
         created() {
 
             this.getBrand()
-            this.inputRadioChange()
 
         }, 
         methods: {
-
-            inputRadioChange(){
-
-                var powerTypes = document.querySelectorAll('.power-type')
-                var subcontain = []
-                
-
-                powerTypes.forEach(contain => {
-
-                    subcontain.push(contain)
-                    // console.log(contain.firstChild.id)
-
-                })
-
-                subcontain.forEach(divInput => {
-                    
-
-                    console.log(divInput.input)
-
-                } )         
-
-            },
 
             async getBrand(){
 
                 const brand = this.$route.params.brand
 
-                await fetch(`${this.APIurl}/api/brands/${brand}`, {
+                await fetch(`${this.APIurl}/api/batchs/${brand}`, {
                     method:"GET",
                     headers:{
                         "Content-type":"application/json"
@@ -120,7 +108,11 @@
 
                     this.brand = data.brand  
 
-                    this.getPanelsCount()
+                    // coletar informações de quantidade de paineis e clientes
+                    this.getInfoBrand()
+
+                    // coletando todas as potencias para realização de queries por parte do usuário
+                    this.sendingAllPowers()
 
                 })
                 .catch((error) => {
@@ -131,39 +123,72 @@
 
                 })
 
-
             },
 
-            async getBatchsPower(){
-
-
-
-            },
-
-            getPanelsCount(){
+            getInfoBrand(){
                 
-                let panelsTotalityCount = 0
-                let clientsTotalityCount = 0
+                for(let i = 0 ; i < this.brand.length ; i++){
 
-                clientsTotalityCount = this.brand.batchs.length
+                    this.panelsCount += this.brand[i].panelsCount
 
-                for(let i = 0 ; i < this.brand.batchs.length ; i++){
-
-                    panelsTotalityCount += this.brand.batchs[i].batch.panels.length
+                    this.clientCount = this.brand.length
 
                 }
 
-                this.brand.panelsCount = panelsTotalityCount
+            },
 
-                if(clientsTotalityCount > 1){
+            async searchPower(powerBrand){
 
-                    this.brand.clientsCount = `${clientsTotalityCount} Clientes` 
+                const power = powerBrand
+                const brand = this.brand[0].brand
 
-                } else {
+                const data = {
+                    power: power,
+                    brand:brand
+                }
 
-                    this.brand.clientsCount = `${clientsTotalityCount} Cliente`
+                const jsonData = JSON.stringify(data)
+                
+                await fetch(`${this.APIurl}/api/batchs/power`, {
+                    method: "POST",
+                    headers:{
+                        "Content-type":"application/json"
+                    },
+                    body: jsonData
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    }
+
+                    this.brand = data.batchs
+
+                })
+
+            },
+
+            sendingAllPowers(){
+            
+                for(let i = 0 ; i < this.brand.length ; i++){
+
+                    this.allPowers.push(this.brand[i].power)
 
                 }
+
+            },
+
+            initialBatchs(){
+
+                this.brand = {}
+                this.allPowers = []
+                this.panelsCount = 0
+                this.clientCount = 0
+                this.getBrand()
 
             }
 
@@ -195,10 +220,6 @@
     }
     
     .power-type{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
         border: 1px solid black;
         border-radius: 15px;
         max-width: 60px;
@@ -206,6 +227,10 @@
         margin-bottom: 4px;
         margin-top: 5px;
         padding: 3px 10px;
+    }
+
+    #cardsPower{
+        margin-block: 20px;
     }
 
 
