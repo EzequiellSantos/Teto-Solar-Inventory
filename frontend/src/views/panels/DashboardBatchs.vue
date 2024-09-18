@@ -12,7 +12,7 @@
 
         <main>
 
-            <DataCardsBrands :brands="brands"/>
+            <DataCardsBatchs :brands="brands" :batchs="batchs"/>
 
         </main>
 
@@ -23,12 +23,13 @@
 <script>
 
     import Message from '@/components/Message.vue'
-    import DataCardsBrands from '@/components/panels/DataCardsBrands.vue'
+    import DataCardsBatchs from '@/components/panels/DataCardsBatchs.vue'
     import { BASE_URL } from '@/config'
+import LogFormVue from '../../components/inverters/LogForm.vue'
 
     export default {
         components:{
-            DataCardsBrands,
+            DataCardsBatchs,
             Message
         },
         data(){
@@ -37,27 +38,26 @@
 
                 msg: null,
                 msgClass: null,
-                brands: {},
+                batchs: {},
                 batchsCount: 0,
                 apiURL: BASE_URL,
-                brandSeparate: [],
-                panelsCount: []
+                brands: []
 
             }
 
         },
         created(){
 
-            this.getBrands()
+            this.getBatchs()
 
         },
         methods: {
 
-            async getBrands(){
+            async getBatchs(){
 
                 try{
 
-                    await fetch(`${this.apiURL}/api/brands/all`, {
+                    await fetch(`${this.apiURL}/api/batchs/all`, {
 
                         method:"GET",
                         headers: {
@@ -80,16 +80,10 @@
 
                         }
 
-                        this.brands = data.brands
+                        this.batchs = data.batchs
 
-                        // percorrendo todas as marcas
-                        for(var i = 0; i < this.brands.length; i++){ 
-
-                            this.brandSeparate.push(this.brands[i].brand)
-
-                        }
-
-                        this.separetePanels()
+                        // coletar as marcas presentes sem repetições
+                        this.separateBrands()                      
 
                     })
 
@@ -109,52 +103,96 @@
 
             },
 
-            
-            separetePanels(){
+            separateBrands(){
 
                 let contator = 0
-                let indice = this.brandSeparate
-                let brandsPanelsCount = 0
+                let indice = [] // array de verificação de marcas
+                
+                // função recursiva para coletar as marcas sem repeti-las
+                this.startLoopInBrands(indice, contator)
 
-                this.iniciarLoopPorMarcas(contator, this.panelsCount, brandsPanelsCount, indice)
-
+                // função para coletar a quantidade de clientes e de placas de cada marca
+                this.getDataForBrand(this.brands)
 
             },
 
-            iniciarLoopPorMarcas(contator, panelsCount, brandsPanelsCount, indice){
+            startLoopInBrands(indice, contator){
 
-                if(contator < this.brands.length){
+                //objeto para facilitar a contagem de dados de cada marca existente
+                let allbrands = {}
 
-                    if(indice[contator] == this.brands[contator].brand){
+                // * loop *
+                if(contator < this.batchs.length){
 
-                        let panels = 0
+                    //verifica se a marca se repete, caso sim ignora
+                    if(indice.includes(this.batchs[contator].brand)){
 
-                        // percorrendo todas os lotes de cada marca
-                        for(var j = 0 ; j < this.brands[contator].batchs.length; j++){
-                            
-                            panels += this.brands[contator].batchs[j].batch.panels.length                          
+                        return
+
+                    } else {
+                        
+                        //adiciona a marca na array de indice para verificação
+                        indice.push(this.batchs[contator].brand)
+
+                        //criando objeto para cada marca
+                        allbrands = {
+
+                            brand: this.batchs[contator].brand,
+                            client: null,
+                            panelsCount: 0
 
                         }
-
-                        brandsPanelsCount = {
-
-                            brand: indice[contator],
-                            panels: panels
-
-                        }
-
-                        this.panelsCount.push(brandsPanelsCount)
-                        contator += 1
-                        this.iniciarLoopPorMarcas(contator, panelsCount, brandsPanelsCount, indice)
 
                     }
 
+                    contator ++
+
+                    //adiciona o objeto com as marcas na array de marcas
+                    this.brands.push(allbrands)
+
+                    //chama a funçao novamente
+                    this.startLoopInBrands(indice, contator)
+
+                }
+                
+            },
+
+            // coletando dados completos de lotes da mesma marca
+            async getDataForBrand(brands){
+
+                for(let i = 0 ; i < brands.length ; i++){
+
+                    await fetch(`${this.apiURL}/api/batchs/${brands[i].brand}`,{
+                        method:"GET",
+                        headers: {
+                            "Content-type":"application/json"
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        //somando a quantidade de clientes de casa marca                    
+                        this.brands[i].client += data.brand.length
+
+                        //loop para a soma de todas as placas de cada marca
+                        for(let j = 0 ; j < data.brand.length ; j++){
+
+                            this.brands[i].panelsCount += data.brand[j].panelsCount
+
+                        }
+
+                        console.log(data)
+
+                    })
+                    .catch((error) => {
+
+                        console.log(error)
+
+                    })
+
                 }
 
-                this.brands.panelsCount = this.panelsCount
-                
             }
-
 
         }
 
