@@ -79,7 +79,7 @@ router.get('/:brand', async (req, res) => {
     
     try {
         
-        const batchData = await Batch.findOne({brand: brand}) 
+        const batchData = await Batch.find({brand: brand}) 
         res.status(201).json({ error: null, msg: "Marca encontrada", brand: batchData })
 
     } catch (error) {
@@ -107,7 +107,6 @@ router.post('/', async (req, res) => {
             panelsCount: null
         }
        
-
         // caso não exista, cria uma nova marca
         const batch = new Batch({ brand: brand, invoice: invoice, client: client, power: power, panels: panels, panelsCount: panels.length })
 
