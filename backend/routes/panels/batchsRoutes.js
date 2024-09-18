@@ -3,7 +3,7 @@ const router = express.Router()
 const Batch = require('../../models/panels/batch')
 
 
-router.get('/power', async(req, res) => {
+router.post('/power', async(req, res) => {
 
     const power = req.body.power
     const brand = req.body.brand
