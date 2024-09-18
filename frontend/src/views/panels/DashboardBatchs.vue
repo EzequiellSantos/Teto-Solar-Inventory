@@ -17,7 +17,9 @@
         </main>
 
         <aside>
+
             {{ this.totalPanelsCount }} placas no total
+
         </aside>
 
     </div>
@@ -87,7 +89,7 @@
                         this.batchs = data.batchs
 
                         // coletar as marcas presentes sem repetições
-                        this.separateBrands()                      
+                        this.separateBrands()   
 
                     })
 
@@ -129,12 +131,8 @@
                 if(contator < this.batchs.length){
 
                     //verifica se a marca se repete, caso sim ignora
-                    if(indice.includes(this.batchs[contator].brand)){
+                    if(!indice.includes(this.batchs[contator].brand)){
 
-                        return
-
-                    } else {
-                        
                         //adiciona a marca na array de indice para verificação
                         indice.push(this.batchs[contator].brand)
 
@@ -145,14 +143,19 @@
                             client: null,
                             panelsCount: 0
 
-                        }
+                        } 
 
                     }
 
-                    contator ++
+                    contator ++     
+                    
+                    // verificação simples para caso o lote seja repetido e o objeto vazio não seja armazenado
+                    if(allbrands?.brand){
 
-                    //adiciona o objeto com as marcas na array de marcas
-                    this.brands.push(allbrands)
+                        //adiciona o objeto com as marcas na array de marcas
+                        this.brands.push(allbrands)  
+
+                    }
 
                     //chama a funçao novamente
                     this.startLoopInBrands(indice, contator)
@@ -192,7 +195,6 @@
                         for(let j = 0 ; j < data.brand.length ; j++){
 
                             this.brands[i].panelsCount += data.brand[j].panelsCount
-                            
 
                         }
 

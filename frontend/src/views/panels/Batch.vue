@@ -11,7 +11,7 @@
                 </h1>
 
                 <div class="input-header">
-                    <!-- <input type="text" id="clientName" v-model="clientName"> -->
+                    <input type="text" id="clientName" v-model="clientName" @input="getClientName"> 
                 </div>
 
             </section>
