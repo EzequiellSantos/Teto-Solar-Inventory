@@ -80,12 +80,28 @@ const routes = [
   {
     path: '/batchs',
     name: "batchs",
-    component: () => import(/* webpackChunkName: "brands" */ '../views/panels/DashboardBatchs.vue'),
+    component: () => import(/* webpackChunkName: "batchs" */ '../views/panels/DashboardBatchs.vue'),
   },
   {
-    path: '/brands/:brand',
-    name: "brand",
-    component: () => import(/* webpackChunkName: "EditLog" */ '../views/panels/Batch.vue'),
+    path: '/batchs/:brand',
+    name: "batch",
+    component: () => import(/* webpackChunkName: "batch" */ '../views/panels/Batch.vue'),
+  },
+  {
+    path: '/registerBatch',
+    name: "registerBatch",
+    component: () => import(/* webpackChunkName: "registerBatch" */ '../views/panels/NewBatch.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/editBatch',
+    name: "editBatch",
+    component: () => import(/* webpackChunkName: "editBatch" */ '../views/panels/EditBatch.vue'),
+    meta: {
+      requireAuth: true
+    }
   }
 ]
 

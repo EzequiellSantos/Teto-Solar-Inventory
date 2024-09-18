@@ -4,11 +4,11 @@
 
         <div v-for="(data, brandIndex) in brands" :key="brandIndex">
 
-            <router-link class="data-cards" :to="`/brands/${data.brand}`">
+            <router-link class="data-cards" :to="`/batchs/${data.brand}`">
 
                 <h3 class="data-cards-title">{{ data.brand }}</h3>
-                <p class="data-cards-description">{{ data.client }}</p>
                 <p class="data-cards-description">{{ data.panelsCount }} Placas</p>
+                <p class="data-cards-description">{{ data.client }}</p>
                 
             </router-link>
 
