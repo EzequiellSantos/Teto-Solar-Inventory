@@ -91,6 +91,26 @@ router.get('/:brand', async (req, res) => {
 
 })
 
+router.post('/id', async(req, res) => {
+
+    const  id = req.body.id
+
+    try {
+        
+        const batch = await Batch.findOne({_id: id})
+
+        res.status(201).json({ error: null, msg: "Lote encontrado", batch: batch })
+
+    } catch (error) {
+        
+        res.status(401).json({ error: "Não foi possível encontrar o lote" })
+        
+        console.log(error)
+
+    }
+
+})
+
 //enviando dados
 router.post('/', async (req, res) => {
 
@@ -112,7 +132,7 @@ router.post('/', async (req, res) => {
 
         await batch.save()
 
-        res.status(201).json({error: null, msg:"Lote Registrado", data: data})
+        res.status(201).json({error: null, msg:"Lote Registrado", data: data, id: batch._id})
 
     } catch(error){
 

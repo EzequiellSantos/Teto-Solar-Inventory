@@ -23,7 +23,7 @@
                 </div>
 
                 <article class="snInfo">
-                    <p><small>{{ snArray.length }} Placas</small></p>
+                    <p><small>{{ snArray?.length }} Placas</small></p>
                 </article>
             
             </section>
@@ -92,20 +92,21 @@
             Message,
             InputSubmit
         },
-        props: ["batch", "page", "btnText"],
+        props: ["batch", "tracking", "page", "btnText"],
         text: "Registrar",
         data() {
 
             return {
                 id: this.batch._id || null,
-                snArray: this.batch.panels || ["teste4", "teste5", "teste6", "teste7", "teste8"],
-                invoice: this.batch.invoice || "777",
-                power: this.batch.power || 555,
-                brand: this.batch.brand || "JA",
-                client: this.batch.client || "Kiel",
-                inputDate: "2024-09-18",
-                inputChecked: null || "Ezequiel",
-                typeChoice: "Entrada",
+                snArray: this.batch.panels || null,
+                invoice: this.batch.invoice || null,
+                power: this.batch.power || null,
+                brand: this.batch.brand || null,
+                client: this.batch.client || null,
+                batchId: this.tracking.batchId || null,
+                inputDate: this.tracking.inputDate || null,
+                inputChecked: this.tracking.inputChecked || null,
+                typeChoice: this.tracking.type || "Entrada",
                 msg: null,
                 msgClass: null,
                 apiURL: BASE_URL
@@ -127,16 +128,6 @@
                     client: this.client,
                     power: this.power,
                     panels: this.snArray,
-
-                }
-
-                //data for tracking
-                const dataTracking = {
-
-                    invoice: this.invoice,
-                    panelsCount: this.snArray.length,
-                    inputDate: this.inputDate,
-                    inputChecked: this.inputChecked
 
                 }
 
@@ -164,6 +155,8 @@
 
                     }
 
+                    this.batchId = data.id
+
                     setTimeout(() => {
 
                         this.msg = null
@@ -172,6 +165,17 @@
                     
 
                 })
+
+                //data for tracking
+                const dataTracking = {
+
+                    batchId: this.batchId,
+                    invoice: this.invoice,
+                    panelsCount: this.snArray?.length,
+                    inputDate: this.inputDate,
+                    inputChecked: this.inputChecked
+
+                }
 
                 const jsonDataTracking =  JSON.stringify(dataTracking)
 
@@ -219,7 +223,7 @@
 
                 e.preventDefault()
 
-                if(this.sn != null || this.sn == ''){
+                if(this.sn != null || this.sn != ''){
 
                     this.snArray.push(this.sn)
                     this.sn = ""

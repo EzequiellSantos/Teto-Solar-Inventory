@@ -96,7 +96,7 @@ const routes = [
     }
   },
   {
-    path: '/editBatch',
+    path: '/editBatch/:id',
     name: "editBatch",
     component: () => import(/* webpackChunkName: "editBatch" */ '../views/panels/EditBatch.vue'),
     meta: {
