@@ -176,8 +176,13 @@
             
                 for(let i = 0 ; i < this.brand.length ; i++){
 
-                    this.allPowers.push(this.brand[i].power)
+                    // verificaçao para evitar repetiçoes
+                    if(!this.allPowers.includes(this.brand[i].power)){
 
+                      this.allPowers.push(this.brand[i].power)  
+
+                    }
+                    
                 }
 
             },
