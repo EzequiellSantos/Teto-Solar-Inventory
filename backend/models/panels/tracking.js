@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 
 const TrackingSchema = new mongoose.Schema({
 
+    batchId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Batch",
+        required: true
+    },
     invoice: {
         type: String
     },

@@ -36,10 +36,30 @@ router.get('/output', async(req, res) => {
 
 })
 
+//resgatar a tracking pelo id do batch
+router.get('/:id', async(req, res) => {
+
+    const id = req.params.id
+
+    try {
+
+        const tracking = await Tracking.findOne({batchId: id})
+
+        res.status(201).json({error: null, msg:"Registro encontrado", tracking: tracking})
+
+    } catch (error) {
+
+        res.status(401).json({ error: "Erro ao buscar registro" })
+        console.log(error)
+
+    }
+
+})
+
 //enviando movimento de entrada
 router.post('/', async(req, res) => {
 
-    const { invoice, panelsCount, inputDate, inputChecked } = req.body
+    const { batchId, invoice, panelsCount, inputDate, inputChecked } = req.body
 
     const outputDate = ""
     const outputChecked =""
@@ -48,7 +68,7 @@ router.post('/', async(req, res) => {
 
     try {
 
-        const tracking = new Tracking({invoice, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type})
+        const tracking = new Tracking({batchId, invoice, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type})
         await tracking.save()
         res.status(200).json({ error: null, msg:"Entrada de placas registrado", data: tracking })
 
@@ -63,10 +83,11 @@ router.post('/', async(req, res) => {
 
 router.put('/output', async(req, res) => {
 
-    const { trackingId, invoice, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body
+    const { trackingId, batchId, invoice, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body
 
     const tracking = {
         id: trackingId,
+        batchId: batchId,
         invoice: invoice,
         panelsCount: panelsCount,
         inputDate: inputDate,

@@ -4,7 +4,7 @@
 
         <h1>Registrando lote de Placas</h1>
 
-        <BatchForm :batch="{}" page="registerBatch" btnText="Registrar"/>
+        <BatchForm :batch="{}" :tracking="{}" page="registerBatch" btnText="Registrar"/>
 
     </div>
 
