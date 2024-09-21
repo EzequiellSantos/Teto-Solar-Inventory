@@ -41,7 +41,7 @@
             </section>
 
             <section class="input-container">
-
+                
                 <input type="text" name="brand" id="brand" v-model="brand" placeholder="Marca" required>
 
             </section>

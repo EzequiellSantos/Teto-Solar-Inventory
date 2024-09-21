@@ -1,9 +1,10 @@
 <template>
 
-    <div>
-        <h1>Registrando Lote de Saída</h1>
+    <div id="newTrackingOut">
 
-        <BatchOutFormVue :tracking="{}" :batch="{}" page="registerOutBatch" btnText="Registrar" />
+        <h1>Registrando Lote de Saída</h1>
+        
+        <BatchFormOut :tracking="{}" :batch="{}" page="registerOutBatch" btnText="Registrar"/>
 
     </div>
 
@@ -12,11 +13,14 @@
 
 <script>
 
-    import BatchOutFormVue from '../../components/panels/BatchOutForm.vue'
+    import BatchFormOut from '@/components/panels/BatchFormOut.vue'
 
     export default {
         components:{
-            BatchOutFormVue
+            BatchFormOut
+        },
+        methods: {
+
         }
     }
 
