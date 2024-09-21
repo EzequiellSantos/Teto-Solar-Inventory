@@ -66,7 +66,7 @@
 
             <section class="input-container">
 
-                <input type="text" name="typeChoice" id="typeChoice" v-model="typeChoice" value="ENTRADA" readonly>
+                <input type="text" name="typeChoice" id="typeChoice" v-model="typeChoice" readonly>
 
             </section>
 
@@ -98,7 +98,8 @@
 
             return {
                 id: this.batch._id || null,
-                snArray: this.batch.panels || null,
+                sn: null,
+                snArray: this.batch.panels || [],
                 invoice: this.batch.invoice || null,
                 power: this.batch.power || null,
                 brand: this.batch.brand || null,
@@ -171,6 +172,7 @@
 
                     batchId: this.batchId,
                     invoice: this.invoice,
+                    brand: this.brand,
                     panelsCount: this.snArray?.length,
                     inputDate: this.inputDate,
                     inputChecked: this.inputChecked
@@ -215,7 +217,88 @@
 
                 e.preventDefault()
 
-                console.log('atualiza besta fera')
+                // data for batch
+                const data = {
+
+                    id: this.id,
+                    brand: this.brand,
+                    invoice: this.invoice,
+                    client: this.client,
+                    power: this.power,
+                    panels: this.snArray,
+
+                }
+
+                const jsonData = JSON.stringify(data)
+
+                await fetch(`${this.apiURL}/api/batchs`, {
+                    method:"PUT",
+                    headers:{
+                        "Content-type":"application/json"
+                    },
+                    body: jsonData
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
+
+                    }
+
+                })
+
+                //data updated for tracking
+                const dataTracking = {
+
+                    batchId: this.batchId,
+                    invoice: this.invoice,
+                    brand: this.brand,
+                    panelsCount: this.snArray?.length,
+                    inputDate: this.inputDate,
+                    inputChecked: this.inputChecked
+
+                }
+
+                const jsonDataTracking = JSON.stringify(dataTracking)
+
+                await fetch(`${this.apiURL}/api/trackings/output`, {
+                    method: "PUT",
+                    headers:{
+                        "Content-type":"application/json"
+                    },
+                    body: jsonDataTracking
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
+                        
+                        setTimeout(() => {
+
+                            this.msg = null
+                            this.$router.push(`/batchs/${this.brand}#${this.id}`)
+                            
+                        }, 1600)
+
+                    }
+
+                })
 
             },
 

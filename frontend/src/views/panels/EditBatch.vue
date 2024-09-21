@@ -2,7 +2,7 @@
     
     <div id="editBatch">
 
-        <h1>Editando Lote</h1>
+        <h1>Editando Lote de Placas</h1>
 
         <BatchForm :batch="batch" :tracking="tracking" page="editBatch" btnText="Editar Lote" :key="componentKey" />
 
@@ -53,8 +53,6 @@
 
                     this.tracking = data.tracking
                     this.batchId = data.tracking.batchId
-
-                    console.log(data.tracking)
 
                     this.getBatch()
 

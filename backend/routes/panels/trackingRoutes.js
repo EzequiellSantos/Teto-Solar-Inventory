@@ -2,13 +2,30 @@ const express =  require('express')
 const router = express.Router()
 const Tracking = require('../../models/panels/tracking')
 
+router.get('/all', async(req, res) => {
+
+    try {
+        
+        const trackings = await Tracking.find({})
+
+        res.status(200).json({error: null, trackings: trackings})
+
+    } catch (error) {
+
+        res.status(401).json({error: "Erro ao coletar os registros"})
+        console.log(error)
+        
+    }
+
+})
+
 //coletando apenas os movimentos de entrada
 router.get('/input', async(req, res) => {
 
     try {
         
         const inputTraking = await Tracking.find({ type: "Entrada"})
-        res.status(200).json({ error: null, msg: "Movimentos de entradas coletados!", data: inputTraking})
+        res.status(200).json({ error: null, msg: "Movimentos de entradas coletados!", trackings: inputTraking})
 
     } catch (error) {
         
@@ -25,7 +42,7 @@ router.get('/output', async(req, res) => {
     try{
 
         const outputTracking = await Tracking.find({type: "Saida"})
-        res.status(200).json({ error: null, msg:"Movimentos de saídas coletados!", data: outputTracking })
+        res.status(200).json({ error: null, msg:"Movimentos de saídas coletados!", trackings: outputTracking })
 
     } catch(error){
 
@@ -59,16 +76,14 @@ router.get('/:id', async(req, res) => {
 //enviando movimento de entrada
 router.post('/', async(req, res) => {
 
-    const { batchId, invoice, panelsCount, inputDate, inputChecked } = req.body
+    const { batchId, invoice, brand, panelsCount, inputDate, inputChecked } = req.body
 
-    const outputDate = ""
-    const outputChecked =""
     const type =  "Entrada"
     
 
     try {
 
-        const tracking = new Tracking({batchId, invoice, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type})
+        const tracking = new Tracking({batchId, invoice, brand, panelsCount, inputDate, inputChecked, type})
         await tracking.save()
         res.status(200).json({ error: null, msg:"Entrada de placas registrado", data: tracking })
 
@@ -83,12 +98,13 @@ router.post('/', async(req, res) => {
 
 router.put('/output', async(req, res) => {
 
-    const { trackingId, batchId, invoice, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body
+    const { trackingId, batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body
 
     const tracking = {
         id: trackingId,
         batchId: batchId,
         invoice: invoice,
+        brand: brand,
         panelsCount: panelsCount,
         inputDate: inputDate,
         inputChecked: inputChecked,

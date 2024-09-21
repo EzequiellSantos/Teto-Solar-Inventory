@@ -46,12 +46,17 @@
 
             </aside>
 
-            <main id="cardsPower" v-for="(batch, index) in brand" :key="index">
+            <main class="cardsPower" v-for="(batch, index) in brand" :key="index">
 
-                <p>{{ batch.power }}W</p>
-                <p>Nota: {{ batch.invoice }}</p>
-                <p>Cliente: {{ batch.client }}</p>
-                <p>Quant: {{ batch.panelsCount }} Placas</p>
+                <div class="card" :id="batch._id">
+                    <p>{{ batch.power }}W</p>
+                    <p>Nota: {{ batch.invoice }}</p>
+                    <p>Cliente: {{ batch.client }}</p>
+                    <p>Quant: {{ batch.panelsCount }} Placas</p>
+                    <button>
+                        <router-link :to="`/editBatch/${batch._id}`">Editar</router-link>
+                    </button>
+                </div>
 
             </main>
 
@@ -236,6 +241,14 @@
 
     #cardsPower{
         margin-block: 20px;
+    }
+
+    .info{
+        margin-block: 15px;
+    }
+
+    button{
+        padding: 3px 10px;
     }
 
 

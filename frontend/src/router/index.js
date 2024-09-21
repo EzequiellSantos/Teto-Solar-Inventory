@@ -102,6 +102,16 @@ const routes = [
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path: '/trackings/',
+    name: "trackings",
+    component: () => import(/* webpackChunkName: "trackings" */ '../views/panels/DashboardTrackings.vue'),
+  },
+  {
+    path: '/registerTracking/',
+    name: "tracking",
+    component: () => import(/* webpackChunkName: "registerTracking" */ '../views/panels/NewTrackingOut.vue'),
   }
 ]
 

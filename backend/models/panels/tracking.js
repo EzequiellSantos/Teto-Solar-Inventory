@@ -10,6 +10,9 @@ const TrackingSchema = new mongoose.Schema({
     invoice: {
         type: String
     },
+    brand: {
+        type: String
+    },
     panelsCount:{
         type: Number,
     },
