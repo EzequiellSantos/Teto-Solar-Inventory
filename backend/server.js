@@ -12,7 +12,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions))
-app.options('/api/inverters/all', cors(corsOptions)); // Habilita CORS para requisições OPTIONS
+// app.options('/api/inverters/all', cors(corsOptions)); // Habilita CORS para requisições OPTIONS
 
 
 // Middlewares
