@@ -12,13 +12,15 @@
 
             </section>
 
-            <section id="snView">
+            <section id="snView" :class="isSameInvoice">
 
-                <div class="snList">
+                <aside>
 
-                    <div class="snList" v-for="(sn, index) in snArray" :key="index">
+                    <div class="sn-list" v-for="(sn, index) in snArray" :key="index">
 
-                        <p>{{ sn }}</p>
+                        <div>
+                            <p>{{ sn }}</p> <button @click="removingSn($event, index)">DEl</button>
+                        </div>
 
                     </div>
 
@@ -28,57 +30,57 @@
 
                     </article>
 
-                    <sectuon class="input-container">
+                    <span v-if="isSameInvoice == 'not-same'">Contém Placa de outro cliente</span>
 
-                        <input type="text" name="invoice" id="invoice" v-model="invoice" readonly required>
+                </aside>
 
-                    </sectuon>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="text" name="power" id="power" v-model="power" readonly required>
+                <input type="text" name="invoice" id="" :class="isSameInvoice" v-model="invoice" readonly required>
 
-                    </section>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="text" name="brand" id="brand" v-model="brand" readonly>
+                <input type="text" name="power" id="power" v-model="power" readonly required>
 
-                    </section>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="text" name="client" id="client" v-model="client" readonly>
+                <input type="text" name="brand" id="brand" v-model="brand" readonly>
 
-                    </section>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="hidden" name="inputDate" id="inputDate" v-model="inputDate">
+                <input type="text" name="client" id="client" v-model="client" readonly>
 
-                    </section>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="hidden" name="client" id="client" v-model="inputChecked">
+                <input type="hidden" name="inputDate" id="inputDate" v-model="inputDate">
 
-                    </section>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="text" name="outputChecked" id="outputChecked" v-model="inputChecked" placeholder="Conferido Por" required>
+                <input type="hidden" name="client" id="client" v-model="inputChecked">
 
-                    </section>
+            </section>
 
-                    <section class="input-container">
+            <section class="input-container">
 
-                        <input type="text" name="typeChoice" id="typeChoice" v-model="typeChoice" readonly>
+                <input type="text" name="outputChecked" id="outputChecked" v-model="inputChecked" placeholder="Conferido Por" required>
 
-                    </section>
+            </section>
 
+            <section class="input-container">
 
-                </div>
-
+                <input type="text" name="typeChoice" id="typeChoice" v-model="typeChoice" readonly>
 
             </section>
 
@@ -103,10 +105,12 @@ export default {
         return {
             msg: null,
             msgClass: null,
+            isSameInvoice: "its-same",
+            countSnArray: 0,
             apiURL: BASE_URL,
             id: this.batch._id || null,
             sn: null,
-            snArray:this.batch.panels || [],
+            snArray:this.batch.panels || ["1212"],
             invoice: this.batch.invoice || null,
             client: this.batch.client || null,
             brand: this.batch.brand || null,
@@ -118,16 +122,148 @@ export default {
             typeChoice: "Saida"
         }
     },
+    created(){
+
+        this.colletingBrand(this.snArray[0])
+
+    },
     methods:{
 
         addSn(e){
             e.preventDefault()
             
-            if(this.sn != null || this.sn != ''){
+            this.countSnArray =  this.snArray?.length
+
+            if(this.sn != null && this.sn != ''){
+
                 this.snArray.push(this.sn)
+
+                if(this.countSnArray == 0){
+
+                    this.colletingBrand(this.snArray[this.countSnArray])
+
+                }
+
+                if(this.countSnArray > 0){
+
+                    this.checkItsSameInvoice(this.snArray[this.countSnArray], this.invoice)
+
+                } 
             }
 
+            
+
             this.sn = null
+
+        },
+
+        removingSn(e, index){
+
+            e.preventDefault()
+
+            this.snArray.splice(index, 1)
+
+            this.isSameInvoice = "its-same"
+
+            this.countSnArray =  this.snArray?.length
+
+            console.log(this.countSnArray, this.snArray)
+
+            if(this.countSnArray > 0){
+
+                this.checkItsSameInvoice(this.snArray[this.countSnArray - 1], this.invoice)
+
+            }
+
+            if(this.countSnArray == 0) {
+
+                this.invoice = null,
+                this.brand = null,
+                this.power = null
+
+            }
+
+        },
+
+        async checkItsSameInvoice(sn, invoice){ 
+
+            const data = {
+                invoice: invoice,
+                panelSn: sn
+            }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/batchs/panels`, {
+                method: "POST",
+                headers: {
+                    "Content-type":"application/json"
+                },
+                body: jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                    this.isSameInvoice = 'not-same'
+                    console.log(data.error)
+
+                } else {
+
+                    this.isSameInvoice = 'its-same'
+
+                }
+
+                setTimeout(() => {
+
+                    this.msg = null
+
+                }, 1000)
+
+            })
+
+        },
+
+        async colletingBrand(sn){
+
+            const data = {
+                panelSn: sn
+            }
+            
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/batchs/panelSn`, {
+                method:"POST",
+                headers:{
+                    "Content-type":"application/json"
+                },
+                body: jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                    this.msg = data.error
+                    this.msgClass = 'error'
+
+                    setTimeout(() => {
+
+                        this.msg = null
+
+                    }, 1500)
+
+                } else {
+
+                    this.brand = data.data[0]?.brand
+                    this.power = data.data[0]?.power
+                    this.invoice = data.data[0]?.invoice
+
+                }
+
+            })
+
 
         },
 
@@ -150,3 +286,35 @@ export default {
     }
 }
 </script>
+
+<style>
+
+    #snView{
+        min-height: 50px;
+        border-radius: 10px;
+        margin: auto;
+        max-width: 400px;
+        padding: 10px;
+    }
+
+    .its-same{
+
+        border:1px solid transparent;
+
+    }
+
+    .not-same{
+
+        border:1px solid rgb(255, 94, 0);
+
+    }
+
+    .sn-list > div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+</style>

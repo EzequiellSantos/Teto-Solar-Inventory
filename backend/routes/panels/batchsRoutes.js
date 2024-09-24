@@ -30,15 +30,16 @@ router.post('/power', async(req, res) => {
 })
 
 // adicionar rota para buscar placas por lote específico
-router.get('/panels', async(req, res) => {
+router.post('/panels', async(req, res) => {
 
     const invoice = req.body.invoice
     const panelSn = req.body.panelSn
 
+
     try{
 
-    //retorna apenas o embeded document correspondente aos itens
-    const panels = await Batch.find({invoice: invoice, panels: panelSn})
+        //retorna apenas o embeded document correspondente aos itens
+        const panels = await Batch.find({invoice: invoice, panels: panelSn})
 
         //verifica se existe resultado para a query
         if(panels[0]){
@@ -46,6 +47,37 @@ router.get('/panels', async(req, res) => {
         }
 
         res.status(200).json({ error: "A placa não corresponde ao lote!" })
+
+    } catch(error){
+
+        res.status(400).json({ error: "Erro ao buscar placa" })
+        console.log(error)
+
+    }
+
+})
+
+//coletar brand por meio do panelSn
+router.post('/panelSn', async(req, res) => {
+
+    const panelSn = req.body.panelSn
+
+    try{
+
+        //retorna apenas o embeded document correspondente aos itens
+        const brand = await Batch.find({panels: panelSn})
+
+        //verifica se existe resultado para a query
+        if(brand[0]){
+
+            return res.status(200).json({ error: null, msg: "Placa encontrada", data: brand }) 
+                      
+        } else {
+
+            res.status(200).json({ error: "Sn de placa não encontrado!" })
+
+        }
+
 
     } catch(error){
 
