@@ -84,8 +84,8 @@ const routes = [
   },
   {
     path: '/batchs/:brand',
-    name: "batch",
-    component: () => import(/* webpackChunkName: "batch" */ '../views/panels/Batch.vue'),
+    name: "batchsBrands",
+    component: () => import(/* webpackChunkName: "batch" */ '../views/panels/Batchs.vue'),
   },
   {
     path: '/registerBatch',
