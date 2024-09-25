@@ -201,6 +201,7 @@
 
                         this.msg = data.msg
                         this.msgClass = 'sucess'
+                        this.$router.push('/batchs')
 
                     }
 
