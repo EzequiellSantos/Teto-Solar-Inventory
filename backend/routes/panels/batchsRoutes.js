@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Batch = require('../../models/panels/batch')
 
-
+// retornar lotes que contenha a devida marca e potencia 
 router.post('/power', async(req, res) => {
 
     const power = req.body.power
@@ -29,12 +29,11 @@ router.post('/power', async(req, res) => {
 
 })
 
-// adicionar rota para buscar placas por lote específico
+// buscar placas por lote específico
 router.post('/panels', async(req, res) => {
 
     const invoice = req.body.invoice
     const panelSn = req.body.panelSn
-
 
     try{
 
@@ -57,7 +56,7 @@ router.post('/panels', async(req, res) => {
 
 })
 
-//coletar brand por meio do panelSn
+// coletar brand por meio do panelSn
 router.post('/panelSn', async(req, res) => {
 
     const panelSn = req.body.panelSn
@@ -123,6 +122,7 @@ router.get('/:brand', async (req, res) => {
 
 })
 
+// buscar batch por meio do objectId
 router.post('/id', async(req, res) => {
 
     const  id = req.body.id
@@ -198,12 +198,7 @@ router.put('/', async(req, res) => {
     try {
 
         const updatebatch =  await Batch.findOneAndUpdate({_id: batchId,}, { $set: batchData },{ new: true })
-/* 
 
-    @ adicionar verificação se a marca foi alterada para fazer assim a migração
-      do lote para outra marca presente ou criar uma nova
-
-*/
         if(updatebatch === null){
 
            return res.json({ error: "Lote não encontrado"})

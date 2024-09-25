@@ -22,18 +22,18 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/inverters/AboutView.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/inverters/AboutView.vue')
   },
   {
     path: '/inverters',
     name:'inverters',
-    component: () => import(/* webpackChunkName: "inverters" */ '../views/inverters/DashboardInv.vue'),
+    component: () => import(/* webpackChunkName: "inverters" */ '../views/inverters/DashboardInv.vue')
   },
 
   {
     path: '/logs',
     name:'logs',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/DashboardLogs.vue'),
+    component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/DashboardLogs.vue')
   },
   {
     path: '/registerLog',
@@ -54,12 +54,12 @@ const routes = [
   {
     path: '/inverter/:id',
     name:'inverter',
-    component: () => import(/* webpackChunkName: "inverter" */ '../views/inverters/Inverter.vue'),
+    component: () => import(/* webpackChunkName: "inverter" */ '../views/inverters/Inverter.vue')
   },
   {
     path: '/log/:id',
     name:'log',
-    component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/Log.vue'),
+    component: () => import(/* webpackChunkName: "logs" */ '../views/inverters/Log.vue')
   },
   {
     path: '/editInverter/:id',
@@ -80,12 +80,12 @@ const routes = [
   {
     path: '/batchs',
     name: "batchs",
-    component: () => import(/* webpackChunkName: "batchs" */ '../views/panels/DashboardBatchs.vue'),
+    component: () => import(/* webpackChunkName: "batchs" */ '../views/panels/DashboardBatchs.vue')
   },
   {
     path: '/batchs/:brand',
     name: "batchsBrands",
-    component: () => import(/* webpackChunkName: "batch" */ '../views/panels/Batchs.vue'),
+    component: () => import(/* webpackChunkName: "batch" */ '../views/panels/Batchs.vue')
   },
   {
     path: '/registerBatch',
@@ -106,12 +106,20 @@ const routes = [
   {
     path: '/trackings',
     name: "trackings",
-    component: () => import(/* webpackChunkName: "trackings" */ '../views/panels/DashboardTrackings.vue'),
+    component: () => import(/* webpackChunkName: "trackings" */ '../views/panels/DashboardTrackings.vue')
   },
   {
     path: '/registerTracking',
     name: "registerTracking",
     component: () => import(/* webpackChunkName: "registerTracking" */ '../views/panels/NewTrackingOut.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/batch/:id',
+    name: "batch",
+    component: () => import(/* webpackChunkName: "batchs" */ '../views/panels/Batch.vue')
   }
 ]
 
