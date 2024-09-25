@@ -732,4 +732,63 @@
     background-color: #ececec;
   }
 
+  /* configurações do formulario de inversores / registros de placas */
+  #form{
+      width: calc(100% - 20px);
+      max-width: 900px;
+      margin: auto;
+  }
+
+  .input-container{
+    margin: 13px 0;
+    padding: 15px;
+    border-radius: 17px ;
+    background-color: rgba(199, 209, 233, 0.616);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .input-container > label, select{
+    cursor: pointer;
+    margin-bottom: 6px;
+    font-size: 1.1em;
+  }
+
+  .input-container > input[type='text']{
+    outline: none;
+    border: none;
+    padding: 6px 10px;
+    margin:0;
+    border-radius: 30px;
+    width: 30vw;
+    min-width: 200px;
+    max-width: 300px;
+  }
+
+  .input-container > select{
+    font-size: clamp(0.625rem, 0.5417rem + 0.4444vw, 0.875rem);
+    outline: none;
+    border: none;
+    padding: 6px 10px;
+    margin:0;
+    border-radius: 30px;
+    text-transform: uppercase;
+    width: 33vw;
+    padding: 6px 15px;
+    min-width: 220px;
+    max-width: 327px;
+    background-color: #fff;
+  }
+
+  @media (width >= 780px) {
+    
+    input, select{
+        padding: 14px;
+    }
+
+  }
+
 </style>
