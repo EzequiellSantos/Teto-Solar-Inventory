@@ -18,9 +18,6 @@
     export default {
         components:{
             BatchFormOut
-        },
-        methods: {
-
         }
     }
 

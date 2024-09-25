@@ -96,6 +96,27 @@ router.post('/', async(req, res) => {
 
 })
 
+router.post('/registerOut', async(req, res) => {
+
+    const {batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type} = req.body
+
+    try {
+        
+        const trackingOut = new Tracking({batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type})
+
+        await trackingOut.save()
+
+        res.status(200).json({error: null, msg: "Registro de saída adicionado!", tracking: trackingOut})
+
+    } catch (error) {
+        
+        res.status(401).json({error: "Falha ao fazer registro"})
+        console.log(error)
+
+    }
+
+})
+
 router.put('/output', async(req, res) => {
 
     const { trackingId, batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body

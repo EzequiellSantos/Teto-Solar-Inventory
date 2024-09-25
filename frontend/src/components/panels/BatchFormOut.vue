@@ -5,12 +5,12 @@
         
             <input type="hidden" name="id" v-model="id" id="id">
 
-            <section class="input-container">
+            <div class="input-container-header">
                 
                 <input type="text" name="sn" id="sn" v-model="sn">
                 <button @click="addSn($event)">Adicionar</button>
 
-            </section>
+            </div>
 
             <section id="snView" :class="isSameInvoice">
 
@@ -18,7 +18,7 @@
 
                     <div class="sn-list" v-for="(sn, index) in snArray" :key="index">
 
-                        <div>
+                        <div class="sn-item">
                             <p>{{ sn }}</p> <button @click="removingSn($event, index)">DEl</button>
                         </div>
 
@@ -30,59 +30,43 @@
 
                     </article>
 
-                    <span v-if="isSameInvoice == 'not-same'">Contém Placa de outro cliente</span>
+                    <span v-if="isSameInvoice == 'not-same'">Contém placa de outro cliente</span>
 
                 </aside>
 
             </section>
 
-            <section class="input-container">
+            <p>Nota Fisc: {{ this.invoice }}</p>
+  
+            <p>Potência: {{ this.power }}</p>
 
-                <input type="text" name="invoice" id="" :class="isSameInvoice" v-model="invoice" readonly required>
+            <p>Marca: {{ this.brand }}</p>
 
-            </section>
+            <div class="input-container">
 
-            <section class="input-container">
+                <label for="client">Cliente:</label>
+                <input type="text" name="client" id="client" v-model="client" placeholder="Cliente">
 
-                <input type="text" name="power" id="power" v-model="power" readonly required>
+            </div>
 
-            </section>
+            <input type="hidden" name="inputDate" id="inputDate" v-model="inputDate">
+            <input type="hidden" name="inputChecked" id="inputChecked" v-model="inputChecked">
 
-            <section class="input-container">
+            <div class="input-container">
 
-                <input type="text" name="brand" id="brand" v-model="brand" readonly>
+                <label for="outputDate">Data de Saída:</label>
+                <input type="date" name="outputDate" id="outputDate" v-model="outputDate">
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
 
-                <input type="text" name="client" id="client" v-model="client" readonly>
+                <label for="outputChecked">Quem verificou</label>
+                <input type="text" name="outputChecked" id="outputChecked" v-model="outputChecked" placeholder="Conferido Por" required>
 
-            </section>
+            </div>
 
-            <section class="input-container">
-
-                <input type="hidden" name="inputDate" id="inputDate" v-model="inputDate">
-
-            </section>
-
-            <section class="input-container">
-
-                <input type="hidden" name="client" id="client" v-model="inputChecked">
-
-            </section>
-
-            <section class="input-container">
-
-                <input type="text" name="outputChecked" id="outputChecked" v-model="inputChecked" placeholder="Conferido Por" required>
-
-            </section>
-
-            <section class="input-container">
-
-                <input type="text" name="typeChoice" id="typeChoice" v-model="typeChoice" readonly>
-
-            </section>
+            <input type="hidden" name="typeChoice" id="typeChoice" v-model="typeChoice" readonly>
 
             <InputSubmit :text="btnText"/>
 
@@ -110,22 +94,17 @@ export default {
             apiURL: BASE_URL,
             id: this.batch._id || null,
             sn: null,
-            snArray:this.batch.panels || ["1212"],
+            snArray:this.batch.panels || [],
             invoice: this.batch.invoice || null,
             client: this.batch.client || null,
             brand: this.batch.brand || null,
             power: this.batch.power || null,
             inputDate: this.tracking.inputDate || null,
             inputChecked: this.tracking.inputChecked || null,
-            outputDate: null,
-            outputChecked: null,
+            outputDate: this.tracking?.outputDate || null,
+            outputChecked: this.tracking?.outputChecked || null,
             typeChoice: "Saida"
         }
-    },
-    created(){
-
-        this.colletingBrand(this.snArray[0])
-
     },
     methods:{
 
@@ -151,8 +130,6 @@ export default {
                 } 
             }
 
-            
-
             this.sn = null
 
         },
@@ -167,8 +144,6 @@ export default {
 
             this.countSnArray =  this.snArray?.length
 
-            console.log(this.countSnArray, this.snArray)
-
             if(this.countSnArray > 0){
 
                 this.checkItsSameInvoice(this.snArray[this.countSnArray - 1], this.invoice)
@@ -179,7 +154,8 @@ export default {
 
                 this.invoice = null,
                 this.brand = null,
-                this.power = null
+                this.power = null,
+                this.client = null
 
             }
 
@@ -215,13 +191,20 @@ export default {
 
                 }
 
-                setTimeout(() => {
+            })
+            .catch((error) => {
 
-                    this.msg = null
-
-                }, 1000)
+                this.msg = error
+                this.msgClass = 'error'
+                console.log(error)
 
             })
+
+            setTimeout(() => {
+
+                this.msg = null
+
+            }, 1000)
 
         },
 
@@ -241,29 +224,36 @@ export default {
                 body: jsonData
             })
             .then((resp) => resp.json())
-            .then((data) => {
+            .then((batch) => {
 
-                if(data.error){
+                if(batch.error){
 
-                    this.msg = data.error
+                    this.msg = batch.error
                     this.msgClass = 'error'
-
-                    setTimeout(() => {
-
-                        this.msg = null
-
-                    }, 1500)
 
                 } else {
 
-                    this.brand = data.data[0]?.brand
-                    this.power = data.data[0]?.power
-                    this.invoice = data.data[0]?.invoice
+                    this.brand = batch.data[0]?.brand
+                    this.power = batch.data[0]?.power
+                    this.invoice = batch.data[0]?.invoice
+                    this.client = batch.data[0]?.client
 
                 }
 
             })
+            .catch((error) => {
 
+                this.msg = error
+                this.msgClass = 'error'
+                console.log(error)
+
+            })
+
+            setTimeout(() => {
+
+                this.msg = null
+
+            }, 1500)
 
         },
 
@@ -271,7 +261,58 @@ export default {
 
             e.preventDefault()
 
-            console.log('teste registro')
+            const data = {
+                batchId: this.id,
+                invoice: this.invoice,
+                brand: this.brand,
+                panelsCount: this.snArray.length,
+                inputDate: this.inputDate,
+                inputChecked: this.inputChecked,
+                outputDate: this.outputDate,
+                outputChecked: this.outputChecked,
+                type: this.type
+            }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/trackings/registerOut`, {
+                method:"POST",
+                headers: {
+                "Content-type":"application/json"
+                },
+                body: jsonData
+            })
+            .then((resp) =>  resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                    this.msg = data.error
+                    this.msgClass = 'error'
+
+                } else {
+
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+                    this.$router.push('/trackings')
+
+
+                }
+
+            })
+            .catch((error) => {
+
+                this.msg = error
+                this.msgClass = 'error'
+                console.log(error)
+
+            })
+
+            setTimeout(() => {
+
+                this.msg = null
+
+            }, 1500)
 
         },
 
@@ -297,6 +338,27 @@ export default {
         padding: 10px;
     }
 
+    .input-container > input[type=date]{
+        border-radius: 20px;
+        outline: 0;
+        border: none;
+        padding: 6px 10px;
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+    }
+
+    .input-container > input[type=text]{
+        outline: none;
+        border: none;
+        padding: 6px 10px;
+        margin: 0;
+        border-radius: 30px;
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+    }
+
     .its-same{
 
         border:1px solid transparent;
@@ -315,6 +377,11 @@ export default {
         justify-content: center;
         align-items: center;
         gap: 10px;
+    }
+
+    .sn-item > button, .input-container > button{
+        padding: 2px 5px;
+        margin-left: 5px;
     }
 
 </style>
