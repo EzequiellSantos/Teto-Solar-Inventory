@@ -11,12 +11,12 @@
                 </h1>
 
                 <div class="input-header">
-                    <input type="text" id="clientName" v-model="clientName" @input="getClientName"> 
+                    <input type="text" id="text" @input="textSearch" v-model="text"> 
                 </div>
 
             </section>
 
-            <section class="power-types">
+            <section class="power-types" v-if="notFound != true">
 
                 <div v-for="(power, index1) in allPowers" :key="index1">  
 
@@ -29,7 +29,7 @@
 
             </section>
 
-            <aside class="info">
+            <aside class="info" v-if="notFound != true" >
 
                 <div class="info-clients" >
 
@@ -48,7 +48,7 @@
 
             <main class="cardsPower" v-for="(batch, index) in brand" :key="index">
 
-                <div class="card" :id="batch._id">
+                <div class="card" :id="batch._id" v-if="notFound != true">
                     <p>{{ batch.power }}W</p>
                     <p>Nota: {{ batch.invoice }}</p>
                     <p>Cliente: {{ batch.client }}</p>
@@ -81,7 +81,9 @@
                 brand: {},
                 allPowers: [],
                 panelsCount:0,
-                clientCount:0
+                clientCount:0,
+                text: "",
+                notFound: false
             }
         }, 
         created() {
@@ -113,6 +115,8 @@
 
                     this.brand = data.brand  
 
+                    this.notFound = false
+
                     // coletar informações de quantidade de paineis e clientes
                     this.getInfoBrand()
 
@@ -131,6 +135,9 @@
             },
 
             getInfoBrand(){
+
+                this.panelsCount = 0
+                this.clientCount = 0
                 
                 for(let i = 0 ; i < this.brand.length ; i++){
 
@@ -179,7 +186,9 @@
 
             sendingAllPowers(){
             
-                for(let i = 0 ; i < this.brand.length ; i++){
+                this.allPowers = []
+
+                for(let  i = 0 ; i < this.brand.length ; i++){
 
                     // verificaçao para evitar repetiçoes
                     if(!this.allPowers.includes(this.brand[i].power)){
@@ -192,13 +201,64 @@
 
             },
 
-            initialBatchs(){
+            async textSearch(){
+               
+                const search = this.text
 
-                this.brand = {}
-                this.allPowers = []
-                this.panelsCount = 0
-                this.clientCount = 0
-                this.getBrand()
+                const data = {
+                    search: search
+                }
+
+                const jsonData = JSON.stringify(data)
+
+                await fetch(`${this.APIurl}/api/batchs/search`, {
+                    method:"POST",
+                    headers: {
+                        "Content-type":"application/json"
+                    },
+                    body:jsonData
+                }) 
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if (data.error) {
+                        
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        //verificação para saber se há resultados, caso não 
+                        if(data.batch.length > 0){ 
+
+                            this.notFound = false
+                            this.brand = data.batch
+                            console.log(data.batch[0].brand)
+                            this.$router.push(`/batchs/${data.batch[0].brand}`) 
+                            this.sendingAllPowers()
+                            this.getInfoBrand()
+                            
+                        } else {
+
+                            this.notFound = true
+
+                        }
+
+                    }
+
+                })
+
+                setTimeout(() => {
+
+                    this.msg = null
+
+                    let inputValue = this.text
+
+                    if(inputValue == "" || inputValue.length == 0){
+                        this.getBrand()
+                    }
+
+                }, 1600)
 
             }
 

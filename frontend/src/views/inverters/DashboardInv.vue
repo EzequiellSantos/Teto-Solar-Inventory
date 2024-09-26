@@ -124,8 +124,6 @@
 
                         this.inverters = data.inverter
 
-
-
                     })
 
                 } catch (error) {

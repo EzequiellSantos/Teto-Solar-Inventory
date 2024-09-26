@@ -1,7 +1,7 @@
 <template>
     <div id="form">
         <Message :msg="msg" :msgClass="msgClass"/>
-        <form id="batchOutForm" enctype="multipart/form-data" @submit="page === 'registerOutBatch' ? register($event) : update($event)">
+        <form id="batchOutForm" enctype="multipart/form-data" @submit="register($event)">
         
             <input type="hidden" name="id" v-model="id" id="id">
 
@@ -92,9 +92,11 @@ export default {
             isSameInvoice: "its-same",
             countSnArray: 0,
             apiURL: BASE_URL,
+            trackingId: null,
             id: this.batch._id || null,
             sn: null,
-            snArray:this.batch.panels || [],
+            panels: this.batch.panels || [],
+            snArray:[],
             invoice: this.batch.invoice || null,
             client: this.batch.client || null,
             brand: this.batch.brand || null,
@@ -233,10 +235,14 @@ export default {
 
                 } else {
 
+                    this.id = batch.data[0]?._id
                     this.brand = batch.data[0]?.brand
                     this.power = batch.data[0]?.power
                     this.invoice = batch.data[0]?.invoice
                     this.client = batch.data[0]?.client
+                    this.panels = batch.data[0]?.panels
+
+                    this.colletingInputTracking()
 
                 }
 
@@ -257,14 +263,39 @@ export default {
 
         },
 
+        async colletingInputTracking(){
+
+            await fetch(`${this.apiURL}/api/trackings/${this.id}`, {
+                method:"GET",
+                headers:{
+                    "Content-type":"application/json"
+                }
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if(data.error){
+
+                } else {
+
+                    this.trackingId = data.tracking._id
+                    this.inputDate = data.tracking.inputDate
+                    this.inputChecked = data.tracking.inputChecked
+
+                }
+
+            })
+
+        },
+
         async register(e){
 
             e.preventDefault()
 
             const data = {
+                trackingId: this.trackingId,
                 batchId: this.id,
                 invoice: this.invoice,
-                brand: this.brand,
                 panelsCount: this.snArray.length,
                 inputDate: this.inputDate,
                 inputChecked: this.inputChecked,
@@ -275,8 +306,8 @@ export default {
 
             const jsonData = JSON.stringify(data)
 
-            await fetch(`${this.apiURL}/api/trackings/registerOut`, {
-                method:"POST",
+            await fetch(`${this.apiURL}/api/trackings/output`, {
+                method:"PUT",
                 headers: {
                 "Content-type":"application/json"
                 },
@@ -294,8 +325,18 @@ export default {
 
                     this.msg = data.msg
                     this.msgClass = 'sucess'
-                    this.$router.push('/trackings')
 
+                    this.panels = this.panels.filter(item => !this.snArray.includes(item))
+
+                    if(this.panels.length == 0){
+
+                        this.deleteBatch()
+
+                    } else {
+
+                        this.updateBatch()
+
+                    }
 
                 }
 
@@ -311,10 +352,84 @@ export default {
             setTimeout(() => {
 
                 this.msg = null
+                // this.$router.push('/trackings')
 
             }, 1500)
 
         },
+        
+        async deleteBatch(){
+
+            const id = this.id
+
+            const data = {
+                id: id
+            }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/batchs/`, {
+                method:"DELETE",
+                headers:{
+                    "Content-type":"application/json"
+                },
+                body:jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if (data.error) {
+
+                    this.msg = data.error
+                    this.msgClass = 'error'
+                    
+                } else {
+
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+
+                }
+
+            })
+
+        },
+
+        async updateBatch(){
+
+            const data = {
+                id: this.id,
+                brand: this.brand,
+                invoice: this.invoice,
+                client: this.client,
+                power: this.power,
+                panels: this.panels
+            }
+
+            const jsonData = JSON.stringify(data)
+
+            await fetch(`${this.apiURL}/api/batchs`, {
+                method:"PUT",
+                headers: {
+                    "Content-type":"application/json"
+                },
+                body:jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                if (data.error) {
+                    this.msg = data.error
+                    this.msgClass = 'error'
+                } else {
+
+                    this.msg = data.msg
+                    this.msgClass = 'sucess'
+
+                }
+
+            })
+        },
+        
 
         async update(e){
 

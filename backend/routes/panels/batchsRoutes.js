@@ -122,6 +122,25 @@ router.get('/:brand', async (req, res) => {
 
 })
 
+// Pesquisa de cliente
+router.post('/search', async(req, res) => {
+
+    const search = req.body.search
+
+    try {
+        
+        const batch = await Batch.find({$text: {$search: search}})
+        res.status(200).json({error: null, batch: batch})
+
+    } catch (error) {
+        
+        console.log(error)
+        res.status(401).json({error: "Pesquisa não encontrada"})
+        
+    }
+
+})
+
 // buscar batch por meio do objectId
 router.post('/id', async(req, res) => {
 

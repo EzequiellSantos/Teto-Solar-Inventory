@@ -26,7 +26,7 @@
                     <p>Quant: {{ tracking.panelsCount }} Placas</p>
                     <p>Entrada: {{ tracking.inputDate }}</p>
                     <p>Saida: {{ tracking.outputDate }}</p>
-                    <p>Conferiu: {{ tracking.inputChecked }}</p>
+                    <p>Conferiu: {{ tracking.outputChecked }}</p>
                     <p id="type" :class="`${tracking.type}`">{{ tracking.type }}</p>
                 </section>
 
