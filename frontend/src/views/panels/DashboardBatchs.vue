@@ -16,7 +16,7 @@
 
         </main>
 
-        <aside>
+        <aside id="footer">
 
             {{ this.totalPanelsCount }} placas no total
 
@@ -223,3 +223,35 @@
     }
 
 </script>
+
+<style scoped>
+
+    #Brands{
+        width: calc(100% - 10px);
+        min-width: 300px;
+        max-width: 600px;
+    }
+
+    .section-header{
+        background-color: #eee;
+        padding: 10px;
+        width: 40%;
+        font-size: clamp(0.9375rem, 0.8812rem + 0.3vw, 1.125rem);
+        border-radius: 20px;
+        margin: auto;
+        margin-block: 10px;
+    }
+
+    #footer{
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #eee;
+        border-radius: 10px;
+        padding: 3px 6px;
+        width: 20vw;
+        max-width: 200px
+    }
+
+</style>

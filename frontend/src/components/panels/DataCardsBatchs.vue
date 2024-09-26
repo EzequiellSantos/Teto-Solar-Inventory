@@ -2,7 +2,7 @@
     
     <div class="data-cards-body">
 
-        <div v-for="(data, brandIndex) in brands" :key="brandIndex">
+        <div class="data-cards-container" v-for="(data, brandIndex) in brands" :key="brandIndex">
 
             <router-link class="data-cards" :to="`/batchs/${data.brand}`">
 
@@ -33,8 +33,47 @@
         text-align: left;   
     }
 
-    .data-cards-title{
-        margin: 20px 0 0 0;
+    .data-cards-body{
+        margin-block: 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .data-cards-container{
+        background-color: #eee;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: flex-start;
+        padding: 10px 0px 10px 20px;
+        min-width: 80px;
+        width: 19%;
+        border-radius: 10px;
+    }
+
+    .data-cards{
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #000;
+    }
+
+    .data-cards-description, .data-cards-title{
+        margin: 4px 0;
+    }
+
+    @media (700px < width){
+
+        .data-cards-description, .data-cards-title, .data-cards, .data-cards-container{
+            cursor: pointer;
+        }
+
     }
 
 </style>
