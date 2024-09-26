@@ -1,12 +1,16 @@
 <template>
     <div id="form">
         <Message :msg="msg" :msgClass="msgClass"/>
+        <div id="reader"></div>
         <form id="batchOutForm" enctype="multipart/form-data" @submit="register($event)">
-        
+
             <input type="hidden" name="id" v-model="id" id="id">
 
             <div class="input-container-header">
                 
+                <button  id="startButton" @click="lerqrcode">
+                    <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
+                </button>
                 <input type="text" name="sn" id="sn" v-model="sn">
                 <button @click="addSn($event)">Adicionar</button>
 
@@ -78,6 +82,7 @@
 
 import Message from '@/components/Message.vue'
 import InputSubmit from '@/components/form/inputSubmit.vue'
+import { Html5QrcodeScanner } from 'html5-qrcode'
 import {BASE_URL} from '@/config'
 export default {
     components:{
@@ -110,8 +115,59 @@ export default {
     },
     methods:{
 
+        lerqrcode(){
+
+            const divReader = document.getElementById("reader")
+            divReader.style.display = "block"
+
+            const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+
+                this.sn = decodedText;
+                console.log("Lido :))", decodedText)
+                this.addSNAndChecks()
+                divReader.style.display = "none"
+
+                try{
+
+                    html5QrcodeScanner.clear();
+                    html5QrcodeScanner.resume()
+
+                } catch(err){
+
+                    console.error(err);
+                    
+                }
+
+            };
+
+            const qrCodeErrorCallback = (errorMessage) => {
+                // console.warn(`QR Code scan error: ${errorMessage}`);
+            };
+
+            const config = { 
+                fps: 1, 
+                qrbox: { width: window.innerWidth / 100 * 40, height: 170 },
+                experimentalFeatures: {
+                    useBarCodeDetectorIfSupported: true
+                },
+                rememberLastUsedCamera: true
+            };
+
+            const html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader", config, false);   
+            html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
+
+        },
+
         addSn(e){
+
             e.preventDefault()
+            
+            this.addSNAndChecks()
+
+        },
+
+        addSNAndChecks(){
             
             this.countSnArray =  this.snArray?.length
 

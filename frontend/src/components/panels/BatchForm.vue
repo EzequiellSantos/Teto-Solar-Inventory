@@ -4,12 +4,17 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
+        <div id="reader"></div>
+
         <form id="batchForm" enctype="multipart/form-data" @submit="page === 'registerBatch' ? register($event) : update($event)" >
 
             <input type="hidden" name="id" id="id" v-model="id">
 
             <section class="input-container">
 
+                <button  id="startButton" @click="lerqrcode">
+                    <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
+                </button>
                 <input type="text" id="sn" v-model="sn" placeholder="SN da Placa">
                 <button @click="addSn($event)">Adicionar</button>
 
@@ -116,6 +121,50 @@
 
         },
         methods: {
+
+            lerqrcode(){
+
+                const divReader = document.getElementById("reader")
+                divReader.style.display = "block"
+
+                const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+    
+                    this.sn = decodedText;
+                    console.log("Lido :))", decodedText)
+                    this.addSnAndChecks()
+                    divReader.style.display = "none"
+
+                    try{
+
+                        html5QrcodeScanner.clear();
+                        html5QrcodeScanner.resume()
+
+                    } catch(err){
+
+                        console.error(err);
+                        
+                    }
+
+                };
+
+                const qrCodeErrorCallback = (errorMessage) => {
+                    // console.warn(`QR Code scan error: ${errorMessage}`);
+                };
+
+                const config = { 
+                    fps: 1, 
+                    qrbox: { width: window.innerWidth / 100 * 40, height: 170 },
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true
+                    },
+                    rememberLastUsedCamera: true
+                };
+
+                const html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader", config, false);   
+                html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
+
+            },
 
             async register(e){
 
@@ -307,13 +356,18 @@
 
                 e.preventDefault()
 
+                this.addSnAndChecks()
+
+            },
+
+            addSnAndChecks(){
+
                 if(this.sn != null || this.sn != ''){
 
                     this.snArray.push(this.sn)
                     this.sn = ""
 
                 }
-
 
             }
 
