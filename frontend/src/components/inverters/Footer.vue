@@ -17,6 +17,10 @@
                 </g>
                 </svg>
 
+                <small>
+                    <p>Inversores</p>
+                </small>
+
             </router-link>
 
             <router-link to="/logs" :class="getLinkClass('/logs', '/registerLog')">
@@ -24,6 +28,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 128 128">
                     <path d="M 24 1 C 16.8 1 11 6.8 11 14 L 11 91 C 11 92.7 12.3 94 14 94 C 15.7 94 17 92.7 17 91 L 17 14 C 17 10.1 20.1 7 24 7 L 103 7 C 101.7 9 101 11.4 101 14 L 101 114 C 101 117.9 97.9 121 94 121 C 90.1 121 87 117.9 87 114 L 87 104 C 87 102.3 85.7 101 84 101 L 4 101 C 2.3 101 1 102.3 1 104 L 1 114 C 1 121.2 6.8 127 14 127 L 94 127 C 101.2 127 107 121.2 107 114 L 107 14 C 107 10.1 110.1 7 114 7 C 117.9 7 121 10.1 121 14 L 121 21 L 114 21 C 112.3 21 111 22.3 111 24 C 111 25.7 112.3 27 114 27 L 124 27 C 125.7 27 127 25.7 127 24 L 127 14 C 127 6.8 121.2 1 114 1 L 24 1 z M 47 21 C 45.3 21 44 22.3 44 24 C 44 25.7 45.3 27 47 27 L 71 27 C 72.7 27 74 25.7 74 24 C 74 22.3 72.7 21 71 21 L 47 21 z M 34 51 C 32.3 51 31 52.3 31 54 C 31 55.7 32.3 57 34 57 L 84 57 C 85.7 57 87 55.7 87 54 C 87 52.3 85.7 51 84 51 L 34 51 z M 34.199219 66 C 32.499219 66 31.199219 67.3 31.199219 69 C 31.199219 70.7 32.499219 72 34.199219 72 L 69.199219 72 C 70.899219 72 72.199219 70.7 72.199219 69 C 72.199219 67.3 70.899219 66 69.199219 66 L 34.199219 66 z M 84 66 A 3 3 0 0 0 81 69 A 3 3 0 0 0 84 72 A 3 3 0 0 0 87 69 A 3 3 0 0 0 84 66 z M 7 107 L 81 107 L 81 114 C 81 116.6 81.8 119 83 121 L 14 121 C 10.1 121 7 117.9 7 114 L 7 107 z"></path>
                 </svg>
+
+                <small>
+                    <p>Registros</p>
+                </small>
 
             </router-link>
 
@@ -78,8 +86,8 @@
         justify-content: space-around;
 
         margin: 10px;
-        width: 150px;
-        height: 55px;        
+        width: 200px;
+        height: 60px;        
         padding: 0px;
         border-radius: 30px;
         backdrop-filter: blur(10px);
@@ -88,11 +96,12 @@
     }
 
     .section-nav > a{
-        padding: 5px 15px ;
+        padding: 5px 20px ;
         border-radius: 30px;
         color: #2e2e2e;
 
         display: flex;
+        flex-direction: column;
         align-content: center;
         align-items: center;
         justify-content: center;
@@ -117,6 +126,10 @@
 
     .active-link g{
         fill: #ffffff;
+    }
+
+    .active-link p {
+        color: #fff;
     }
 
     a:active{

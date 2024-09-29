@@ -30,7 +30,9 @@
             <p class="text-description" id="pSnArray" v-for="(eachSn, index) in this.allSn" :key="index">
                 
                 {{ eachSn }} 
-                <button id="removingSn" @click="removingSn($event, index)"><img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/></button>
+                <button id="removingSn" @click="removingSn($event, index)">
+                    <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/>
+                </button>
 
             </p>
 

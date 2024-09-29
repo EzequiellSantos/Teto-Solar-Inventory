@@ -4,76 +4,92 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <div id="reader"></div>
+        <div id="readerForm" style="position: fixed;"></div>
 
         <form id="batchForm" enctype="multipart/form-data" @submit="page === 'registerBatch' ? register($event) : update($event)" >
 
             <input type="hidden" name="id" id="id" v-model="id">
 
-            <section class="input-container">
+            <div class="input-container">
 
-                <button  id="startButton" @click="lerqrcode">
-                    <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
-                </button>
-                <input type="text" id="sn" v-model="sn" placeholder="SN da Placa">
-                <button @click="addSn($event)">Adicionar</button>
+                <section id="snSection">
+                    <button  id="startButtonForm" @click.prevent="lerqrcode">
+                        <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
+                    </button>
 
-            </section>
+                    <input type="text" id="sn" v-model="sn" placeholder="SN da Placa">
+                    <button id="addingSn" @click="addSn($event)">
+                        <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
+                    </button>
+                </section>
 
-            <!-- loop na array de sn -->
-            <section id="snView">
+                <!-- loop na array de sn -->
+                <section id="snListContainer">
 
-                <div class="snList" v-for="(sn, index) in snArray" :key="index">
-                    <p>{{ sn }}</p>
-                </div>
+                    <div class="sn-list" v-for="(sn, index) in snArray" :key="index">
+                        
+                        <p>{{ sn }}</p>
+                        <button @click="removingSn($event, index)">
+                            <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/>
+                        </button>
 
-                <article class="snInfo">
-                    <p><small>{{ snArray?.length }} Placas</small></p>
-                </article>
-            
-            </section>
+                    </div>
+                
+                </section>
 
-            <section class="input-container">
 
+                <p class="snInfo"><small>{{ snArray?.length }} Placas</small></p>
+
+            </div>
+
+
+            <div class="input-container">
+
+                <label for="invoice">Nota Fiscal:</label>
                 <input type="text" name="invoice" id="invoice" v-model="invoice" placeholder="Nota Fisc" required>
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
 
+                <label for="power">Potência:</label>
                 <input type="number" name="power" id="power" v-model="power" placeholder="Potência" required>
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
                 
-                <input type="text" name="brand" id="brand" v-model="brand" placeholder="Marca" required>
+                <label for="brand">Marca:</label>
+                <input type="text" name="brand" id="brand" v-model="brand" placeholder="Marca" required >
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
 
                 <input type="date" name="inputDate" id="inputDate" v-model="inputDate" required>
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
 
-                <input type="text" name="client" id="client" v-model="client" required>
+                <label for="client">Cliente</label>
+                <input type="text" name="client" id="client" v-model="client" placeholder="Cliente" required>
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
 
-                <input type="text" name="inputChecked" id="inputChecked" v-model="inputChecked" required>
+                <label for="inputChecked">Verificado Por:</label>
+                <input type="text" name="inputChecked" id="inputChecked" v-model="inputChecked" placeholder="verificador" required>
 
-            </section>
+            </div>
 
-            <section class="input-container">
+            <div class="input-container">
 
+                <label for="typeChoice">Tipo de Movimento</label>
                 <input type="text" name="typeChoice" id="typeChoice" v-model="typeChoice" readonly>
 
-            </section>
+            </div>
 
             <InputSubmit :text="btnText"/>
 
@@ -122,9 +138,59 @@
         },
         methods: {
 
+            
+            addSn(e) {
+
+                e.preventDefault()
+
+                if(this.sn !== null || this.sn != ''){
+
+                    if(!this.snArray.includes(this.sn)){
+                    
+                        this.snArray.push(this.sn)
+                        this.sn = ""
+
+                    } else{
+
+                        this.msg = "SN da placa já adicionado!"
+                        this.msgClass = 'error'
+
+                        setTimeout(() => {
+
+                            this.msg = null
+                            
+                        },1500)
+
+                    }
+                    
+                }
+
+            },
+
+            addSnAndChecks(){
+
+                if(this.sn != null || this.sn != ''){
+
+                    this.snArray.push(this.sn)
+                    this.sn = ""
+
+                }
+
+            },
+
+            removingSn(e, index){
+                
+                e.preventDefault()
+
+                this.snArray.splice(index, 1)
+
+                this.countSnArray =  this.snArray?.length
+
+            },
+
             lerqrcode(){
 
-                const divReader = document.getElementById("reader")
+                const divReader = document.getElementById("readerForm")
                 divReader.style.display = "block"
 
                 const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
@@ -137,7 +203,7 @@
                     try{
 
                         html5QrcodeScanner.clear();
-                        html5QrcodeScanner.resume()
+                        html5QrcodeScanner.resume();
 
                     } catch(err){
 
@@ -161,7 +227,7 @@
                 };
 
                 const html5QrcodeScanner = new Html5QrcodeScanner(
-                    "reader", config, false);   
+                    "readerForm", config, false);   
                 html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
 
             },
@@ -350,25 +416,6 @@
 
                 })
 
-            },
-
-            addSn(e) {
-
-                e.preventDefault()
-
-                this.addSnAndChecks()
-
-            },
-
-            addSnAndChecks(){
-
-                if(this.sn != null || this.sn != ''){
-
-                    this.snArray.push(this.sn)
-                    this.sn = ""
-
-                }
-
             }
 
         }
@@ -379,6 +426,36 @@
 
 <style scoped>
 
+    #form,#snListContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #snListContainer{
+        margin: auto;
+    }
+
+    .sn-list{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    #inputDate, #power{
+        outline: none;
+        border: none;
+        padding: 6px 10px;
+        margin: 0;
+        border-radius: 30px;
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+        text-align: center;
+    }
 
 
 </style>

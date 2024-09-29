@@ -2,7 +2,7 @@
 
     <div id="newTrackingOut">
 
-        <h1>Registrando Lote de Saída</h1>
+        <h1>Registrando Saídas</h1>
         
         <BatchFormOut :tracking="{}" :batch="{}" page="registerOutBatch" btnText="Registrar"/>
 
