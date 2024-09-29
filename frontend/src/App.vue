@@ -789,6 +789,10 @@
         padding: 14px;
     }
 
+    a, button, img, svg, a > p, span > input, span > label{
+      cursor: pointer;
+    }
+
   }
 
   /* configs for DashBoard Batchs */

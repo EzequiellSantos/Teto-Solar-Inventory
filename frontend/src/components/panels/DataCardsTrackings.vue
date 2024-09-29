@@ -65,10 +65,6 @@
         margin-top: 140px;
     }
 
-    .cards-container{
-
-    }
-
     .card{
         display: flex;
         flex-direction: column;
@@ -107,6 +103,14 @@
 
     .Entrada{
         background-color: aqua;
+    }
+
+    @media (width > 780px) {
+        
+        a .card,p, h2, strong{
+            cursor: pointer;
+        }
+
     }
 
 </style>
