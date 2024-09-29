@@ -29,7 +29,7 @@
                     <div class="sn-list" v-for="(sn, index) in snArray" :key="index">
                         
                         <p>{{ sn }}</p>
-                        <button @click="removingSn($event, index)">
+                        <button v-if="page == 'registerBatch'" @click="removingSn($event, index)">
                             <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/>
                         </button>
 

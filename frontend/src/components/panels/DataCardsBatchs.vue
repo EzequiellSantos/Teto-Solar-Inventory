@@ -7,7 +7,8 @@
             <router-link class="data-cards" :to="`/batchs/${data.brand}`">
 
                 <h3 class="data-cards-title">{{ data.brand }}</h3>
-                <p class="data-cards-description">{{ data.panelsCount }} Placas</p>
+                <p class="data-cards-description" v-if="data.panelsCount > 1">{{ data.panelsCount }} Placas</p>
+                <p class="data-cards-description" v-else>{{ data.panelsCount }} Placa</p>
                 <p class="data-cards-description">{{ data.client }}</p>
                 
             </router-link>
