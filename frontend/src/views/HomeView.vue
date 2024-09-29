@@ -22,6 +22,17 @@
 
       </router-link>
 
+      <router-link to="/batchs">
+      
+        <section class="card">
+
+          <img id="panelsIcon" class="icon-links" src="../../public/panel_img100.png" alt="panel">
+          <p id="panels">Placas</p>
+
+        </section>
+
+      </router-link>
+
     </div>
 
     <footer>
@@ -153,6 +164,14 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  #panelsIcon{
+    margin-top: 5px;
+  }
+
+  p#panels{
+    margin-top: 5px;
   }
 
   footer{ 

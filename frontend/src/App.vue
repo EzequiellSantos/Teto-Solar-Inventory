@@ -734,9 +734,9 @@
 
   /* configurações do formulario de inversores / registros de placas */
   #form{
-      width: calc(100% - 20px);
-      max-width: 900px;
-      margin: auto;
+    width: calc(100% - 20px);
+    max-width: 900px;
+    margin: auto;
   }
 
   .input-container{
@@ -789,6 +789,34 @@
         padding: 14px;
     }
 
+  }
+
+  /* configs for DashBoard Batchs */
+
+  .section-header{
+    position: fixed;
+    top: -10px;
+    left: 0;
+    height: 75px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+
+    width: 100vw;
+    padding: 5px 0 0 0;
+    font-size: clamp(0.9375rem, 0.8812rem + 0.3vw, 1.125rem);
+    background-color: var(--color-main00);
+    margin: auto;
+    margin-block: 10px;
+  }
+
+  #titleBatchs{
+    color: #fff;
+    margin-top: -10px;
+    font-size: clamp(1.875rem, 1.6875rem + 1vw, 2.5rem);
   }
 
 </style>
