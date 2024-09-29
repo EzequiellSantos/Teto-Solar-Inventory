@@ -1,14 +1,26 @@
 <template>
 
     <div id="Brands">
+        
+        <Message :msg="msg" :msgClass="msgClass"/>
 
         <section class="section-header">
 
-            <h1>Estoque</h1>
+            <router-link id="homeLink"  to="/">
+
+                <img src="../../../public/logo_icon_transparent_short_2.png" alt="Logo Teto Solar ">
+
+            </router-link>
+
+            <h1 id="titleBatchs">Estoque</h1>
 
         </section>
 
-        <Message :msg="msg" :msgClass="msgClass"/>
+        <aside id="panelsCountInfo">
+
+            {{ this.totalPanelsCount }} placas no total
+
+        </aside>  
 
         <main>
 
@@ -16,11 +28,7 @@
 
         </main>
 
-        <aside id="footer">
-
-            {{ this.totalPanelsCount }} placas no total
-
-        </aside>
+        <PanelsFooter/>
 
     </div>
 
@@ -30,12 +38,14 @@
 
     import Message from '@/components/Message.vue'
     import DataCardsBatchs from '@/components/panels/DataCardsBatchs.vue'
+    import PanelsFooter from  '@/components/panels/Footer.vue'
     import { BASE_URL } from '@/config'
 
     export default {
         components:{
             DataCardsBatchs,
-            Message
+            Message,
+            PanelsFooter
         },
         data(){
 
@@ -226,28 +236,28 @@
 
 <style scoped>
 
+
+
+    #homeLink{
+        position: fixed;
+        left: 0;
+        top: 2px;
+        border-radius: 20px;
+    }
+
+    #homeLink > img{
+        height: 80px;
+    }
+
     #Brands{
-        width: calc(100% - 10px);
         min-width: 300px;
         max-width: 600px;
     }
 
-    .section-header{
-        background-color: #eee;
-        padding: 10px;
-        width: 40%;
-        font-size: clamp(0.9375rem, 0.8812rem + 0.3vw, 1.125rem);
-        border-radius: 20px;
+    #panelsCountInfo{
         margin: auto;
-        margin-block: 10px;
-    }
-
-    #footer{
-        position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #eee;
+        margin-top: 100px;
+        background-color: #eeeeee8a;
         border-radius: 10px;
         padding: 3px 6px;
         width: 20vw;

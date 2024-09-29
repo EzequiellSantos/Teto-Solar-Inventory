@@ -1,29 +1,41 @@
 <template>
     <div id="form">
+
         <Message :msg="msg" :msgClass="msgClass"/>
-        <div id="reader"></div>
+
+        <div id="readerForm" style="position: fixed;"></div>
+        
         <form id="batchOutForm" enctype="multipart/form-data" @submit="register($event)">
 
             <input type="hidden" name="id" v-model="id" id="id">
 
-            <div class="input-container-header">
+            <div class="input-container">
                 
-                <button  id="startButton" @click="lerqrcode">
-                    <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
-                </button>
-                <input type="text" name="sn" id="sn" v-model="sn">
-                <button @click="addSn($event)">Adicionar</button>
+                <section id="snSection">
 
-            </div>
+                    <button  id="startButtonForm" @click.prevent="lerqrcode">
+                        <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
+                    </button>
 
-            <section id="snView" :class="isSameInvoice">
+                    <input type="text" name="sn" id="sn" v-model="sn" placeholder="Insira o SN">
+                    <button @click="addSn($event)">
+                        <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
+                    </button>
+
+                </section>
 
                 <aside>
 
                     <div class="sn-list" v-for="(sn, index) in snArray" :key="index">
 
                         <div class="sn-item">
-                            <p>{{ sn }}</p> <button @click="removingSn($event, index)">DEl</button>
+
+                            <p :class="isSameInvoice">{{ sn }}</p> 
+
+                            <button @click="removingSn($event, index)">
+                                <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/>
+                            </button>
+
                         </div>
 
                     </div>
@@ -37,6 +49,10 @@
                     <span v-if="isSameInvoice == 'not-same'">Contém placa de outro cliente</span>
 
                 </aside>
+
+            </div>
+
+            <section id="snView">
 
             </section>
 
@@ -117,15 +133,15 @@ export default {
 
         lerqrcode(){
 
-            const divReader = document.getElementById("reader")
-            divReader.style.display = "block"
+            const divreaderForm = document.getElementById("readerForm")
+            divreaderForm.style.display = "block"
 
             const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
 
                 this.sn = decodedText;
                 console.log("Lido :))", decodedText)
                 this.addSNAndChecks()
-                divReader.style.display = "none"
+                divreaderForm.style.display = "none"
 
                 try{
 
@@ -154,7 +170,7 @@ export default {
             };
 
             const html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", config, false);   
+                "readerForm", config, false);   
             html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
 
         },
@@ -288,6 +304,7 @@ export default {
 
                     this.msg = batch.error
                     this.msgClass = 'error'
+                    this.snArray.pop()
 
                 } else {
 
@@ -499,15 +516,7 @@ export default {
 }
 </script>
 
-<style>
-
-    #snView{
-        min-height: 50px;
-        border-radius: 10px;
-        margin: auto;
-        max-width: 400px;
-        padding: 10px;
-    }
+<style scoped>
 
     .input-container > input[type=date]{
         border-radius: 20px;
@@ -530,15 +539,26 @@ export default {
         max-width: 300px;
     }
 
+    aside{
+        margin: auto;
+    }
+
+    #batchOutForm{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     .its-same{
 
-        border:1px solid transparent;
+        color: #000;
 
     }
 
     .not-same{
 
-        border:1px solid rgb(255, 94, 0);
+        color: #f00;
 
     }
 
@@ -550,9 +570,9 @@ export default {
         gap: 10px;
     }
 
-    .sn-item > button, .input-container > button{
+/*     .sn-item > button, .input-container > button{
         padding: 2px 5px;
         margin-left: 5px;
-    }
+    } */
 
 </style>
