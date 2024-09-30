@@ -187,7 +187,8 @@ export default {
             
             this.countSnArray =  this.snArray?.length
 
-            if(this.sn != null && this.sn != ''){
+            if(this.sn != null && this.sn != '' && !this.snArray.includes(this.sn)){
+
 
                 this.snArray.push(this.sn)
 

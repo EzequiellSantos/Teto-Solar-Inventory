@@ -246,8 +246,6 @@
 
 <style scoped>
 
-
-
     #homeLink{
         position: fixed;
         left: 0;

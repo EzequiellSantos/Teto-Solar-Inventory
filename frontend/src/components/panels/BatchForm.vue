@@ -13,14 +13,16 @@
             <div class="input-container">
 
                 <section id="snSection">
+
                     <button  id="startButtonForm" @click.prevent="lerqrcode">
                         <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
                     </button>
 
-                    <input type="text" id="sn" v-model="sn" placeholder="SN da Placa">
+                    <input type="text" name="sn" id="sn" v-model="sn" placeholder="SN da Placa">
                     <button id="addingSn" @click="addSn($event)">
                         <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
                     </button>
+
                 </section>
 
                 <!-- loop na array de sn -->
@@ -425,6 +427,19 @@
 </script>
 
 <style scoped>
+
+    #readerForm{
+        position: fixed;
+        top: 10%;
+        left: 50vw;
+        transform: translateX(-50vw);
+    }
+
+    #form{
+        width: calc(100% - 20px);
+        max-width: 900px;
+        margin: auto;
+    }
 
     #form,#snListContainer{
         display: flex;
