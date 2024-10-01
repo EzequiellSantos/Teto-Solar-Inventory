@@ -56,24 +56,24 @@ router.post('/panels', async(req, res) => {
 
 })
 
-// coletar brand por meio do panelSn
-router.post('/panelSn', async(req, res) => {
+// coletar brand por meio da nota fiscal
+router.post('/invoice', async(req, res) => {
 
-    const panelSn = req.body.panelSn
+    const invoice = req.body.invoice
 
     try{
 
         //retorna apenas o embeded document correspondente aos itens
-        const brand = await Batch.find({panels: panelSn})
+        const brand = await Batch.find({invoice: invoice})
 
         //verifica se existe resultado para a query
         if(brand[0]){
 
-            return res.status(200).json({ error: null, msg: "Placa encontrada", data: brand }) 
+            return res.status(200).json({ error: null, msg: "Lote encontrado!", data: brand }) 
                       
         } else {
 
-            res.status(200).json({ error: "Sn de placa não encontrado!" })
+            res.status(200).json({ error: "Dados de Lote não encontrado!" })
 
         }
 
@@ -203,6 +203,7 @@ router.put('/', async(req, res) => {
     const client = req.body.client
     const power = req.body.power
     const panels = req.body.panels
+    const panelsCount = req.body.panelsCount
 
     const batchData = {
         id: batchId,
@@ -211,7 +212,7 @@ router.put('/', async(req, res) => {
         client: client,
         power: power,
         panels: panels,
-        panelsCount: panels.length
+        panelsCount: panelsCount
     }
 
     try {

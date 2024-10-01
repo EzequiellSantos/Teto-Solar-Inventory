@@ -2,7 +2,7 @@
     
     <div id="TrackingInput">
 
-        <Message :msg="msg" :msgClass="msgClass" />
+        <MessageVue :msg="msg" :msgClass="msgClass" />
 
         <section id="header">
 
@@ -105,7 +105,6 @@
                     } else {
 
                         this.trackings = data.trackings
-                        console.log(this.trackings)
 
                     }
 

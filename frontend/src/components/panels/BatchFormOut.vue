@@ -11,52 +11,20 @@
 
             <div class="input-container">
                 
-                <section id="snSection">
+                <label for="count">
+                    Quantidade
+                </label>
 
-                    <button  id="startButtonForm" @click.prevent="lerqrcode">
-                        <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
-                    </button>
-
-                    <input type="text" name="sn" id="sn" v-model="sn" placeholder="Insira o SN">
-                    <button @click="addSn($event)">
-                        <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"/>
-                    </button>
-
-                </section>
-
-                <aside>
-
-                    <div class="sn-list" v-for="(sn, index) in snArray" :key="index">
-
-                        <div class="sn-item">
-
-                            <p :class="isSameInvoice">{{ sn }}</p> 
-
-                            <button @click="removingSn($event, index)">
-                                <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus"/>
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <article class="snInfo">
-
-                        <p><small>{{ snArray?.length }} Placas</small></p>
-
-                    </article>
-
-                    <span v-if="isSameInvoice == 'not-same'">Contém placa de outro cliente</span>
-
-                </aside>
+                <input type="number" id="count" name="count" v-model="count" required placeholder="Quantidade de placas">
 
             </div>
 
-            <section id="snView">
+            <div class="input-container">
 
-            </section>
+                <label for="invoice">Nota Fiscal:</label>
+                <input type="text" name="invoice" id="invoice" v-model="invoice" required @input="searchInvoice" placeholder="Nota Fisc.">
 
-            <p>Nota Fisc: {{ this.invoice }}</p>
+            </div>
   
             <p>Potência: {{ this.power }}</p>
 
@@ -110,14 +78,10 @@ export default {
         return {
             msg: null,
             msgClass: null,
-            isSameInvoice: "its-same",
-            countSnArray: 0,
             apiURL: BASE_URL,
             trackingId: null,
             id: this.batch._id || null,
-            sn: null,
-            panels: this.batch.panels || [],
-            snArray:[],
+            count: this.batch.panelsCount || null,
             invoice: this.batch.invoice || null,
             client: this.batch.client || null,
             brand: this.batch.brand || null,
@@ -126,172 +90,27 @@ export default {
             inputChecked: this.tracking.inputChecked || null,
             outputDate: this.tracking?.outputDate || null,
             outputChecked: this.tracking?.outputChecked || null,
+            panelsCount: this.tracking?.panelsCount || null,
             typeChoice: "Saida"
         }
     },
     methods:{
 
-        lerqrcode(){
+        searchInvoice(){
 
-            const divreaderForm = document.getElementById("readerForm")
-            divreaderForm.style.display = "block"
-
-            const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
-
-                this.sn = decodedText;
-                console.log("Lido :))", decodedText)
-                this.addSNAndChecks()
-                divreaderForm.style.display = "none"
-
-                try{
-
-                    html5QrcodeScanner.clear();
-                    html5QrcodeScanner.resume()
-
-                } catch(err){
-
-                    console.error(err);
-                    
-                }
-
-            };
-
-            const qrCodeErrorCallback = (errorMessage) => {
-                // console.warn(`QR Code scan error: ${errorMessage}`);
-            };
-
-            const config = { 
-                fps: 1, 
-                qrbox: { width: window.innerWidth / 100 * 40, height: 170 },
-                experimentalFeatures: {
-                    useBarCodeDetectorIfSupported: true
-                },
-                rememberLastUsedCamera: true
-            };
-
-            const html5QrcodeScanner = new Html5QrcodeScanner(
-                "readerForm", config, false);   
-            html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
+            this.colletingBrand(this.invoice)
 
         },
 
-        addSn(e){
-
-            e.preventDefault()
-            
-            this.addSNAndChecks()
-
-        },
-
-        addSNAndChecks(){
-            
-            this.countSnArray =  this.snArray?.length
-
-            if(this.sn != null && this.sn != '' && !this.snArray.includes(this.sn)){
-
-
-                this.snArray.push(this.sn)
-
-                if(this.countSnArray == 0){
-
-                    this.colletingBrand(this.snArray[this.countSnArray])
-
-                }
-
-                if(this.countSnArray > 0){
-
-                    this.checkItsSameInvoice(this.snArray[this.countSnArray], this.invoice)
-
-                } 
-            }
-
-            this.sn = null
-
-        },
-
-        removingSn(e, index){
-
-            e.preventDefault()
-
-            this.snArray.splice(index, 1)
-
-            this.isSameInvoice = "its-same"
-
-            this.countSnArray =  this.snArray?.length
-
-            if(this.countSnArray > 0){
-
-                this.checkItsSameInvoice(this.snArray[this.countSnArray - 1], this.invoice)
-
-            }
-
-            if(this.countSnArray == 0) {
-
-                this.invoice = null,
-                this.brand = null,
-                this.power = null,
-                this.client = null
-
-            }
-
-        },
-
-        async checkItsSameInvoice(sn, invoice){ 
+        async colletingBrand(invoice){
 
             const data = {
-                invoice: invoice,
-                panelSn: sn
-            }
-
-            const jsonData = JSON.stringify(data)
-
-            await fetch(`${this.apiURL}/api/batchs/panels`, {
-                method: "POST",
-                headers: {
-                    "Content-type":"application/json"
-                },
-                body: jsonData
-            })
-            .then((resp) => resp.json())
-            .then((data) => {
-
-                if(data.error){
-
-                    this.isSameInvoice = 'not-same'
-                    console.log(data.error)
-
-                } else {
-
-                    this.isSameInvoice = 'its-same'
-
-                }
-
-            })
-            .catch((error) => {
-
-                this.msg = error
-                this.msgClass = 'error'
-                console.log(error)
-
-            })
-
-            setTimeout(() => {
-
-                this.msg = null
-
-            }, 1000)
-
-        },
-
-        async colletingBrand(sn){
-
-            const data = {
-                panelSn: sn
+                invoice: invoice
             }
             
             const jsonData = JSON.stringify(data)
 
-            await fetch(`${this.apiURL}/api/batchs/panelSn`, {
+            await fetch(`${this.apiURL}/api/batchs/invoice`, {
                 method:"POST",
                 headers:{
                     "Content-type":"application/json"
@@ -305,16 +124,14 @@ export default {
 
                     this.msg = batch.error
                     this.msgClass = 'error'
-                    this.snArray.pop()
 
                 } else {
 
                     this.id = batch.data[0]?._id
                     this.brand = batch.data[0]?.brand
                     this.power = batch.data[0]?.power
-                    this.invoice = batch.data[0]?.invoice
                     this.client = batch.data[0]?.client
-                    this.panels = batch.data[0]?.panels
+                    this.panelsCount = batch.data[0]?.panelsCount
 
                     this.colletingInputTracking()
 
@@ -350,6 +167,8 @@ export default {
 
                 if(data.error){
 
+                    console.log(error)
+
                 } else {
 
                     this.trackingId = data.tracking._id
@@ -370,7 +189,7 @@ export default {
                 trackingId: this.trackingId,
                 batchId: this.id,
                 invoice: this.invoice,
-                panelsCount: this.snArray.length,
+                panelsCount: this.count,
                 inputDate: this.inputDate,
                 inputChecked: this.inputChecked,
                 outputDate: this.outputDate,
@@ -400,9 +219,9 @@ export default {
                     this.msg = data.msg
                     this.msgClass = 'sucess'
 
-                    this.panels = this.panels.filter(item => !this.snArray.includes(item))
+                    this.count = this.panelsCount - this.count
 
-                    if(this.panels.length == 0){
+                    if(this.count == 0){
 
                         this.deleteBatch()
 
@@ -426,7 +245,6 @@ export default {
             setTimeout(() => {
 
                 this.msg = null
-                // this.$router.push('/trackings')
 
             }, 1500)
 
@@ -466,6 +284,13 @@ export default {
 
             })
 
+            setTimeout(() => {
+
+                this.msg = null
+                this.$router.push('/trackings')
+
+            }, 1500)
+
         },
 
         async updateBatch(){
@@ -476,7 +301,7 @@ export default {
                 invoice: this.invoice,
                 client: this.client,
                 power: this.power,
-                panels: this.panels
+                panelsCount: this.count
             }
 
             const jsonData = JSON.stringify(data)
@@ -499,9 +324,17 @@ export default {
                     this.msg = data.msg
                     this.msgClass = 'sucess'
 
+                    setTimeout(() => {
+
+                        this.msg = null
+                        this.$router.push('/trackings')
+
+                    }, 1500)
+
                 }
 
             })
+
         },
         
 
@@ -518,6 +351,18 @@ export default {
 </script>
 
 <style scoped>
+
+    #count{
+        outline: none;
+        border: none;
+        padding: 6px 10px;
+        margin: 0;
+        border-radius: 30px;
+        width: 30vw;
+        min-width: 200px;
+        max-width: 300px;
+        text-align: center;
+    }
 
     .input-container > input[type=date]{
         border-radius: 20px;

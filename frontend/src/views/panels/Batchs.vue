@@ -21,7 +21,7 @@
 
             <div id="search-container">
 
-                <input type="text" id="text" @input="textSearch" v-model="text" placeholder="SN ou Cliente"> 
+                <input type="text" id="text" @input="textSearch" v-model="text" placeholder="Cliente"> 
 
                 <button  id="startButton" @click="lerqrcode">
                     <img src="https://img.icons8.com/pastel-glyph/64/000000/qr-code--v2.png">
@@ -138,54 +138,6 @@
 
         }, 
         methods: {
-
-            lerqrcode(){
-
-                const divReader = document.getElementById("reader")
-                const containerInput = document.getElementById("search-container")
-                containerInput.style.backgroundColor = 'transparent'
-                divReader.style.display = "block"
-                
-
-
-                const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
-    
-                    this.text = decodedText;
-                    console.log("Lido :))", decodedText)
-                    this.textSearch()
-                    divReader.style.display = "none"
-
-                    try{
-
-                        html5QrcodeScanner.clear();
-                        html5QrcodeScanner.resume()
-
-                    } catch(err){
-
-                        console.error(err);
-                        
-                    }
-
-                };
-
-                const qrCodeErrorCallback = (errorMessage) => {
-                    // console.warn(`QR Code scan error: ${errorMessage}`);
-                };
-
-                const config = { 
-                    fps: 1, 
-                    qrbox: { width: window.innerWidth / 100 * 40, height: 170 },
-                    experimentalFeatures: {
-                        useBarCodeDetectorIfSupported: true
-                    },
-                    rememberLastUsedCamera: true
-                };
-
-                const html5QrcodeScanner = new Html5QrcodeScanner(
-                    "reader", config, false);   
-                html5QrcodeScanner.render(qrCodeSuccessCallback, qrCodeErrorCallback);
-
-            },
 
             initialBatchs(){
 
@@ -333,7 +285,6 @@
 
                             this.notFound = false
                             this.brand = data.batch
-                            console.log(data.batch[0].brand)
                             this.$router.push(`/batchs/${data.batch[0].brand}`) 
                             this.sendingAllPowers()
                             this.getInfoBrand()

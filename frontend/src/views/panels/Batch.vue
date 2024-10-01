@@ -18,10 +18,8 @@
                 <h2>Potência: {{ batch.power }}W</h2>
                 <h3>Marca: {{ batch.brand }}</h3>
 
-                <label for="listSn">Lista de SNs:</label>
-                <ul id="listSn" v-for="(sn, index) in batch.panels" :key="index">
-                    <li>{{ sn }}</li>
-                </ul>
+                <label for="listSn">Quantidade de Placas</label>
+                <h4>{{ batch.panelsCount }}</h4>
                 
             </section>
 
