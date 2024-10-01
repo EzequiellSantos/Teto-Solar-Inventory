@@ -186,7 +186,7 @@
         height: 93px;
     }
 
-    #header{
+    section#header{
         position: fixed;
         top: 0;
         color: #fff;
@@ -197,7 +197,7 @@
 
     #NavigationRegister{
         position: fixed;
-        right: 0.6vw;
+        right: 1vw;
         top: 15px;
     }
 

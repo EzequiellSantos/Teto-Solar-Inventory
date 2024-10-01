@@ -50,8 +50,9 @@
         flex-direction: row;
         align-content: center;
         justify-content: flex-start;
-        padding: 10px 0px 10px 20px;
-        min-width: 80px;
+        padding: 20px 0px 20px 20px;
+        margin: 0px 10px;
+        min-width: 150px;
         width: 19%;
         border-radius: 10px;
     }

@@ -103,6 +103,18 @@
     color: #42b983;
   }
 
+  #card-links{
+    margin: auto;
+    margin-top: 100px;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
   .container{
     margin: auto;
     margin-top: 0px;
@@ -441,47 +453,47 @@
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-backup));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-CLIENTE{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-client));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-ESTOQUE{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-inventory));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-GARANTIA{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-garanted));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-BACKUP{
     background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-backup));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-SISTEMA-NOVO{
     background: linear-gradient(150deg, rgb(240, 240, 240) 10%, var(--color-for-new-system));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-AUTORIZADA{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-autorizaded));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-REPOSICAO{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-inventory));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   .background-for-AGUARDANDO{
     background: linear-gradient(150deg, rgb(255, 255, 255) 10%, var(--color-for-waiting));
-    height: 80vh;
+    min-height: 80vh;
   }
 
   /* configurações de views únicas */

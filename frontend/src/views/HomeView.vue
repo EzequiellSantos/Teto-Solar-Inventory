@@ -134,18 +134,6 @@ export default {
     z-index: -1;
   }
 
-  #card-links{
-    margin: auto;
-    margin-top: 100px;
-    padding: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-  }
-
   a{
     text-decoration: none;
     font-family: var(--font-base);
