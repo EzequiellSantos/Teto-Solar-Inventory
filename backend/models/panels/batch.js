@@ -18,7 +18,6 @@ const BatchSchema = new mongoose.Schema({
     },
     panels: {
         type: [String],
-        unique: true
     },
     panelsCount: {
         type: Number,

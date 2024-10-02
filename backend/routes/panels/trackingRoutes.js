@@ -76,14 +76,14 @@ router.get('/:id', async(req, res) => {
 //enviando movimento de entrada
 router.post('/', async(req, res) => {
 
-    const { batchId, invoice, brand, panelsCount, inputDate, inputChecked } = req.body
+    const { batchId, invoice, brand, client, panelsCount, inputDate, inputChecked } = req.body
 
     const type =  "Entrada"
     
 
     try {
 
-        const tracking = new Tracking({batchId, invoice, brand, panelsCount, inputDate, inputChecked, type})
+        const tracking = new Tracking({batchId, invoice, brand, client, panelsCount, inputDate, inputChecked, type})
         await tracking.save()
         res.status(200).json({ error: null, msg:"Entrada de placas registrado", data: tracking })
 
@@ -98,11 +98,11 @@ router.post('/', async(req, res) => {
 
 router.post('/registerOut', async(req, res) => {
 
-    const {batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type} = req.body
+    const {batchId, invoice, brand, client, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type} = req.body
 
     try {
         
-        const trackingOut = new Tracking({batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type})
+        const trackingOut = new Tracking({batchId, invoice, brand, client, panelsCount, inputDate, inputChecked, outputDate, outputChecked, type})
 
         await trackingOut.save()
 
@@ -117,27 +117,28 @@ router.post('/registerOut', async(req, res) => {
 
 })
 
-router.put('/output', async(req, res) => {
+router.post('/output', async(req, res) => {
 
-    const { trackingId, batchId, invoice, brand, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body
-
-    const tracking = {
-        id: trackingId,
-        batchId: batchId,
-        invoice: invoice,
-        brand: brand,
-        panelsCount: panelsCount,
-        inputDate: inputDate,
-        inputChecked: inputChecked,
-        outputDate: outputDate,
-        outputChecked: outputChecked,
-        type: "Saida"
-    }
+    const { trackingId, batchId, invoice, brand, client, panelsCount, inputDate, inputChecked, outputDate, outputChecked } = req.body
 
     try{
 
-        const updateTracking = await Tracking.findOneAndUpdate({_id: trackingId}, { $set: tracking }, { new: true })
-        res.status(200).json({ error: null, msg: "Registro de Saída adicionado", data: updateTracking })
+        const tracking = new Tracking({
+            id: trackingId, 
+            batchId: batchId, 
+            invoice: invoice,
+            brand: brand,
+            client: client,
+            panelsCount: panelsCount,
+            inputDate: inputDate,
+            inputChecked: inputChecked,
+            outputDate: outputDate,
+            outputChecked: outputChecked,
+            type: "Saida"})
+
+        await tracking.save()
+
+        res.status(200).json({ error: null, msg: "Registro de Saída adicionado", data: tracking })
 
     } catch(error){
 

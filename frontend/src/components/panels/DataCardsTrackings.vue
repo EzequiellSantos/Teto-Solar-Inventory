@@ -7,30 +7,28 @@
 
             <div v-if="(tracking.type == 'Entrada' )">
 
-                <router-link :to="`batch/${tracking.batchId}`">
-                    <section class="card" :id="`${tracking.batchId}`">
-                        <h2>{{ tracking.brand }}</h2>
-                        <p><strong>Quant:</strong> {{ tracking.panelsCount }} Placas</p>
-                        <p><strong>Entrada:</strong> {{ tracking.inputDate }}</p>
-                        <p><strong>Recebeu:</strong> {{ tracking.inputChecked }}</p>
-                        <p id="type" :class="`${tracking.type}`">{{ tracking.type }}</p>
-                    </section>
-                </router-link>
+                <section class="card" :id="`${tracking.batchId}`">
+                    <h2>{{ tracking.brand }}</h2>
+                    <p><strong>Cliente:</strong> {{ tracking.client }}</p>
+                    <p><strong>Quant:</strong> {{ tracking.panelsCount }} Placas</p>
+                    <p><strong>Entrada:</strong> {{ tracking.inputDate }}</p>
+                    <p><strong>Recebeu:</strong> {{ tracking.inputChecked }}</p>
+                    <p id="type" :class="`${tracking.type}`">{{ tracking.type }}</p>
+                </section>
 
             </div>
 
             <div v-else>
 
-                <router-link :to="`batch/${tracking.batchId}`">
-                    <section class="card">
-                        <h2>{{ tracking.brand }}</h2>
-                        <p><strong>Quant:</strong> {{ tracking.panelsCount }} Placas</p>
-                        <p><strong>Entrada:</strong> {{ tracking.inputDate }}</p>
-                        <p><strong>Saida:</strong> {{ tracking.outputDate }}</p>
-                        <p><strong>Conferiu:</strong> {{ tracking.outputChecked }}</p>
-                        <p id="type" :class="`${tracking.type}`">{{ tracking.type }}</p>
-                    </section>
-                </router-link>
+                <section class="card">
+                    <h2>{{ tracking.brand }}</h2>
+                    <p><strong>Cliente:</strong> {{ tracking.client }}</p>
+                    <p><strong>Quant:</strong> {{ tracking.panelsCount }} Placas</p>
+                    <p><strong>Entrada:</strong> {{ tracking.inputDate }}</p>
+                    <p><strong>Saida:</strong> {{ tracking.outputDate }}</p>
+                    <p><strong>Conferiu:</strong> {{ tracking.outputChecked }}</p>
+                    <p id="type" :class="`${tracking.type}`">{{ tracking.type }}</p>
+                </section>
 
             </div>
             

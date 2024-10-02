@@ -189,6 +189,8 @@ export default {
                 trackingId: this.trackingId,
                 batchId: this.id,
                 invoice: this.invoice,
+                brand: this.brand,
+                client: this.client,
                 panelsCount: this.count,
                 inputDate: this.inputDate,
                 inputChecked: this.inputChecked,
@@ -200,7 +202,7 @@ export default {
             const jsonData = JSON.stringify(data)
 
             await fetch(`${this.apiURL}/api/trackings/output`, {
-                method:"PUT",
+                method:"POST",
                 headers: {
                 "Content-type":"application/json"
                 },
@@ -307,7 +309,7 @@ export default {
             const jsonData = JSON.stringify(data)
 
             await fetch(`${this.apiURL}/api/batchs`, {
-                method:"PUT",
+                method:"POST",
                 headers: {
                     "Content-type":"application/json"
                 },

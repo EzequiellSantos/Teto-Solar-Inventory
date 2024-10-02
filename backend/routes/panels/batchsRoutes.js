@@ -165,7 +165,7 @@ router.post('/id', async(req, res) => {
 //enviando dados
 router.post('/', async (req, res) => {
 
-    const { brand, invoice, client, power, panels } = req.body
+    const { brand, invoice, client, power, panels, panelsCount } = req.body
 
     try{
 
@@ -175,11 +175,11 @@ router.post('/', async (req, res) => {
             client: client,
             power: power,
             panels: panels,
-            panelsCount: null
+            panelsCount: panelsCount
         }
        
         // caso não exista, cria uma nova marca
-        const batch = new Batch({ brand: brand, invoice: invoice, client: client, power: power, panels: panels, panelsCount: panels.length })
+        const batch = new Batch({ brand: brand, invoice: invoice, client: client, panels: panels, power: power, panelsCount: panelsCount })
 
         await batch.save()
 

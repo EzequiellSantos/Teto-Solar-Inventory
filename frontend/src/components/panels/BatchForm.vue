@@ -82,7 +82,6 @@
     import InputSubmit from '@/components/form/inputSubmit.vue'
     import Message from '@/components/Message.vue'
     import { BASE_URL } from '@/config'
-    import { Html5QrcodeScanner } from 'html5-qrcode'
 
     export default {
 
@@ -128,6 +127,7 @@
                     invoice: this.invoice,
                     client: this.client,
                     power: this.power,
+                    panels:null,
                     panelsCount: this.count
 
                 }
@@ -173,6 +173,7 @@
                     batchId: this.batchId,
                     invoice: this.invoice,
                     brand: this.brand,
+                    client: this.client,
                     panelsCount: this.count,
                     inputDate: this.inputDate,
                     inputChecked: this.inputChecked
@@ -260,6 +261,7 @@
                     batchId: this.batchId,
                     invoice: this.invoice,
                     brand: this.brand,
+                    client: this.client,
                     panelsCount: this.count,
                     inputDate: this.inputDate,
                     inputChecked: this.inputChecked
