@@ -46,7 +46,7 @@
 
         </section>
 
-        <aside class="info" v-if="notFound != true" >
+        <aside class="info" id="infoContainer" v-if="notFound != true" >
 
             <div class="info-clients">
 
@@ -141,7 +141,8 @@
 
             initialBatchs(){
 
-                this.getBrand()
+                this.getBrand(),
+                this.adaptingStyles()
 
             },
 
@@ -175,6 +176,10 @@
                     // coletando todas as potencias para realização de queries por parte do usuário
                     this.sendingAllPowers()
 
+                    //adapta o tamanho do header com o restante do conteúdo
+                    this.adaptingStyles()
+
+
                 })
                 .catch((error) => {
 
@@ -183,6 +188,17 @@
                     console.log(error)
 
                 })
+
+            },
+
+            adaptingStyles(){
+                
+                const header = document.getElementById('header')
+                const info = document.getElementById('infoContainer')
+                console.log(header.offsetHeight)
+
+                // header.style.height = `${header.offsetHeight + 4}px`
+                info.style.marginTop = `${header.offsetHeight * 1.8}px`
 
             },
 
@@ -329,7 +345,7 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: 180px;
+        height: auto;
         background-color: #fff;
     }
 
@@ -448,6 +464,7 @@
         margin-block: 30px;
         max-width: 600px;
         min-width: 300px;
+        padding-bottom: 50px;
 
         display: flex;
         flex-direction: row;
@@ -497,7 +514,7 @@
         width: 22%;
         min-width: 140px;
         max-width: 150px;
-        margin: auto;   
+        margin: auto;
         margin-top: 180px;
         padding: 4px 0;
         border-radius: 10px;

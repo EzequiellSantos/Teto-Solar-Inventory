@@ -182,7 +182,7 @@
     }
 
     #logoHome{
-        height: 93px;
+        height: 80px;
     }
 
     section#header{
@@ -196,7 +196,7 @@
 
     #NavigationRegister{
         position: fixed;
-        right: 1vw;
+        right: 2.5vw;
         top: 15px;
     }
 
