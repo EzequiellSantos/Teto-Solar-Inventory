@@ -309,7 +309,7 @@ export default {
             const jsonData = JSON.stringify(data)
 
             await fetch(`${this.apiURL}/api/batchs`, {
-                method:"POST",
+                method:"PUT",
                 headers: {
                     "Content-type":"application/json"
                 },
