@@ -72,7 +72,7 @@
         background-color: #eee;
         border-radius: 20px;
 
-        height: 170px;
+        height: 180px;
         min-width: 200px;
 
         padding: 20px 10px 10px 15px;
