@@ -83,6 +83,7 @@ export default {
             id: this.batch._id || null,
             count: this.batch.panelsCount || null,
             invoice: this.batch.invoice || null,
+            clientbatch: this.batch.client || null,
             client: this.batch.client || null,
             brand: this.batch.brand || null,
             power: this.batch.power || null,
@@ -301,7 +302,6 @@ export default {
                 id: this.id,
                 brand: this.brand,
                 invoice: this.invoice,
-                client: this.client,
                 power: this.power,
                 panelsCount: this.count
             }

@@ -50,8 +50,8 @@
 
             <div class="info-clients">
 
-                <p v-if="this.clientCount < 2"> {{ this.clientCount }} Cliente </p>
-                <p v-else> {{ this.clientCount }} Clientes </p>
+                <p v-if="this.clientCount < 2"> {{ this.clientCount }} Lote </p>
+                <p v-else> {{ this.clientCount }} Lotes </p>
 
             </div>
 

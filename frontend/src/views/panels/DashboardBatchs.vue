@@ -203,11 +203,11 @@
 
                         if(this.brands[i].client > 1){
 
-                            this.brands[i].client = `${this.brands[i].client} clientes`
+                            this.brands[i].client = `${this.brands[i].client} Lotes`
 
                         } else {
 
-                            this.brands[i].client = `${this.brands[i].client} cliente`
+                            this.brands[i].client = `${this.brands[i].client} Lote`
 
                         }
 
