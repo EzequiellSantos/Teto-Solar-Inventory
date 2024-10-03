@@ -103,6 +103,7 @@
                 power: this.batch.power || null,
                 brand: this.batch.brand || null,
                 client: this.batch.client || null,
+                trackingId: this.tracking._id || null,
                 batchId: this.tracking.batchId || null,
                 inputDate: this.tracking.inputDate || null,
                 inputChecked: this.tracking.inputChecked || null,
@@ -258,6 +259,7 @@
                 //data updated for tracking
                 const dataTracking = {
 
+                    id: this.trackingId,
                     batchId: this.batchId,
                     invoice: this.invoice,
                     brand: this.brand,
