@@ -255,7 +255,21 @@
                     }
 
                 })
+                .catch((error) => {
+                    
+                    console.log(error)
+                    this.msg = error
+                    this.msgClass = 'error'
 
+                    setTimeout(() => {
+
+                        this.msg = null
+
+                    }, 1500)
+
+                })
+
+                /* 
                 //data updated for tracking
                 const dataTracking = {
 
@@ -301,7 +315,7 @@
 
                     }
 
-                })
+                }) */
 
             }
 
