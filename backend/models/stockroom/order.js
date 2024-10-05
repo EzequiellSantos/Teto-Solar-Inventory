@@ -12,7 +12,7 @@ const materialsSchema = new mongoose.Schema({
         type: Number
     },
     quantOrder: {
-        type: Order
+        type: Number
     }
 
 })
