@@ -5,7 +5,7 @@ const materialsSchema = new mongoose.Schema({
     code: {
         type: String
     },
-    Description: {
+    description: {
         type: String
     },
     quantExist: {
@@ -13,6 +13,10 @@ const materialsSchema = new mongoose.Schema({
     },
     quantOrder: {
         type: Number
+    },
+    isArrivedSeparate: {
+        type: Boolean,
+        default: false
     }
 
 })
