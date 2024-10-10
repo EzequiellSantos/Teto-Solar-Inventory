@@ -2,9 +2,13 @@ const mongoose =  require('mongoose')
 
 const MaterialSchema = new mongoose.Schema({
 
+    type: {
+        type: String
+    },
     code: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     description: {
         type: String,
