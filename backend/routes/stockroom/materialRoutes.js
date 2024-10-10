@@ -7,7 +7,7 @@ router.get("/all", async(req, res) => {
 
     try {
         
-        const materials = Material.find({})
+        const materials = await Material.find()
 
         res.status(200).json({error: null, data: materials})
 
@@ -56,7 +56,7 @@ router.get('/actived', async(req, res) => {
 
     try {
         
-        const materialsActived = Material.find({isActive: true})
+        const materialsActived = await Material.find({isActive: true})
 
         res.status(200).json({error: null, materials: materialsActived})
 
@@ -75,7 +75,7 @@ router.get('/desactived', async(req, res) => {
 
     try {
         
-        const materialsDesactived = Material.find({isActive: false})
+        const materialsDesactived = await Material.find({isActive: false})
 
         res.status(200).json({error: null, materials: materialsDesactived})
 
@@ -117,7 +117,7 @@ router.get('/stateQuantity/:type', async(req, res) => {
 
     try {
         
-        const materials = Material.find({stateQuantity: type})
+        const materials = await Material.find({stateQuantity: type})
 
         res.status(200).json({error: null, materials: materials})
 
@@ -134,11 +134,16 @@ router.get('/stateQuantity/:type', async(req, res) => {
 // registrando material
 router.post('/', async(req, res) => {
 
-    const {code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
+    const {type, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
 
     try {
-        
-        const material = new Material({code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive})
+
+        if(!['UC', 'MP', 'IM'].includes(type)){
+            res.json({error: "Tipo não identificado"})
+        }
+
+        const code = await generateNewCode(type)
+        const material = new Material({type, code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive})
 
         await material.save()
 
@@ -155,15 +160,25 @@ router.post('/', async(req, res) => {
 
 })
 
+const generateNewCode = async (type) => {
+
+    const lastProduct = await Material.findOne({type}).sort({code: -1})
+    const lastCode = lastProduct ? lastProduct.code : `${type}0000`
+    const newCodeNumber = parseInt(lastCode.slice(2)) + 1
+    return `${type}${String(newCodeNumber).padStart(4, '0')}`
+
+}
+
 // atualizando
 router.put('/', async(req, res) => {
 
-    const {materialId, code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
+    const {materialId, type, code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
 
     try {
         
         const material = {
             id: materialId,
+            type: type,
             code: code, 
             description: description, 
             quantity: quantity, 
