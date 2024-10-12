@@ -1,9 +1,9 @@
 <template>
     
-    <div id="orders">
+    <div id="RegisterOutput">
 
         <section>
-            <h1>Pedidos</h1>
+            <h1>Registrar Saída do Estoque</h1>
         </section>
 
         <Footer/>
@@ -14,18 +14,11 @@
 
 <script>
 
-    import  Footer from '@/components/stockroom/Footer.vue'
+    import Footer from '@/components/stockroom/Footer.vue'
 
     export default {
         components:{
             Footer
-        } 
+        }
     }
-
 </script>
-
-<style>
-
-
-
-</style>
