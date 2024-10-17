@@ -5,6 +5,9 @@
         <section>
 
             <h1>Almoxarifado</h1>
+            <p><span>#</span> <span>Cód</span> <span>Descrição:</span> <span>Quant:</span></p>
+
+            <router-link to="/registerProduct">Cadastrar Produto</router-link>
 
         </section>
 
@@ -114,6 +117,8 @@
 
 <style scoped>
 
-
+    main{
+        padding-bottom: 120px;
+    }
 
 </style>

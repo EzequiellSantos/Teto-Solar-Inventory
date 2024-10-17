@@ -24,25 +24,24 @@ router.get("/all", async(req, res) => {
 // retornar por itens pesquisados (CODIGO, DESCRIPTION)
 router.get('/search', async(req, res) => {
 
-
     try {
         
         let query = req.query.query
 
-        const material = await Material.find({$text: {$search: `${query}` }})
+        const materials = await Material.find({$text: {$search: `${query}` }}).limit(5)
 
-        if(material.length == 0){
+        if(materials === null){
 
             res.json({error: "Produto não encontrado"})
 
         } else{
 
-            res.status(200).json({error: null, material: material})
+            res.status(200).json({error: null, materials: materials})
 
         }
 
     } catch (error) {
-        
+  
         res.status(400).json({error: "Produto não encontrado :/"})
         console.log(error)
 
@@ -55,13 +54,13 @@ router.get('/search', async(req, res) => {
 router.get('/actived', async(req, res) => {
 
     try {
-        
+    
         const materialsActived = await Material.find({isActive: true})
 
         res.status(200).json({error: null, materials: materialsActived})
 
     } catch (error) {
-        
+     
         res.status(401).json({error: "Não foi possível coletar os materiais ativos"})
         console.log(error)
 
@@ -74,13 +73,13 @@ router.get('/actived', async(req, res) => {
 router.get('/desactived', async(req, res) => {
 
     try {
-        
+ 
         const materialsDesactived = await Material.find({isActive: false})
 
         res.status(200).json({error: null, materials: materialsDesactived})
 
     } catch (error) {
-        
+ 
         res.status(401).json({error: "Não foi possível coletar os materiais desativados"})
         console.log(error)
 
@@ -95,13 +94,13 @@ router.get('/location/:location', async(req, res) => {
     const location = req.params.location
 
     try {
-        
+    
         const materials = await Material.find({location: location})
 
         res.status(200).json({error: null, materials: materials})
 
     } catch (error) {
-        
+     
         res.status(400).json({error: "Erro ao buscar localização"})
 
         console.log(error)
@@ -127,19 +126,47 @@ router.get('/stateQuantity/:type', async(req, res) => {
 
     }
 
-
 })
 
+//resgatando material por ID 
+router.get('/:id', async(req, res) => {
+
+    const id = req.params.id
+    
+    try {
+        
+        const material = await Material.findOne({_id: id})
+
+        if(material === null){
+
+            return res.json({error: "Produto não encontrado"})
+
+        } else {
+
+            res.status(200).json({error: null, material: material})   
+
+        }
+
+    } catch (error) {
+        
+        res.status(401).json({error: "Erro ao buscar produto"})
+        console.log(error)
+
+    }
+
+})
 
 // registrando material
 router.post('/', async(req, res) => {
 
-    const {type, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
+    const {type, description, quantity, minQuantity, uniMed, location, isActive} = req.body
 
     try {
 
-        if(!['UC', 'MP', 'IM'].includes(type)){
-            res.json({error: "Tipo não identificado"})
+        const stateQuantity = `${calculatorState(quantity, minQuantity)}`
+
+        if(!["UC", "MP", "IM"].includes(type)){
+            return res.json({error: "Tipo não identificado"})
         }
 
         const code = await generateNewCode(type)
@@ -148,8 +175,6 @@ router.post('/', async(req, res) => {
         await material.save()
 
         res.status(201).json({msg: "Material Registrado!", data: material})
-
-
 
     } catch (error) {
         
@@ -172,12 +197,13 @@ const generateNewCode = async (type) => {
 // atualizando
 router.put('/', async(req, res) => {
 
-    const {materialId, type, code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
+    const {id, type, code, description, quantity, minQuantity, uniMed, location, stateQuantity, isActive} = req.body
 
     try {
         
         const material = {
-            id: materialId,
+
+            id: id,
             type: type,
             code: code, 
             description: description, 
@@ -185,14 +211,14 @@ router.put('/', async(req, res) => {
             minQuantity: minQuantity, 
             uniMed: uniMed, 
             location: location, 
-            stateQuantity: stateQuantity, 
+            stateQuantity: calculatorState(quantity, minQuantity, stateQuantity), 
             isActive: isActive
+
         }
 
-        const upateMaterial = await Material.findOneAndUpdate({_id: materialId}, {$set: material}, {new: true})
+        const updateMaterial = await Material.findOneAndUpdate({_id: id}, {$set: material}, {new: true})
 
-        res.status(200).json({msg: "Material atualizado com sucesso", upateMaterial: upateMaterial})
-        
+        res.status(200).json({msg: "Material atualizado com sucesso", updateMaterial: updateMaterial})
 
     } catch (error) {
         
@@ -203,5 +229,29 @@ router.put('/', async(req, res) => {
     }
 
 })
+
+function calculatorState(quant, minQuant, state){
+
+    let percent = quant / minQuant * 100
+
+    if(state === 'Orded') {
+
+        return 'Orded'
+
+    } else if(percent > 150){
+
+        return "Alto"
+
+    } else if(percent >= 100 && percent <= 150){
+
+        return "Mediano"
+
+    } else if(percent < 100){
+
+        return "Critico"
+
+    }
+
+}
 
 module.exports = router

@@ -16,7 +16,7 @@ const MaterialSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        required: Number
+        required: true
     },
     minQuantity: {
         type: Number,
