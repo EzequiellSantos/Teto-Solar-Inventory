@@ -4,6 +4,7 @@
 
         <section>
             <h1>Pedidos</h1>
+            <router-link to="/registerOrder">Novo Pedido</router-link>
         </section>
 
         <Footer/>
@@ -14,11 +15,13 @@
 
 <script>
 
+    import OrderForm from '@/components/stockroom/OrderForm.vue'
     import  Footer from '@/components/stockroom/Footer.vue'
 
     export default {
         components:{
-            Footer
+            Footer,
+            OrderForm
         } 
     }
 
