@@ -29,7 +29,7 @@ router.get('/search', async(req, res) => {
         
         const histories = await Order.find({$text: { $search: search }})
 
-        if(histories.length != 0){
+        if(histories !== null){
 
             res.status(200).json({error: null, histories: histories})
 
