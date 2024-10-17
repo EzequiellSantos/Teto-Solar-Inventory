@@ -5,7 +5,7 @@
         <section class="bar" :id="`${product.code}`" v-for="(product, index) in products" :key="index">
 
             <p class="item" @click="exibir(product.code)">  <span>{{index}}</span> <span>{{product.code}}</span> <span>{{ product.description }}</span> <span>{{product.quantity}}</span></p>
-            <p class="info-extra"><span>Quantidade Min: {{product.minQuantity}}</span> <span>Local: {{ product.location }}</span><span>Unidade Med: {{ product.uniMed }} </span> <router-link id="Edit" to="/editProduct">Editar</router-link></p>
+            <p class="info-extra"><span>Quantidade Min: {{product.minQuantity}}</span> <span>Local: {{ product.location }}</span><span>Unidade Med: {{ product.uniMed }} </span> <router-link id="Edit" :to="`/editProduct/${product._id}`">Editar</router-link></p>
             
         </section>
 

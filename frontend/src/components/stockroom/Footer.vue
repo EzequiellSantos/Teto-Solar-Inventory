@@ -88,7 +88,8 @@
         justify-content: space-around;  
 
         margin: 10px;
-        width: 700px;
+        width: calc(100% - 5px);
+        max-width: 700px;
         height: 60px;        
         padding: 0px;
         border-radius: 30px;
@@ -99,6 +100,7 @@
 
     .section-nav > a{
         text-decoration: none;
+        font-size: clamp(0.75rem, 0.6375rem + 0.6vw, 1.125rem);
         padding: 5px 24px ;
         border-radius: 30px;
         color: #2e2e2e;   
