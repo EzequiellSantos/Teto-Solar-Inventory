@@ -142,7 +142,15 @@ const routes = [
     component: () => import(/* webpackChunkName: "materials" */ '../views/stockroom/Almox.vue')
   },
   {
-    path: '/editProduct',
+    path: '/registerProduct',
+    name: "registerproduct",
+    component: () => import(/* webpackChunkName: "registerBatch" */ '../views/stockroom/NewProduct.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/editProduct/:id',
     name: "editproduct",
     component: () => import(/* webpackChunkName: "editproduct" */ '../views/stockroom/EditProduct.vue')
   },
@@ -150,6 +158,22 @@ const routes = [
     path: '/orders',
     name: "orders",
     component: () => import(/* webpackChunkName: "orders" */ '../views/stockroom/Orders.vue')
+  },
+  {
+    path: '/registerOrder',
+    name: "registerorder",
+    component: () => import(/* webpackChunkName: "registerOrder" */ '../views/stockroom/NewOrder.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/editOrder',
+    name: "editorder",
+    component: () => import(/* webpackChunkName: "editOrder" */ '../views/stockroom/EditOrder.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
 ]
 
