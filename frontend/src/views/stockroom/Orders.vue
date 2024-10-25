@@ -138,17 +138,6 @@
                 })
                 
 
-            }, 
-
-            checkIfMaterialIsArrived(){
-
-                // const pElementCode = document.getElementById(`p${idMaterial}`)
-
-
-                    
-
-                
-
             }
         } 
     }
