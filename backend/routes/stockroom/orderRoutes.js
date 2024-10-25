@@ -101,4 +101,24 @@ router.put('/', async(req, res) => {
 
 })
 
+router.put('/updateUniqueOrder', async(req, res) => {
+
+    const id = req.body.id
+    const idMaterial = req.body.idMaterial
+    const isArrived = req.body.isArrived
+
+    try {
+
+        const updateUniqueMaterial = await Order.findOneAndUpdate({ _id: id, "materials._id": idMaterial }, {$set: { "materials.$.isArrivedSeparate": isArrived }})
+
+        res.status(200).json({error: null, msg: "Material chegou", material: updateUniqueMaterial})
+        
+    } catch (error) {
+        
+        res.status(400).json({error: "Erro ao definir material como recebido"})
+
+    }
+
+})
+
 module.exports = router
