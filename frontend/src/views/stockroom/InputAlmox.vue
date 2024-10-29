@@ -25,7 +25,14 @@
                 <aside style="text-align: left; min-width: 200px; width:100%;" v-for="(product, index) in products" :key="index">
 
                     <section class="list-itens">
-                        <div @click="addSelectedProduct(product.code, product.quantity)" ><span>{{ product?.code }}</span> <span class="span-description-list">{{ product?.description }}</span> <span>{{ product?.quantity }}</span><img data-v-9551272e="" width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> </div> 
+                        
+                        <div @click="addSelectedProduct(product.code, product.quantity)" >
+                            <span>{{ product?.code }}</span> 
+                            <span class="span-description-list">{{ product?.description }}</span>
+                            <span>{{ product?.quantity }}</span>
+                            <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                        </div>
+
                     </section>
                     
                 </aside>
