@@ -124,7 +124,6 @@
                     } else {
 
                         this.orders = data.data 
-                        this.checkIfMaterialIsArrived()
 
                     }
 
