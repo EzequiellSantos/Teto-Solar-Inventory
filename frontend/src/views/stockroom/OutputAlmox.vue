@@ -18,15 +18,29 @@
             </div>
 
             <div class="input-container" >
-                <aside style="text-align: left; min-width: 200px; width:20vw;">
+                
+                <h2>Lista de Produtos:</h2>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span> <span>Quant.</span></aside>
 
-                    <h2>Código: {{ product?.code }}</h2>
-                    <p><strong>Descrição:</strong></p>
-                    <p><small> {{ product?.description }}</small></p>
-                    <p><strong>Quantidade Presente:</strong></p>
-                    <p><small> {{ product?.quantity }}</small></p>
+                <aside style="text-align: left; min-width: 200px; width:20vw;" v-for="(product, Index) in this.products" :key="Index">
+
+                    <section class="list-itens">
+
+                        <div @click="addSelectedProduct(product.code, product.quantity)" >
+                            <span>{{ product?.code }}</span> 
+                            <span class="span-description-list">{{ product?.description }}</span>
+                            <span>{{ product?.quantity }}</span>
+                            <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                        </div>
+
+                    </section>
                      
                 </aside>
+            </div>
+
+            <div class="input-container">
+                <h4>Produto Selecionado:</h4>
+                <p class="select-product" v-if="selectProduct.code?.length != 0">{{selectProduct.code}} {{selectProduct.description}} {{selectProduct.quantity}}</p>
             </div>
 
             <div class="input-container">
@@ -93,7 +107,8 @@
                 apiURL: BASE_URL,
                 msg: null,
                 msgClass: null,
-                product: {},
+                products: {},
+                selectProduct: {},
                 search: null,
                 outputQuant: null,
                 sector: null
@@ -142,7 +157,7 @@
                         } else {
 
                             this.msg = null
-                            this.product = data.material
+                            this.products = data.materials
 
                         }
 
@@ -152,21 +167,54 @@
 
             },
 
+            async addSelectedProduct(code, quantity){
+
+                await fetch(`${this.apiURL}/api/materials/search?query=${code}`, {
+                    method:"GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    
+                    if(data.error){
+                        
+                        console.log(data.error)
+
+                    } else {
+
+                        this.selectProduct._id = data.materials[0]._id  
+                        this.selectProduct.code = code
+                        this.selectProduct.type = data.materials[0].type
+                        this.selectProduct.description = data.materials[0].description
+                        this.selectProduct.quantity = quantity,
+                        this.selectProduct.uniMed = data.materials[0].uniMed
+                        this.selectProduct.location = data.materials[0].location
+                        this.selectProduct.stateQuantity = data.materials[0].stateQuantity
+                        this.selectProduct.isActive = data.materials[0].isActive
+
+                    }
+
+                })
+
+            },
+
             async update(e){
 
                 e.preventDefault()
 
                 const data = {
-                    id: this.product._id,
-                    type: this.product.type,
-                    code: this.product.code,
-                    description: this.product.description,
-                    quantity: this.product.quantity - this.outputQuant,
-                    minQuantity: this.product.minQuantity,
-                    uniMed: this.product.uniMed,
-                    location: this.product.uniMed,
-                    stateQuantity: this.product.stateQuantity,
-                    isActive: this.product.isActive
+                    id: this.selectProduct._id,
+                    type: this.selectProduct.type,
+                    code: this.selectProduct.code,
+                    description: this.selectProduct.description,
+                    quantity: this.selectProduct.quantity - this.outputQuant,
+                    minQuantity: this.selectProduct.minQuantity,
+                    uniMed: this.selectProduct.uniMed,
+                    location: this.selectProduct.uniMed,
+                    stateQuantity: this.selectProduct.stateQuantity,
+                    isActive: this.selectProduct.isActive
                 }
 
                 const jsonData = JSON.stringify(data)
@@ -222,8 +270,8 @@
 
                 const data = {
 
-                    code: this.product.code,
-                    description: this.product.description,
+                    code: this.selectProduct.code,
+                    description: this.selectProduct.description,
                     quant: -this.outputQuant,
                     date: this.outputDate,
                     sector: this.sector,
@@ -258,10 +306,11 @@
                         this.msg = data.msg
                         this.msgClass = 'sucess'
 
+                        // reiniciando para um próximo pedido
                         this.search = null,
-                        this.sector = null,
-                        this.outputQuant = null
-                        this.product = {}
+                        this.inputQuant = null
+                        this.products = {}
+                        this.selectProduct = {}
 
                         setTimeout(() => {
                             
