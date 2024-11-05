@@ -117,7 +117,61 @@ const routes = [
     path: '/batch/:id',
     name: "batch",
     component: () => import(/* webpackChunkName: "batchs" */ '../views/panels/Batch.vue')
-  }
+  },
+  {
+    path: '/histories',
+    name: "histories",
+    component: () => import(/* webpackChunkName: "histories" */ '../views/stockroom/Histories.vue')
+  },
+  {
+    path: '/registerInput',
+    name: "registerInput",
+    component: () => import(/* webpackChunkName: "inputalmox" */ '../views/stockroom/InputAlmox.vue')
+  },
+  {
+    path: '/registerOutput',
+    name: "registeroutput",
+    component: () => import(/* webpackChunkName: "registeroutput" */ '../views/stockroom/OutputAlmox.vue')
+  },
+  {
+    path: '/materials',
+    name: "materials",
+    component: () => import(/* webpackChunkName: "materials" */ '../views/stockroom/Almox.vue')
+  },
+  {
+    path: '/registerProduct',
+    name: "registerproduct",
+    component: () => import(/* webpackChunkName: "registerBatch" */ '../views/stockroom/NewProduct.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/editProduct/:id',
+    name: "editproduct",
+    component: () => import(/* webpackChunkName: "editproduct" */ '../views/stockroom/EditProduct.vue')
+  },
+  {
+    path: '/orders',
+    name: "orders",
+    component: () => import(/* webpackChunkName: "orders" */ '../views/stockroom/Orders.vue')
+  },
+  {
+    path: '/registerOrder',
+    name: "registerorder",
+    component: () => import(/* webpackChunkName: "registerOrder" */ '../views/stockroom/NewOrder.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/editOrder',
+    name: "editorder",
+    component: () => import(/* webpackChunkName: "editOrder" */ '../views/stockroom/EditOrder.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
 ]
 
 const router = createRouter({

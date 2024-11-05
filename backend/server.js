@@ -34,12 +34,18 @@ const logRoutes = require('./routes/inverters/logRoutes')
 const authRoutes = require('./routes/authRoutes') 
 const batchsRoutes = require('./routes/panels/batchsRoutes')
 const trackingRoutes = require('./routes/panels/trackingRoutes')
+const materialRoutes = require('./routes/stockroom/materialRoutes')
+const historyRoutes = require('./routes/stockroom/historyRoutes')
+const orderRoutes = require('./routes/stockroom/orderRoutes')
 
 app.use('/api/batchs', batchsRoutes)
 app.use('/api/trackings', trackingRoutes)
 app.use('/api/inverters', invertersRoutes)
 app.use('/api/logs', logRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/materials', materialRoutes)
+app.use('/api/histories', historyRoutes)
+app.use('/api/orders', orderRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;

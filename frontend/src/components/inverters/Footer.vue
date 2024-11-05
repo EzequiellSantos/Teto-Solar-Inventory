@@ -85,7 +85,6 @@
         align-items: center;
         justify-content: space-around;
 
-        margin: 10px;
         width: 200px;
         height: 60px;        
         padding: 0px;

@@ -17,7 +17,7 @@ const BatchSchema = new mongoose.Schema({
         required: true
     },
     panels: {
-        type: String
+        type: [String]
     },
     panelsCount: {
         type: Number,
@@ -25,5 +25,7 @@ const BatchSchema = new mongoose.Schema({
     }
 
 })
+
+BatchSchema.index({ client: "text", panels: "text"})
 
 module.exports = mongoose.model("Batch", BatchSchema)

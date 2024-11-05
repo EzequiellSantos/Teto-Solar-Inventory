@@ -78,9 +78,8 @@
         align-items: center;
         justify-content: space-around;
 
-        margin: 10px;
         width: 200px;
-        height: 60px;        
+        height: 60px;
         padding: 0px;
         border-radius: 30px;
         backdrop-filter: blur(10px);
@@ -100,7 +99,7 @@
         justify-content: center;
     }
 
-    .section-nav > p:hover{
+    .section-nav  p:hover{
         color: #fff;
         cursor: pointer;
     }

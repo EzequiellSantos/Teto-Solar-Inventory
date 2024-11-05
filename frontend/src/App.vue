@@ -835,4 +835,136 @@
     font-size: clamp(1.875rem, 1.6875rem + 1vw, 2.5rem);
   }
 
+  /* styles for almox */
+
+  .list-itens > button{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    margin: auto;
+    margin-block: 5px;
+    padding: 7px;
+  }
+
+  .list-itens > img {
+    padding-left: 10px;
+  }
+
+  #headerList{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin-top: 4px;
+    font-weight: bold;
+  }
+
+  section#headerTittle{
+    padding-top: 10px;
+    font-size: 1.3em;
+  }
+
+  .select-product{
+    background-color: rgb(236, 255, 232);
+    padding: 10px;
+    margin: 5px 0 0 0 ;
+    border-radius: 20px;
+  }
+
+  .almox-containers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: rgba(199, 209, 233, 0.616);
+    border-radius: 40px;
+    padding: 20px 20px;
+    margin: 40px 0;
+  }
+
+  .almox-containers > input, select{
+    width: 40vw;
+    font-size: 1.2em;
+    padding: 5px;
+  }
+
+  .almox-containers > select{
+    border-radius: 20px;
+  }
+
+  /* styles for menu for histories and materials */
+
+  .menu{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-shrink:0 ;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    list-style-type: none;
+    z-index: 1;
+  }
+
+  .sub-menu{
+    position: absolute;
+    background-color: var(--color-main01);
+    border-radius: 10px;
+    top: 26px;
+  }
+
+  .sub-item{
+    display: none;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    color: #fff;
+  }
+
+  .menu-item{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 3px 4px;
+    border-radius: 5px;
+  }
+
+  .menu-item:hover  li.sub-item{
+    
+    display: flex;
+
+  }
+
+  .item{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    color: #000;
+  }
+
+  .item > img{
+    display: inline-block;
+    transform: rotate(180deg);
+  }
+
+  .menu-item:hover > span >  img{
+    transform: rotate(-180deg);
+  }
+
+  .selected{
+    background-color: #fafafa;
+    color: var(--color-main01);
+  }
+
 </style>

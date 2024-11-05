@@ -33,6 +33,17 @@
 
       </router-link>
 
+      <router-link to="/materials">
+      
+        <section class="card">
+
+          <img id="materialsIcon" class="icon-links" src="../../public/almox_img100.png" alt="panel">
+          <p id="panels">Almoxarifado</p>
+
+        </section>
+
+      </router-link>      
+
     </div>
 
     <footer>
