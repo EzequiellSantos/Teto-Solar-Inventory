@@ -352,69 +352,6 @@
         min-width: 100px;
     }
 
-    .menu{
-        width: 80%;
-        margin: auto;
-        display: flex;
-        flex-shrink:0 ;
-        flex-direction: row;
-        justify-content: space-evenly;
-        align-items: flex-start;
-        list-style-type: none;
-    }
-
-    .sub-menu{
-        position: absolute;
-        background-color: var(--color-main01);
-        border-radius: 10px;
-        top: 28px;
-    }
-
-    .sub-item{
-        display: none;
-        padding: 5px;
-        margin: 5px;
-        border-radius: 5px;
-        color: #fff;
-    }
-
-    .menu-item{
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: #f2f2f2;
-        padding: 3px 4px;
-        border-radius: 5px;
-    }
-
-    .menu-item:hover  li.sub-item{
-        
-        display: flex;
-
-    }
-
-    .item{
-        display: flex;
-        align-content: center;
-        justify-content: center;
-    }
-
-    .item > img{
-        display: inline-block;
-        transform: rotate(180deg);
-    }
-
-    .menu-item:hover > li > span >  img{
-        transform: rotate(-180deg);
-    }
-
-    .selected{
-        background-color: #fafafa;
-        color: var(--color-main01);
-    }
-
     .info-extra{
         display: none;
         position: absolute;
