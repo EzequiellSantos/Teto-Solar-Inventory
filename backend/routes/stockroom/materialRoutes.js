@@ -21,6 +21,26 @@ router.get("/all", async(req, res) => {
 
 })
 
+// retornar materiais por stateQuantity
+router.get('/state', async(req, res) => {
+
+    const state = req.query.query
+
+    try {
+        
+        const materials = await Material.find({stateQuantity: state})
+
+        res.status(200).json({error: null, materials: materials})
+
+    } catch (error) {
+        
+        console.log(error)
+        res.status(400).json({error: "Não foi possível buscar por estatus de quantidade"})
+
+    }
+
+})
+
 // retornar por itens pesquisados (CODIGO, DESCRIPTION)
 router.get('/search', async(req, res) => {
 
