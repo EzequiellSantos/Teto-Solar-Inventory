@@ -117,8 +117,6 @@
 
             async getProductInfo(search){
 
-                console.log(search)
-
                 if(search.length > 3) {
 
                 await fetch(`${this.apiURL}/api/materials/search?query=${search}`, {
@@ -136,7 +134,6 @@
                     } else {
                         
                         this.selectedMaterials = data.materials
-                        console.log(this.selectedMaterials)
 
                     }
 
@@ -162,7 +159,6 @@
                     }
 
                     this.materials.push(objectProduct)
-                    console.log(this.materialsId)
 
                 }
 
@@ -232,7 +228,6 @@
 
                         this.msg = data.msg
                         this.msgClass = 'sucess'
-                        console.log(data)
                         this.updateMaterials(this.materialsId)
 
                     }
@@ -243,13 +238,11 @@
 
             async updateMaterials(ids){
 
-                console.log(ids )
-
                 for(let i = 0 ; i < ids.length ; i++){
 
                     const data = {
                         id: ids[i],
-                        stateQuantity: 'Orded'
+                        stateQuantity: 'Pedido'
                     }
 
                     const jsonData = JSON.stringify(data)
@@ -269,7 +262,7 @@
                             this.msgClass = 'error'
                             console.log(error)
                         } else {
-                            console.log(data)
+
                         }
 
                     })

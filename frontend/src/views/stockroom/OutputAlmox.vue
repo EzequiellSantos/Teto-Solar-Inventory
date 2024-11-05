@@ -41,7 +41,7 @@
                 <h3>Produto Selecionado:</h3>
                 <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
                 <section v-if="selectProduct.code?.length != 0">
-                    <p class="select-product">{{selectProduct.code}} {{selectProduct.description}}</p>
+                    <p class="select-produtc">{{selectProduct.code}} {{selectProduct.description}}</p>
                 </section>
             </div>
 
