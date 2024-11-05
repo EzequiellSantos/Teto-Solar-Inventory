@@ -633,8 +633,9 @@
 
     @media (width >= 780px) {
         
-        input, select{
+        select{
             padding: 14px;
+            font-size: 1.4em;
         }
 
     }
