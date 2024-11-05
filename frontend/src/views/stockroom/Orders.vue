@@ -2,6 +2,8 @@
     
     <div id="orders">
 
+        <Message :msg="msg" :msgClass="msgClass" />
+
         <section>
             <h1>Pedidos</h1>
             <router-link to="/registerOrder">Novo Pedido</router-link>
@@ -12,9 +14,18 @@
             <div id="eachOrder" class="card-order" v-for="(order, index) in orders" :key="index">
 
                 <div v-for="(material, indexTwo) in order.materials" :key="indexTwo">
-                    <p :class="`p-orders ${ material.isArrivedSeparate === true ? 'arrived' : ' ' }`" :id="`p${material._id}`"><span>{{material.code}} {{ material.description }} {{material.quantOrder}} </span> 
-                    <input type="checkbox" :name="material.code" :id="material.code" v-model="material.isArrivedSeparate" @click="uniqueOrdedSelected(order._id, material._id, material.isArrivedSeparate == true ? false : true)"> 
-                    </p>
+                    
+                    <section :class="`section-orders ${ material.isArrivedSeparate === true ? 'Pedido' : ' ' }`" :id="`section${material._id}`">
+
+                        <span>
+                            {{material.code}} 
+                            {{ material.description }} 
+                            {{material.quantOrder}} 
+                        </span>
+
+                        <input type="checkbox" :name="material.code" :id="material.code" v-model="material.isArrivedSeparate" @click="uniqueOrdedSelected(order._id, material._id, material.isArrivedSeparate == true ? false : true)"> 
+                    
+                    </section>
                 </div>
 
             </div>
@@ -32,24 +43,29 @@
     import {BASE_URL} from '@/config'
     import OrderForm from '@/components/stockroom/OrderForm.vue'
     import  Footer from '@/components/stockroom/Footer.vue'
+    import Message from '@/components/Message.vue'
 
     export default {
         components:{
             Footer,
-            OrderForm
+            OrderForm,
+            Message
         },
         data() {
 
             return {
                 apiURL: BASE_URL,
                 orders: {},
-                arrived: false
+                arrived: false,
+                msg: null,
+                msgClass: null
             }
 
         },
         created() {
 
             this.getOrders()
+            this.scrollBottom()
 
         },
         mounted() {
@@ -60,16 +76,15 @@
         methods: {
             async uniqueOrdedSelected(idOrder, idMaterial, isArrivedSeparate){
 
-                const pElementCode = document.getElementById(`p${idMaterial}`)
-                console.log(pElementCode)
+                const sectionElementCode = document.getElementById(`section${idMaterial}`)
 
                 if(isArrivedSeparate){
 
-                    pElementCode.classList.add('arrived')
+                    sectionElementCode.classList.add('arrived')
 
                 } else {
 
-                    pElementCode.classList.remove('arrived')
+                    sectionElementCode.classList.remove('arrived')
 
                 }
 
@@ -97,10 +112,15 @@
                         this.msgClass = 'error'
 
                     } else {
-
-                        console.log(data)
+                        
 
                     }
+
+                    setTimeout(() => {
+                        
+                        this.msg = null
+
+                    }, 1500);
 
                 })
 
@@ -137,6 +157,15 @@
                 })
                 
 
+            },
+
+            scrollBottom(){
+
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                })
+
             }
         } 
     }
@@ -145,7 +174,7 @@
 
 <style>
 
-    .p-orders{
+    .section-orders{
         color: red;
         text-decoration-line: none;
     }

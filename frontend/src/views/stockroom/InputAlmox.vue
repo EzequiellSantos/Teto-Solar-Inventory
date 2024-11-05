@@ -4,7 +4,7 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <section>
+        <section id="headerTittle">
 
             <h1>Registrar Entrada no Estoque</h1>
 
@@ -12,45 +12,49 @@
 
         <form id="productForm" enctype="multipart/form-data" @submit="update($event)">
         
-            <div class="input-container">
+            <div class="almox-containers">
 
                 <label for="search">Procurar por Código ou Descrição:</label>
-                <input type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição">
+                <input ref="search" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição">
 
             </div>
 
-            <div class="input-container" >
+            <div class="almox-containers" >
+
                 <h2>Lista de Produtos:</h2>
-                <aside id="headerList"><span>Cód.</span> <span>Descri.</span> <span>Quant.</span></aside>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
+
                 <aside style="text-align: left; min-width: 200px; width:100%;" v-for="(product, index) in products" :key="index">
 
                     <section class="list-itens">
                         
-                        <div @click="addSelectedProduct(product.code, product.quantity)" >
+                        <button class="select-product-item" @click="addSelectedProduct(product.code, product.quantity)" >
                             <span>{{ product?.code }}</span> 
                             <span class="span-description-list">{{ product?.description }}</span>
-                            <span>{{ product?.quantity }}</span>
                             <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
-                        </div>
+                        </button>
 
                     </section>
                     
                 </aside>
             </div>
 
-            <div class="input-container">
-                <h4>Produto Selecionado:</h4>
-                <p class="select-product" v-if="selectProduct.code?.length != 0">{{selectProduct.code}} {{selectProduct.description}} {{selectProduct.quantity}}</p>
+            <div class="almox-containers" ref="productSelect">
+                <h3>Produto Selecionado:</h3>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
+                <section v-if="selectProduct.code?.length != 0">
+                    <p class="select-produtc">{{selectProduct.code}} {{selectProduct.description}}</p>
+                </section>
             </div>
 
-            <div class="input-container">
+            <div class="almox-containers">
                 
                 <label for="inputQuant">Quantidade de Entrada:</label>
-                <input type="number" name="inputQuant" id="inputQuant" v-model="inputQuant" placeholder="Quantidade" required>
+                <input ref="inputQuant" type="number" name="inputQuant" id="inputQuant" v-model="inputQuant" placeholder="Quantidade" required>
 
             </div>
 
-            <div class="input-container">
+            <div class="almox-containers">
 
                 <label for="type">Tipo de Entrada:</label>
                 <select name="type" id="type" v-model="type" required>
@@ -63,7 +67,7 @@
 
             </div>
 
-            <div class="input-container">
+            <div class="almox-containers">
 
                 <label for="inputDate">Data de Entrada</label>
                 <input type="date" name="inputDate" id="inputDate" v-model="inputDate">
@@ -141,7 +145,6 @@
                     })
                     .then((resp) => resp.json())
                     .then((data) => {
-                        console.log(data)
 
                         if(data.error){
 
@@ -189,6 +192,9 @@
                     }
 
                 })
+
+                this.$refs.productSelect.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                this.$refs.inputQuant.focus();
 
 
             },
@@ -325,8 +331,9 @@
 
 <style scoped>
 
-    #productForm{
-        width: calc(60% - 20px);
+    label{
+        font-size: 1.3em;
+        margin-bottom: 5px;
     }
 
     #RegisterOutput{
@@ -341,58 +348,13 @@
     aside p,h3{
         padding: 3px 0;
     }
-    
-    #headerList{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        align-items: center;
-        width: 100%;
-        margin-top: 4px;
-        margin-left: -30px;
-        font-weight: bold;
-    }
 
-    .list-itens > div{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        background-color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        text-align: center;
-        margin: auto;
-        margin-block: 5px;
-        padding-block: 5px;
-    }
-
-    .list-itens > img {
-        padding-left: 10px;
-    }
-
-    .span-description-list{
+    /*.span-description-list{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-         /* -webkit-mask-image: linear-gradient(90deg, black, transparent 99%);
-         mask-image: linear-gradient(90deg, black, transparent 98%); */
-    }
-
-    .input-container {
-        display: flex;
-        justify-content: center;
-        flex-direction: column ;
-        align-items: center;
-    }
-
-    .input-container > input, select {
-        
-        margin: auto;
-        width: 90%;
-
-    }
-
-
+          -webkit-mask-image: linear-gradient(90deg, black, transparent 99%);
+         mask-image: linear-gradient(90deg, black, transparent 98%); 
+    }*/
 
 </style>

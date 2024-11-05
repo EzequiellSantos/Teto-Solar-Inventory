@@ -4,7 +4,7 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <section>
+        <section id="headerTittle">
 
             <h1>Registrar Saída do Estoque</h1>
 
@@ -12,45 +12,47 @@
 
         <form id="productForm" enctype="multipart/form-data" @submit="update($event)">
 
-            <div class="input-container">
+            <div class="almox-containers">
                 <label for="search">Procurar por Código ou Descrição:</label>
-                <input type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
+                <input ref="search" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
             </div>
 
-            <div class="input-container" >
+            <div class="almox-containers" >
                 
                 <h2>Lista de Produtos:</h2>
-                <aside id="headerList"><span>Cód.</span> <span>Descri.</span> <span>Quant.</span></aside>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
 
-                <aside style="text-align: left; min-width: 200px; width:20vw;" v-for="(product, Index) in this.products" :key="Index">
+                <aside style="text-align: left; min-width: 200px; width:100%;" v-for="(product, Index) in this.products" :key="Index">
 
                     <section class="list-itens">
 
-                        <div @click="addSelectedProduct(product.code, product.quantity)" >
+                        <button class="select-product-item" @click="addSelectedProduct(product.code, product.quantity)" >
                             <span>{{ product?.code }}</span> 
                             <span class="span-description-list">{{ product?.description }}</span>
-                            <span>{{ product?.quantity }}</span>
                             <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
-                        </div>
+                        </button>
 
                     </section>
                      
                 </aside>
             </div>
 
-            <div class="input-container">
-                <h4>Produto Selecionado:</h4>
-                <p class="select-product" v-if="selectProduct.code?.length != 0">{{selectProduct.code}} {{selectProduct.description}} {{selectProduct.quantity}}</p>
+            <div class="almox-containers" ref="productSelect">
+                <h3>Produto Selecionado:</h3>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
+                <section v-if="selectProduct.code?.length != 0">
+                    <p class="select-product">{{selectProduct.code}} {{selectProduct.description}}</p>
+                </section>
             </div>
 
-            <div class="input-container">
+            <div class="almox-containers">
 
                 <label for="outputQuant">Quantidade de saída:</label>
-                <input type="number" name="outputQuant" id="outputQuant" v-model="outputQuant" placeholder="Quantidade" required>
+                <input ref="outputQuant" type="number" name="outputQuant" id="outputQuant" v-model="outputQuant" placeholder="Quantidade" required>
 
             </div>
 
-            <div class="input-container">
+            <div class="almox-containers">
 
                 <label for="sector">Setor de Saída:</label>
                 <select name="sector" id="sector" v-model="sector" required>
@@ -70,7 +72,7 @@
 
             </div>
 
-            <div class="input-container">
+            <div class="almox-containers">
 
                 <label for="outputDate">Data de Sáida</label>
                 <input type="date" name="outputDate" id="outputDate" v-model="outputDate">
@@ -196,6 +198,10 @@
 
                     }
 
+                    this.$refs.productSelect.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    this.$refs.outputQuant.focus();
+                    
+
                 })
 
             },
@@ -263,6 +269,8 @@
 
                 })
 
+                
+
 
             },
 
@@ -306,11 +314,12 @@
                         this.msg = data.msg
                         this.msgClass = 'sucess'
 
-                        // reiniciando para um próximo pedido
+                        // reiniciando para uma próxima saída
                         this.search = null,
-                        this.inputQuant = null
+                        this.outputQuant = null
                         this.products = {}
                         this.selectProduct = {}
+                        this.$refs.search.focus();
 
                         setTimeout(() => {
                             
@@ -331,6 +340,11 @@
 </script>
 
 <style>
+
+    label{
+        font-size: 1.3em;
+        margin-bottom: 5px;
+    }
 
     #RegisterOutput{
         display: flex;

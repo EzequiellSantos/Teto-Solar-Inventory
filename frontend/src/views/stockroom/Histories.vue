@@ -4,11 +4,13 @@
 
         <Message :msg="msg" :msgClass="msgClass"/>
         
-        <section>
+        <section id="header">
 
-            <h1>Registros</h1>
+            <h1 style="color: #fff; margin-block:5px; font-size:1.9em;">Registros</h1>
 
-            <input type="text" id="search" name="search" @input="getHistoryForSearch" v-model="search" placeholder="Código ou Descrição">
+            <router-link to="/">Home</router-link>
+
+            <input type="text" id="search" name="search" @input="getHistories" v-model="search" placeholder="Código ou Descrição">
 
             <div id="choices">
                 
@@ -49,7 +51,18 @@
 
             <div :id="product.code" @click="exibir(product.code)" v-for="(product, index) in products" :key="index">
 
-                <section> <span>{{product.code}}</span> <span>{{product.description}}</span> <span>{{product.quant}}</span> <span>{{ product.sector }}</span> <router-link :to="`/editHistory/${product._id}`">editar</router-link> <p class="info-extra">{{product.date}}</p> </section>
+                <section class="item">
+                    
+                    <span class="code">{{product.code}}</span> 
+                    <span class="description">{{product.description}}</span> 
+                    <span class="sector">{{ product.sector }}</span> 
+                    <span class="quant">{{product.quant}}</span> 
+                    <!-- <router-link :to="`/editHistory/${product._id}`">
+                        editar
+                    </router-link>  -->
+                    <p class="info-extra">{{product.date}}</p>
+
+                </section>
 
             </div>
 
@@ -61,7 +74,7 @@
 
 </template>
 
-<script danfer>
+<script>
 
     import Message from '@/components/Message.vue'
     import {BASE_URL} from '@/config'
@@ -86,7 +99,9 @@
 
         },
         mounted () {
+
             this.getTypeHistory('Saida')
+
         },
         methods:{
 
@@ -113,6 +128,53 @@
                subItem.classList.add('selected')
             },
 
+            async getHistories(){
+ 
+                if (this.sector === null) {
+                    
+                    this.msg = 'Selecione um setor'
+                    this.msgClass = 'error'
+
+                    setTimeout(() => {
+                        
+                        this.msg = null
+
+                    }, 1500);
+
+                }
+
+                console.log(this.search)
+
+                await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if (data.error) {
+                        
+                        console.error(data.error)
+
+                    } else {
+                        
+                        this.products = data.history
+                        this.scrollBottom()
+
+                    }
+                })
+                .catch((err) => {
+
+                    this.msg = err
+                    this.msgClass = 'error'
+                    consle.error(err)
+                        
+                })
+
+            },
+
             async getTypeHistory(type){
 
                 this.adequedStyles(type)
@@ -134,6 +196,7 @@
                     } else {
 
                         this.products = data.histories
+                        this.scrollBottom()
 
                     }
 
@@ -172,6 +235,7 @@
                     } else {
 
                         this.products = data.histories
+                        this.scrollBottom()
 
                     }
 
@@ -201,12 +265,12 @@
 
                         if(data.error){
 
-                            /* this.msg = data.error
-                            this.msgClass = 'error' */
+
 
                         } else {
 
                             this.products = data.histories
+                            this.scrollBottom()
 
                         }
 
@@ -218,6 +282,13 @@
                         console.log(err)
 
                     })
+                    .catch((err) => {
+
+                        this.msg = err
+                        this.msgClass = 'error'
+                        consle.error(err)
+
+                    })
 
                 }
 
@@ -227,6 +298,13 @@
 
                 }, 1500);
 
+            },
+
+            scrollBottom(){
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight, // Altura total do documento
+                    behavior: 'smooth' // Animação suave
+                });
             }
 
         }
@@ -237,25 +315,66 @@
 
 <style scoped>
 
+    #header{
+        position: fixed;
+        width: 100%;
+        background-color: var(--color-main00);
+        padding: 13px 0;
+    }
+
+    main{
+        padding: 160px 0 100px 0;
+    }
+
+    p.item{
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: space-between;
+    }
+
+    .index{
+        flex-grow: 0;
+        margin-left: auto;
+    }
+
+    .code{
+        min-width: 150px;
+        flex-grow:0 ;
+        text-align: center;
+    }
+
+    .description{
+        min-width: 500px;
+    }
+
+    .quant{
+        min-width: 100px;
+    }
+
     .menu{
         width: 80%;
         margin: auto;
         display: flex;
         flex-shrink:0 ;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-evenly;
         align-items: flex-start;
         list-style-type: none;
     }
 
     .sub-menu{
         position: absolute;
-        top: 18px;
+        background-color: var(--color-main01);
+        border-radius: 10px;
+        top: 28px;
     }
 
     .sub-item{
         display: none;
-        background-color: #444;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
         color: #fff;
     }
 
@@ -265,6 +384,9 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        background-color: #f2f2f2;
+        padding: 3px 4px;
+        border-radius: 5px;
     }
 
     .menu-item:hover  li.sub-item{
@@ -289,14 +411,15 @@
     }
 
     .selected{
-        background-color: #666;
+        background-color: #fafafa;
+        color: var(--color-main01);
     }
 
-        .info-extra{
+    .info-extra{
         display: none;
-        flex-direction: row;
-        align-content: center;
-        justify-content: space-evenly;
+        position: absolute;
+        margin-top: 23px ;
+        margin-left: -30px;
     }
 
     .exibir .info-extra{

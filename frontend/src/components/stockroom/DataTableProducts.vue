@@ -4,8 +4,19 @@
 
         <section class="bar" :id="`${product.code}`" v-for="(product, index) in products" :key="index">
 
-            <p class="item" @click="exibir(product.code)">  <span>{{index}}</span> <span>{{product.code}}</span> <span>{{ product.description }}</span> <span>{{product.quantity}}</span></p>
-            <p class="info-extra"><span>Quantidade Min: {{product.minQuantity}}</span> <span>Local: {{ product.location }}</span><span>Unidade Med: {{ product.uniMed }} </span> <router-link id="Edit" :to="`/editProduct/${product._id}`">Editar</router-link></p>
+            <p class="item" @click="exibir(product.code)">
+                <span class="index">{{index}}</span> 
+                <span class="code">{{product.code}}</span> 
+                <span class="description">{{ product.description }}</span> 
+                <span :class="`state-quantity ${product.stateQuantity}`">{{product.quantity}}</span>
+            </p>
+
+            <p class="info-extra">
+                <span>Quantidade Min: {{product.minQuantity}}</span> 
+                <span>Local: {{ product.location }}</span>
+                <span>Unidade Med: {{ product.uniMed }}</span> 
+                <router-link id="Edit" :to="`/editProduct/${product._id}`">Editar</router-link>
+            </p>
             
         </section>
 
@@ -45,24 +56,37 @@
         align-content: center;
         flex-direction: column;
         justify-content: space-evenly;
-        border: 1px solid black;
+        background-color: #F8F8F8;
         border-radius: 20px;
         width: 70%;
         height: 40px;
         margin: auto;
-        margin-block: 10px;
+        margin-block: 20px;
+        padding: 5px 0 0 0;
         transition: all 0.4s ease-in-out;
     }
 
     .bar > p.item{
-
         display: flex;
         flex-direction: row;
         align-content: center;
-        justify-content: space-evenly;
-
+        justify-content: space-between;
     }
 
+    .index{
+        flex-grow: 0;
+        margin-left: auto;
+    }
+
+    .code{
+        min-width: 150px;
+        flex-grow:0 ;
+        text-align: center;
+    }
+
+    .description{
+        min-width: 500px;
+    }
 
     .info-extra{
         display: none;
@@ -111,6 +135,33 @@
             height: 65px;
         }
 
+    }
+
+    .state-quantity {
+        min-width: 20px ;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background-color:#d6d6d6 ;
+        flex-grow: 0;
+        margin-right: auto;
+
+    }
+
+    .Alto{
+        background-color: rgb(82, 255, 82);
+    }
+
+    .Mediano{
+        background-color: #ffff00;
+    }
+
+    .Critico{
+        background-color: #ff0000;
+        color: #fff;
+    }
+
+    .Pedido{
+        background-color: aquamarine;
     }
 
 </style>

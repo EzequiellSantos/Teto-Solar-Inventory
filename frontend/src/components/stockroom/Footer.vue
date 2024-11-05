@@ -87,7 +87,6 @@
         align-items: center;
         justify-content: space-around;  
 
-        margin: 10px;
         width: calc(100% - 5px);
         max-width: 700px;
         height: 60px;        

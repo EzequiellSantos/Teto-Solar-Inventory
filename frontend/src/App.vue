@@ -835,4 +835,69 @@
     font-size: clamp(1.875rem, 1.6875rem + 1vw, 2.5rem);
   }
 
+  /* styles for almox */
+
+  .list-itens > button{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    margin: auto;
+    margin-block: 5px;
+    padding: 7px;
+  }
+
+  .list-itens > img {
+    padding-left: 10px;
+  }
+
+  #headerList{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin-top: 4px;
+    font-weight: bold;
+  }
+
+  section#headerTittle{
+    padding-top: 10px;
+    font-size: 1.3em;
+  }
+
+  .select-product{
+    background-color: rgb(236, 255, 232);
+    padding: 10px;
+    margin: 5px 0 0 0 ;
+    border-radius: 20px;
+  }
+
+  .almox-containers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: rgba(199, 209, 233, 0.616);
+    border-radius: 40px;
+    padding: 20px 20px;
+    margin: 40px 0;
+  }
+
+  .almox-containers > input, select{
+    width: 40vw;
+    font-size: 1.2em;
+    padding: 5px;
+  }
+
+  .almox-containers > select{
+    border-radius: 20px;
+  }
+
 </style>

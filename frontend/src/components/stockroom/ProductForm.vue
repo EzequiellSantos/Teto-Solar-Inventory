@@ -211,7 +211,6 @@
 
                         this.msg = data.msg
                         this.msgClass = 'sucess'
-                        console.log(data.updateMaterial.code)
 
                         setTimeout(() => {
                         
