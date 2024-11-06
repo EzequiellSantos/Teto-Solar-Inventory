@@ -33,7 +33,7 @@
 
       </router-link>
 
-      <router-link to="/materials">
+      <router-link to="/">
       
         <section class="card">
 
