@@ -250,24 +250,26 @@ router.put('/', async(req, res) => {
 
 })
 
+
+
 router.post('/inserting', async(req, res) => {
 
     const documents = req.body.documents
 
     try {
-        
-            for(const doc in documents){
+    
+        for(const doc in documents){
 
-                const material = new Material({type: documents[doc].type, code: documents[doc].code, description: documents[doc].description, quantity: documents[doc].quantity, minQuantity: documents[doc].minQuantity, uniMed: documents[doc].uniMed, location: documents[doc].location, stateQuantity: documents[doc].stateQuantity, isActive: documents[doc].isActive})
+            const material = new Material({type: documents[doc].type, code: documents[doc].code, description: documents[doc].description, quantity: documents[doc].quantity, minQuantity: documents[doc].minQuantity, uniMed: documents[doc].uniMed, location: documents[doc].location, stateQuantity: documents[doc].stateQuantity, isActive: documents[doc].isActive})
 
-                await material.save()
+            await material.save()
 
-                console.log(`Documento inserido: ${material}`)
+            console.log(`Documento inserido: ${material}`)
 
-            }
+        }
 
-            console.log("Todos os documentos foram inseridos")
-            res.status(200).json({msg:"Todos os documentos foram inseridos" })
+        console.log("Todos os documentos foram inseridos")
+        res.status(200).json({msg:"Todos os documentos foram inseridos" })
 
     } catch (error) {
         

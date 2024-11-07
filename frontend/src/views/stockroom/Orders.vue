@@ -95,6 +95,46 @@
                 }
 
                 const jsonData = JSON.stringify(data)
+                const materialFind = {}
+
+                await fetch(`${this.apiURL}/api/materials/${idMaterial}`,{
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        console.error(data.error, " erro ao coletar quantidade ")
+
+                    } else {
+
+                        materialFind.id = data.material._id
+                        materialFind.minQuantity = data.material.minQuantity
+                        materialFind.quantity = data.material.quantity
+                        materialFind.stateQuantity = "Alto"
+
+                    }
+
+                })
+
+                if(sectionElementCode.classList.contains('arrived')){
+
+                    const jsonDataMaterial = JSON.stringify(materialFind)
+
+                    this.updateMaterialForInventory(jsonDataMaterial)
+
+                } else {
+
+                    materialFind.stateQuantity = "Pedido"
+                    const jsonDataMaterial = JSON.stringify(materialFind)
+                    this.updateMaterialForInventory(jsonDataMaterial)
+                    
+
+                }
 
                 await fetch(`${this.apiURL}/api/orders/updateUniqueOrder`, {
                     method: "PUT",
@@ -124,6 +164,31 @@
 
                 })
 
+            },
+
+
+            async updateMaterialForInventory(json){
+                await fetch(`${this.apiURL}/api/materials/`, {
+                        method:"PUT",
+                        headers: {
+                            "Content-type":"application/json"
+                        },
+                        body: json
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+                        
+                        if(data.error){
+                            
+                            console.error(data.error)
+
+                        } else {
+
+                            console.log(data.msg)
+
+                        }
+
+                    })
             },
 
             async getOrders(){
