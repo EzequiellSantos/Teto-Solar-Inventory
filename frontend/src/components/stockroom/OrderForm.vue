@@ -115,6 +115,35 @@
         },
         methods: {
 
+            async gerarPDF(jsonData, date) {
+
+                const jsonSimplificado = jsonData.map(({ code, isArrivedSeparate, ...resto }) => resto)
+                
+                const jsonRenomeado = jsonSimplificado.map(({description, quantExist, quantOrder, ...resto}) => ({
+                    ...resto,
+                    descricao: description,
+                    quantidade: quantExist,
+                    pedido: quantOrder
+                }))
+
+                // Transforma o JSON em um array de arrays para a tabela
+                const colunas = Object.keys(jsonRenomeado[0]); // Cabeçalhos das colunas
+                const linhas = jsonRenomeado.map(item => Object.values(item)); // Linhas dos dados
+
+                // Cria o documento PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Adiciona a tabela ao PDF
+                doc.autoTable({
+                    head: [colunas],
+                    body: linhas
+                });
+
+                // Baixa o PDF
+                doc.save(`PEDIDOS-${date}.pdf`);
+            },
+
             async getProductInfo(search){
 
                 if(search.length > 3) {
@@ -209,6 +238,8 @@
 
                 const jsonData = JSON.stringify(data)
 
+                this.gerarPDF(this.ordedMaterials, this.date)
+
                 await fetch(`${this.apiURL}/api/orders/`, {
                     method:"POST",
                     headers:{
@@ -258,9 +289,11 @@
                     .then(data => {
 
                         if(data.error){
+
                             this.msg = data.error
                             this.msgClass = 'error'
                             console.log(error)
+
                         } else {
 
                         }
