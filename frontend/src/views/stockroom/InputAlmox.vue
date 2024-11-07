@@ -330,6 +330,7 @@
                         this.inputQuant = null
                         this.products = {}
                         this.selectProduct = {}
+                        this.$refs.search.focus();
 
                         setTimeout(() => {
                             
