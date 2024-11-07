@@ -121,7 +121,7 @@
     position: relative;
   }
 
-  .container input{
+  .container input[type=text], input[type=number], input[type=date]{
     background-color: rgb(255, 255, 255);
     border: 1px solid rgba(218, 218, 218, 0.116);
     width: 35vw;
