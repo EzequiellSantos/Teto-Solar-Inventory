@@ -165,7 +165,6 @@
             },
 
             async addSelectedProduct(code, quantity, e){
-            console.log("pika")
 
                 e.preventDefault()
 
@@ -228,10 +227,6 @@
                     stateQuantity: this.selectProduct.stateQuantity,
                     isActive: this.selectProduct.isActive
                 }
-
-                const jsonData = JSON.stringify(data)
-                console.clear()
-                console.log(this.selectProduct)
 
                 await fetch(`${this.apiURL}/api/materials`, {
                     method:"PUT",
