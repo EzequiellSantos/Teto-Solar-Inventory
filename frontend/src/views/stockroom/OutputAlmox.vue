@@ -26,7 +26,7 @@
 
                     <section class="list-itens">
 
-                        <button class="select-product-item" @click="addSelectedProduct(product.code, product.quantity)" >
+                        <button type="button" class="select-product-item" @click="addSelectedProduct(product.code, product.quantity)" >
                             <span>{{ product?.code }}</span> 
                             <span class="span-description-list">{{ product?.description }}</span>
                             <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
@@ -41,7 +41,7 @@
                 <h3>Produto Selecionado:</h3>
                 <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
                 <section v-if="selectProduct.code?.length != 0">
-                    <p class="select-produtc">{{selectProduct.code}} {{selectProduct.description}}</p>
+                    <p class="select-product">{{selectProduct.code}} {{selectProduct.description}}</p>
                 </section>
             </div>
 
@@ -95,6 +95,7 @@
     import Footer from '@/components/stockroom/Footer.vue'
     import {BASE_URL} from  '@/config'
     import InputSubmit from '@/components/form/inputSubmit.vue'
+import { provide } from 'vue'
 
     export default {
         components:{
@@ -186,15 +187,23 @@
 
                     } else {
 
-                        this.selectProduct._id = data.materials[0]._id  
-                        this.selectProduct.code = code
-                        this.selectProduct.type = data.materials[0].type
-                        this.selectProduct.description = data.materials[0].description
-                        this.selectProduct.quantity = quantity,
-                        this.selectProduct.uniMed = data.materials[0].uniMed
-                        this.selectProduct.location = data.materials[0].location
-                        this.selectProduct.stateQuantity = data.materials[0].stateQuantity
-                        this.selectProduct.isActive = data.materials[0].isActive
+                        const product = data.materials.find((item) => item.code == code)
+
+                        if(product){
+                         
+                            this.selectProduct = {
+                                _id: product._id,
+                                code: code,
+                                type: product.type,
+                                description: product.description,
+                                quantity: quantity,
+                                uniMed: product.uniMed,
+                                location: product.location,
+                                stateQuantity: product.stateQuantity,
+                                isActive: product.isActive
+                            }
+                         
+                        }
 
                     }
 

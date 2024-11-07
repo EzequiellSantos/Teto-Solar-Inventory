@@ -28,9 +28,9 @@
 
                     <section class="list-itens">
                         
-                        <button class="select-product-item" @click="addSelectedProduct(product.code, product.quantity)" >
-                            <span>{{ product?.code }}</span> 
-                            <span class="span-description-list">{{ product?.description }}</span>
+                        <button type="button"  class="select-product-item" @click="addSelectedProduct(product.code, product.quantity, $event)" >
+                            <span>{{ product.code }}</span> 
+                            <span class="span-description-list">{{ product.description }}</span>
                             <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
                         </button>
 
@@ -43,7 +43,7 @@
                 <h3>Produto Selecionado:</h3>
                 <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
                 <section v-if="selectProduct.code?.length != 0">
-                    <p class="select-produtc">{{selectProduct.code}} {{selectProduct.description}}</p>
+                    <p class="select-product">{{selectProduct.code}} {{selectProduct.description}}</p>
                 </section>
             </div>
 
@@ -164,7 +164,10 @@
 
             },
 
-            async addSelectedProduct(code, quantity){
+            async addSelectedProduct(code, quantity, e){
+            console.log("pika")
+
+                e.preventDefault()
 
                 await fetch(`${this.apiURL}/api/materials/search?query=${code}`, {
                     method:"GET",
@@ -179,15 +182,25 @@
                         console.log(data.error)
                     } else {
 
-                        this.selectProduct._id = data.materials[0]._id
-                        this.selectProduct.code = code
-                        this.selectProduct.type = data.materials[0].type
-                        this.selectProduct.description = data.materials[0].description
-                        this.selectProduct.quantity = quantity,
-                        this.selectProduct.uniMed = data.materials[0].uniMed
-                        this.selectProduct.location = data.materials[0].location
-                        this.selectProduct.stateQuantity = data.materials[0].stateQuantity
-                        this.selectProduct.isActive = data.materials[0].isActive
+                        const product = data.materials.find((item) => item.code == code)
+
+                        if(product){
+
+                            this.selectProduct = {
+                                _id: product._id,
+                                code: code,
+                                type: product.type,
+                                description: product.description,
+                                quantity: quantity,
+                                uniMed: product.uniMed,
+                                location: product.location,
+                                stateQuantity: product.stateQuantity,
+                                isActive: product.isActive
+                            }
+
+                        } else {
+                            console.log('nao corresponde')
+                        }
 
                     }
 
@@ -217,6 +230,8 @@
                 }
 
                 const jsonData = JSON.stringify(data)
+                console.clear()
+                console.log(this.selectProduct)
 
                 await fetch(`${this.apiURL}/api/materials`, {
                     method:"PUT",
@@ -240,7 +255,7 @@
                         
                         setTimeout(() => {
 
-                            this.sendingRegister()
+                            this.sendingRegister(this.selectProduct.code, this.selectProduct.description)
 
                         }, 1000)
                         
@@ -265,12 +280,12 @@
             
             },
 
-            async sendingRegister(){
+            async sendingRegister(code, description){
 
                 const data = {
 
-                    code: this.selectProduct.code,
-                    description: this.selectProduct.description,
+                    code: code,
+                    description: description,
                     quant: this.inputQuant,
                     date: this.inputDate,
                     sector: null,
@@ -279,6 +294,8 @@
                 }
 
                 const jsonData = JSON.stringify(data)
+
+                console.log(jsonData, " Registro ")
 
                 await fetch(`${this.apiURL}/api/histories`, {
                     method: "POST",
@@ -296,6 +313,8 @@
                         this.msgClass = 'error'
 
                     } else {
+
+                        console.log(data)
 
                         window.scrollTo({
                             top: 0,
