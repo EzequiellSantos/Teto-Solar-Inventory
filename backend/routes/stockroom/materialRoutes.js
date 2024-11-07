@@ -48,7 +48,7 @@ router.get('/search', async(req, res) => {
         
         let query = req.query.query
 
-        const materials = await Material.find({$text: {$search: `${query}` }}).limit(6)
+        const materials = await Material.find({$text: {$search: `${query}` }}).limit(16)
 
         if(materials === null){
 
