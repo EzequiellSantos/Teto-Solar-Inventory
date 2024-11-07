@@ -15,7 +15,7 @@
 
                 <div v-for="(material, indexTwo) in order.materials" :key="indexTwo">
                     
-                    <section :class="`section-orders ${ material.isArrivedSeparate === true ? 'Pedido' : ' ' }`" :id="`section${material._id}`">
+                    <section :class="`section-orders ${ material.isArrivedSeparate === true ? 'arrived' : ' ' }`" :id="`section${material._id}`">
 
                         <span>
                             {{material.code}} 
@@ -23,7 +23,7 @@
                             {{material.quantOrder}} 
                         </span>
 
-                        <input type="checkbox" :name="material.code" :id="material.code" v-model="material.isArrivedSeparate" @click="uniqueOrdedSelected(order._id, material._id, material.isArrivedSeparate == true ? false : true)"> 
+                        <input type="checkbox" class="input-check" :name="material.code" :id="material.code" v-model="material.isArrivedSeparate" @click="uniqueOrdedSelected(order._id, material._id, material.isArrivedSeparate == true ? false : true)"> 
                     
                     </section>
                 </div>
@@ -173,6 +173,25 @@
 </script>
 
 <style>
+
+    .card-order{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: auto;
+        width: 60%;
+        padding: 20px;
+        border-radius: 20px;
+        margin-block: 20px;
+        background-color: #f2f2f2;
+    }
+
+    input{
+        margin: 0;
+        border-radius: 10px;
+        background-color: aquamarine;
+    }
 
     .section-orders{
         color: red;
