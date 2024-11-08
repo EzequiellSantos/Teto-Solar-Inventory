@@ -13,8 +13,27 @@
 
             <div class="input-container">
                 <p><strong>Selecione o material:</strong></p>
+
+                <aside id="headerList" v-if="selectedMaterials.length !== 0">
+                    <span class="span-code">Cód.</span> 
+                    <span class="span-description">Descrição</span> 
+                    <span class="span-quant">Quanti</span>
+                    <span class="button-remove" ></span>
+                </aside>
+
                 <div v-for="(material, index) in selectedMaterials" :key="index">
-                    <p @click="selectProduct(material)">{{material.code}} {{material.description}} {{ material.quantity }}</p>
+                    
+                    <section class="list-itens">
+
+                        <button type="button" class="select-product-item" @click="selectProduct(material)">
+                            <span class="span-code">{{material.code}}</span>
+                            <span class="span-description">{{material.description}}</span>
+                            <span class="span-quant">{{ material.quantity }}</span>
+                            <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add">
+                        </button>
+
+                    </section>
+
                 </div>
             </div>
 
@@ -26,35 +45,41 @@
 
                 <div v-for="(material, index) in materials" :key="index">
 
-                    <span>{{material.code}}</span>
-                    <span>{{material.description}}</span> 
-                    <span>{{material.quantExist}}</span> 
-                    <span>{{ material.quantOrder }}</span>
-
-                    <input type="number" name="quantOrder" id="Order" v-model="quantOrder" placeholder="Quantidade">
-
-                    <button @click="adicionarPedido($event, material.code, material.description, material.quantExist, this.quantOrder)">
-                        Adicionar ao pedido
-                    </button>
+                    <section class="defining-quant">
+                        <span class="span-description">{{material.description}}</span>
+                        <input  type="number" class="input-quant" name="quantOrder" id="quantOrder" v-model="quantOrder" placeholder="Quanti.">
+                        <button @click="adicionarPedido($event, material.code, material.description, material.quantExist, this.quantOrder)">
+                            <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add">
+                        </button>
+                    </section>
 
                 </div>
                
             </div>
 
             <div class="input-container">
+
                 <strong>
                     <p>Lista de pedidos</p>
                 </strong>
 
+                <aside id="headerList" v-if="ordedMaterials.length !== 0">
+                    <span class="span-description">Descrição</span> 
+                    <span class="span-quant">Quanti</span>
+                    <span class="span-order">Pedido</span>
+                    <span class="button-remove" ></span>
+                </aside>
+
                 <div id="Order" v-for="(order, index) in ordedMaterials" :key="index">
 
-                    <span> 
-                        {{order.code}} 
-                        {{order.description}} 
-                        {{order.quantExist}} 
-                        {{order.quantOrder}} 
-                        <button @click="remove($event, index)">remover</button> 
-                    </span>
+                    <section class="orded-defined">  
+                        <span class="span-description">{{order.description}} </span>
+                        <span class="span-quant">{{order.quantExist}}</span> 
+                        <span class="span-order">{{order.quantOrder}}</span> 
+                        <button class="button-remove" @click="remove($event, index)">
+                            <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus">
+                        </button> 
+                    </section>
 
                 </div>
 
@@ -65,8 +90,10 @@
             <input type="hidden" name="quantExist" id="quantExist" v-model="quantExist">
 
             <div class="input-container">
+
                 <label for="date">Data:</label>
                 <input type="date" name="date" id="date" v-model="date" required>
+
             </div>
 
             <InputSubmit text="Criar"/>
@@ -76,7 +103,7 @@
     </div>
 
 </template>
- <script>
+<script>
 
     import Message from '@/components/Message.vue'
     import InputSubmit from '@/components/form/inputSubmit.vue'
@@ -212,7 +239,6 @@
 
                 this.ordedMaterials.push(jsonOrder)
                 this.quantOrder = null
-
                 this.materials = []
 
             },
@@ -339,5 +365,71 @@
         justify-content: center;
         align-items: center;
     }
+
+    #Order{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .defining-quant, .orded-defined{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 20px;
+        margin-block: 5px;
+    }
+
+    .defining-quant > button, .orded-defined > button{
+        background-color: transparent;
+    }
+
+    .defining-quant > input[type=number]{
+        background-color: #f2f2f2;
+    }
+
+    .orded-defined{
+        padding: 3px 5px;
+    }
+
+    .span-code{
+        flex-grow: 0;
+        margin-left: auto;
+    }
+
+    .span-description{
+        width: 400px;
+    }
+
+    .span-quant{
+        width: 60px;
+    }
+
+    .input-quant{
+        width: 55px;
+        margin: 0 10px;
+    }
+
+    .span-order{
+        width: 50px;
+    }
+
+    input[type=number].input-quant::-webkit-inner-spin-button{
+        -webkit-appearance: none;
+    }
+
+    .button-remove{
+        margin-right: auto;
+        flex-grow: 0;
+    }
+
+    #date, #search{
+        margin: auto;
+    }
+
 
  </style>

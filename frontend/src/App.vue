@@ -801,6 +801,10 @@
         padding: 14px;
     }
 
+    input[type=submit]{
+      padding: 10px 14px;
+    }
+
     a, button, img, svg, a > p, span > input, span > label{
       cursor: pointer;
     }
