@@ -70,6 +70,38 @@ router.get('/search', async(req, res) => {
 
 })
 
+//procurar por pesquisa e/ou tipo selecionado
+router.get('/searchChoice', async(req, res) => {
+
+    const param1 = req.query.param1
+    const param2 = req.query.param2
+
+    try {
+     
+        if(!param2){
+
+            const materials = await Material.find({$text: {$search: `${param1}`}})
+            console.log('teste com param1')
+            return res.status(200).json({error: null, materials: materials})
+    
+        } else {
+    
+            const materials = await Material.find({$text: {$search: `${param1}`}, stateQuantity: param2})
+            console.log('teste com param2', param2, materials)
+    
+            return res.status(200).json({error: null, materials: materials})   
+    
+        }
+        
+    } catch (error) {
+        
+        console.log(error)
+        res.status(400).json({error: "Erro ao bucar produtos"})
+
+    }
+
+})
+
 //procurar por itens ativados
 router.get('/actived', async(req, res) => {
 

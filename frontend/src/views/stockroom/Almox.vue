@@ -2,32 +2,47 @@
     
     <div id="Almox">
 
-        <section id="header">
+        <section id="headerAlmox">
 
             <h1>Almoxarifado</h1>
-            <router-link to="/registerProduct">Cadastrar Produto</router-link>
-            <router-link to="/">Home</router-link>
+            <router-link id="createProduct" to="/registerProduct">
 
-            <section id="choices">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAADzUlEQVR4nO2aSU9UQRDH24MORI2R+AVcghrBNWLwosGFRIgcNNEPIOIXMC7fQJDgQfHgTaMhqDc3YvTAEgIuZxdcIjcRDi6J6/xMOX0YKz0686Z7eE/fL5mEDO/9q7rmvequ7jImJSUlJSUlKMBKoAM4D9wDJoAZ4Kv9zNjv5H+99tpak2SAtUA3MEl03gCnRcskAWAO0AKM4J9hYI/YMHEE2ASMEZ5RYKOJC0AVcAb4/gen3wM3gWNAq80Ji4G59rPYftdqr7kFfPiDntjqATKzPfgVwOMCTmaBG8C+KI7awO63gRMtF4+A5WFG9xeARmC6wMD7gDrjCaAe6C8QhHfAFl+2igLYDXx0OPME2G4CATQBTx12xZddoez+BtBQYPAXgQUmMEA1cMFh/xOwtRLv/LTjkT8a1LDbl+OO3DAFLAtlsMqR8MSBQ0EMFudTuyMID4LMDuSmOk3Ff3mHXzJtak6HWOR8V0aumJhg808+4usGn8vbMUe2n29igiRf4JnycdiXeIvjEWsyMQPY5sgHzT6ER5Ron4kpwFXl62C5gnVKMOtrhacfKU+aa4AfSrq+HMFuJXbDh6OhAmB1pZDKp7McsUkltj8BATigpF9HFVrpKGkzCQhAtWOpviKK0BElctOXkyEDYLXvKPnDUUR6lcixBAXghJI/G0XkvhJpSVAA9ir5u1FEXimR2gQFYJWSfxFFZFqJ1JR4v1dKtL1E3T4VJQBflMi8BAUgo27/nAagVEhfAV7+Q0lwwsc02JqgALT5mAZ7//eFUIcSuZWgAAwo+fYoIrVKRM7qqhJSDMkZQXnFkGDP5//PcliwzQlJ2xC5raRP+d4Sq49rAIB1jo3R8vwl15mRT7+JKcB1r5uigm1LScK2+E6Hn7t9HYyMKuGnlTgJLhZgIfBc+Tjk08BGx9FYbM4HgEvKN/F1vW8jPY5H7LhXI9H8OunwqyuEoQzwUBnKRtpw9OdThyPrj5e6d1E00pBke3J0ELzWCSX88nrwb4GloQ1vLtDCdg1YVKGEd9lhX5a/jaHt/0Iakgr0CckR9Q4T1q7O9tgfZGcou06kNc325Li46rO/167w9CIn/7Fv8GWrJKQhyfbkuMjag0opTqojVnUH7dq+UKPkePB3vsjZQYqmbxTmoz2uOmEPLVbLNrtka/upsd+12WsGHCVtPmKrK1i2j4IsPBx1QwiG5JUwcQVoliIkwMAHvaztKwW5UrpTNiTKGLTce8pn3/GsQK7DVJoaz8kOrZ3Kpu3p0xf79zP7P7nmUORtrJSUlJSUFFMsPwEt7n/iXbzm4AAAAABJRU5ErkJggg==" alt="add--v1">    
+                <br><span>Novo Produto</span>
+                
+            </router-link>
 
-                <ul class="menu">
-                    
-                    <li class="menu-item"> 
-                        <span class="item">
-                            Tipo
-                            <img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/>
-                        </span>
-                        <ul class="sub-menu" id="ulTypes">
-                            <li class="sub-item" id="ChoiceAlto" @click="getTypeMaterial('Alto')">Alto</li>
-                            <li class="sub-item" id="ChoiceMediano" @click="getTypeMaterial('Mediano')">Mediano</li>
-                            <li class="sub-item" id="ChoiceCritico" @click="getTypeMaterial('Critico')">Critico</li>
-                            <li class="sub-item" id="ChoicePedido" @click="getTypeMaterial('Pedido')">Pedidos</li>
-                        </ul>
-                    </li>
+            <router-link id="homeAlmox" to="/">
+                <img src="/img/logo_icon_transparent_short_2.fa07d0c2.png" alt="Logo Teto Solar ">
+            </router-link>
 
-                </ul>
 
-            </section>
+            <div id="optionsAlmox" >
+
+                <input type="text" v-model="search" @input="searchProduct" placeholder="Código ou Descrição">
+
+                <section id="choices">
+
+                    <ul class="menu">
+                        
+                        <li class="menu-item"> 
+                            <span class="item">
+                                Tipo
+                                <img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/>
+                            </span>
+                            <ul class="sub-menu" id="ulTypes">
+                                <li class="sub-item" id="ChoiceAlto" @click="getTypeMaterial('Alto')">Alto</li>
+                                <li class="sub-item" id="ChoiceMediano" @click="getTypeMaterial('Mediano')">Mediano</li>
+                                <li class="sub-item" id="ChoiceCritico" @click="getTypeMaterial('Critico')">Critico</li>
+                                <li class="sub-item" id="ChoicePedido" @click="getTypeMaterial('Pedido')">Pedidos</li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </section>
+
+            </div>
             
             <div id="headerBar">
                 <p class="item01">#</p> 
@@ -38,7 +53,17 @@
 
         </section>
 
-        <main>
+        <main id="mainAlmox">
+
+                <div v-if="products == null || products.length == 0">
+                    <div class="spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
 
             <DataTableProducts :products="products" />
 
@@ -71,6 +96,8 @@
                 msg: null,
                 msgClass: null,
                 products: {},
+                search: null,
+                state: null,
                 apiURL: BASE_URL
 
             }
@@ -85,9 +112,70 @@
         },
         methods: {
 
+            async searchProduct(){
+                
+                if(this.search.length == 0 && this.search === "" && this.search.length < 2){
+
+                    setTimeout(() => {
+                        
+                        this.getAllMaterials()
+
+                    }, 900);
+
+                } else if(this.state != null){
+
+                    await fetch(`${this.apiURL}/api/materials/searchChoice?param1=${this.search}&param2=${this.state}`, {
+                        method:"GET",
+                        headers: {
+                            "Content-type":"Application/json"
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.error){
+
+                            console.error(data.error)
+
+                        } else {
+
+                            this.products = data.materials
+
+                        }
+
+                    })
+
+                } else {
+
+                    await fetch(`${this.apiURL}/api/materials/searchChoice?param1=${this.search}`, {
+                        method:"GET",
+                        headers: {
+                            "Content-type":"Application/json"
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.error){
+
+                            console.error(data.error)
+
+                        } else {
+
+                            this.products = data.materials
+
+                        }
+
+                    })
+
+                }
+
+            },
+
             async getTypeMaterial(state){
 
                 this.adequedStyles(state)
+                this.state = state
 
                 await fetch(`${this.apiURL}/api/materials/state?query=${state}`, {
                     method:"GET",
@@ -199,24 +287,59 @@
 
 <style scoped>
 
-    main{
+    main#mainAlmox{
         padding-bottom: 120px;
-        padding-top: 100px;
+        padding-top: 120px;
     }
 
-    section#header{
+    section#headerAlmox{
         background-color: var(--color-main00);
         color: #fff;
         position: fixed;
         top: 0;
         width: 100%;
-        height: 70px;
+        height: 100px;
+    }
+
+    section#headerAlmox > h1 {
+        font-size: 2.3em;
+        margin-block: 5px ;
+    }
+
+    #optionsAlmox{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #homeAlmox{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    #homeAlmox > img{
+        width: 100px;
+    }
+
+    #createProduct{
+        color: #fff;
+        text-decoration: none;
+        position: absolute;
+        right: 5px;
+        top: 10px;
+        display: block;
+    }
+
+    #createProduct > img{
+        width: 50px;
     }
 
     #headerBar{
         position: fixed;
         z-index: -1;
-        top: 70px;
+        top: 100px;
         left: 50%;
         transform: translateX(-50%);
         border-radius: 50px;
