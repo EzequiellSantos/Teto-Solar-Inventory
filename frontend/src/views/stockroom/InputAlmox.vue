@@ -228,6 +228,8 @@
                     isActive: this.selectProduct.isActive
                 }
 
+                const jsonData = JSON.stringify(data)
+
                 await fetch(`${this.apiURL}/api/materials`, {
                     method:"PUT",
                     headers: {
