@@ -9,7 +9,7 @@
 
             <router-link id="home" to="/">
             
-                <img data-v-a84d758e="" src="/img/logo_icon_transparent_short_2.fa07d0c2.png" alt="Logo Teto Solar ">
+                <img src="/img/logo_icon_transparent_short_2.fa07d0c2.png" alt="Logo Teto Solar ">
 
             </router-link>
 

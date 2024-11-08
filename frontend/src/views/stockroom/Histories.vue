@@ -4,11 +4,13 @@
 
         <Message :msg="msg" :msgClass="msgClass"/>
         
-        <section id="header">
+        <section id="headerHistories">
 
             <h1 style="color: #fff; margin-block:5px; font-size:1.9em;">Registros</h1>
 
-            <router-link to="/">Home</router-link>
+            <router-link id="homeHistories" to="/">
+                <img src="/img/logo_icon_transparent_short_2.fa07d0c2.png" alt="Logo Teto Solar ">
+            </router-link>
 
             <input type="text" id="search" name="search" @input="getHistories" v-model="search" placeholder="Código ou Descrição">
 
@@ -48,6 +50,16 @@
         </section>
 
         <main>
+
+            <div v-if="logs == null || logs.length == 0">
+                <div class="spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
 
             <div :id="product.code" @click="exibir(product.code)" v-for="(product, index) in products" :key="index">
 
@@ -315,11 +327,21 @@
 
 <style scoped>
 
-    #header{
+    #headerHistories{
         position: fixed;
         width: 100%;
         background-color: var(--color-main00);
         padding: 13px 0;
+    }
+
+    #homeHistories{
+        position: absolute;
+        top: 10px;
+        left: 0px;
+    }
+
+    #homeHistories > img{
+        width: 110px;
     }
 
     main{
