@@ -51,7 +51,7 @@
 
         <main>
 
-            <div v-if="logs == null || logs.length == 0">
+            <div v-if="products.length == null">
                 <div class="spinner">
                     <div></div>
                     <div></div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <div :id="product.code" @click="exibir(product.code)" v-for="(product, index) in products" :key="index">
+                <div class="div-container-histories" :id="product._id" @click="exibir(product._id)" v-for="(product, index) in products" :key="index">
 
                 <section class="item">
                     
@@ -72,7 +72,7 @@
                     <!-- <router-link :to="`/editHistory/${product._id}`">
                         editar
                     </router-link>  -->
-                    <p class="info-extra">{{product.date}}</p>
+                    <span class="info-extra">Data: {{product.date}}</span>
 
                 </section>
 
@@ -117,15 +117,18 @@
         },
         methods:{
 
-            exibir(code){
-                const item = document.getElementById(`${code}`)
+            exibir(id){
+
+                const item = document.getElementById(`${id}`)
 
                 if(item.classList.contains('exibir')){
 
                     item.classList.remove('exibir')
                     
                 } else {
+                    
                     item.classList.add('exibir')
+
                 }
                 
             },
@@ -155,8 +158,6 @@
 
                 }
 
-                console.log(this.search)
-
                 await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}`, {
                     method: "GET",
                     headers: {
@@ -168,7 +169,7 @@
 
                     if (data.error) {
                         
-                        console.error(data.error)
+                        // console.error(data.error)
 
                     } else {
                         
@@ -262,56 +263,6 @@
 
             },
 
-            async getHistoryForSearch(){
-
-                if(this.search.length > 4){
-                    
-                    await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}`, {
-                        method:"GET",
-                        headers: {
-                            "Content-type":"application/json"
-                        }
-                    })
-                    .then((resp) => resp.json())
-                    .then((data) => {
-
-                        if(data.error){
-
-
-
-                        } else {
-
-                            this.products = data.histories
-                            this.scrollBottom()
-
-                        }
-
-                    })
-                    .catch((err) => {
-
-                        this.msg = err
-                        this.msgClass = 'error'
-                        console.log(err)
-
-                    })
-                    .catch((err) => {
-
-                        this.msg = err
-                        this.msgClass = 'error'
-                        consle.error(err)
-
-                    })
-
-                }
-
-                setTimeout(() => {
-                        
-                    this.msg = null
-
-                }, 1500);
-
-            },
-
             scrollBottom(){
                 window.scrollTo({
                     top: document.documentElement.scrollHeight, // Altura total do documento
@@ -332,6 +283,7 @@
         width: 100%;
         background-color: var(--color-main00);
         padding: 13px 0;
+        z-index: 2;
     }
 
     #homeHistories{
@@ -348,11 +300,18 @@
         padding: 160px 0 100px 0;
     }
 
-    p.item{
+    .div-container-histories{
         display: flex;
         flex-direction: row;
         align-content: center;
-        justify-content: space-between;
+        justify-content: center;
+
+        background-color: #F8F8F8;
+        padding: 13px;
+        border-radius: 20px;
+        width: 70%;
+        margin: auto;
+        margin-block: 10px;
     }
 
     .index{
@@ -367,7 +326,7 @@
     }
 
     .description{
-        min-width: 500px;
+        min-width: 600px;
     }
 
     .quant{
@@ -377,8 +336,11 @@
     .info-extra{
         display: none;
         position: absolute;
-        margin-top: 23px ;
-        margin-left: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-right: auto;
+        margin-top: 30px ;
+        z-index: 1;
     }
 
     .exibir .info-extra{
@@ -418,7 +380,7 @@
         }
 
         100%{
-            height: 65px;
+            height: 50px;
         }
 
     }
