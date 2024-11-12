@@ -16,6 +16,9 @@ const TrackingSchema = new mongoose.Schema({
     brand: {
         type: String
     },
+    power: {
+        type: Number
+    },
     panelsCount:{
         type: Number,
     },
