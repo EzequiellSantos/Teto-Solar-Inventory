@@ -216,6 +216,7 @@
 
     #Saidas, #Entradas{
         width: 20px;
+        height: 20px;
         margin: 0 5px;
         accent-color: rgb(0, 20, 136);
         outline: none;
@@ -229,7 +230,7 @@
         justify-content: center;
         border: 1px solid #fff;
         border-radius: 20px;
-        padding: 0px 5px;
+        padding: 7px;
     }
 
 </style>

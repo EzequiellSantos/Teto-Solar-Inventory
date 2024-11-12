@@ -70,6 +70,10 @@
     cursor: text;
   }
 
+  input[type=submit]{
+    padding: 10px 14px;
+  }
+
   /* configurações do container de pesquisa */
 
   #search-container{
@@ -799,10 +803,6 @@
     
     input, select{
         padding: 14px;
-    }
-
-    input[type=submit]{
-      padding: 10px 14px;
     }
 
     a, button, img, svg, a > p, span > input, span > label{

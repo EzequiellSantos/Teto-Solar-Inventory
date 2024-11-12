@@ -196,7 +196,7 @@
         padding-bottom: -4px;
     }
 
-    input{
+    #user, #password{
         border: none;
         border-bottom: 2px solid rgb(0, 140, 255);
         background-color: rgb(252, 252, 252);
@@ -205,7 +205,11 @@
         transition: all 0.3s ease-in;
     }
 
-    input:focus{
+    #password{
+        height: 30px;
+    }
+
+    #user:focus, #password:focus{
         outline: none;
         box-shadow: 0em 0.07em 0.6em rgba(0, 0, 0, 0.219);
     }
@@ -216,7 +220,7 @@
             width: 70%;
         }
 
-        input{
+        #user, #password{
             width: 50%;
         }
 
@@ -228,7 +232,7 @@
             width: 90%;
         }
 
-        input{
+        #user, #password{
             width: 60%;
         }
 

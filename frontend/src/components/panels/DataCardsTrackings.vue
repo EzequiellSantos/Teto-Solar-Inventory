@@ -9,6 +9,7 @@
 
                 <section class="card" :id="`${tracking.batchId}`">
                     <h2>{{ tracking.brand }}</h2>
+                    <p v-if="tracking.power != null"><strong>Potência:</strong> {{ tracking.power }}</p>
                     <p><strong>Cliente:</strong> {{ tracking.client }}</p>
                     <p><strong>Quant:</strong> {{ tracking.panelsCount }} Placas</p>
                     <p><strong>Entrada:</strong> {{ tracking.inputDate }}</p>
@@ -22,6 +23,7 @@
 
                 <section class="card">
                     <h2>{{ tracking.brand }}</h2>
+                    <p v-if="tracking.power != null"><strong>Potência:</strong> {{ tracking.power }}</p>
                     <p><strong>Cliente:</strong> {{ tracking.client }}</p>
                     <p><strong>Quant:</strong> {{ tracking.panelsCount }} Placas</p>
                     <p><strong>Entrada:</strong> {{ tracking.inputDate }}</p>
@@ -72,7 +74,7 @@
         background-color: #eee;
         border-radius: 20px;
 
-        height: 180px;
+        height: 200px;
         min-width: 200px;
 
         padding: 20px 10px 10px 15px;
