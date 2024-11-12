@@ -68,7 +68,7 @@ router.get('/searchSeparate', async(req, res) => {
 
     try {
         
-        //coleta o setor escolhido e 
+        //coleta o setor escolhido e pesquisa os produtos que ele levou
         const historySpecifc = await History.find({sector: sector, $text: {$search: search}})
 
         // verifica se o produto foi encontrado

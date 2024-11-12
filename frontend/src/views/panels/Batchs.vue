@@ -195,7 +195,6 @@
                 
                 const header = document.getElementById('header')
                 const info = document.getElementById('infoContainer')
-                console.log(header.offsetHeight)
 
                 // header.style.height = `${header.offsetHeight + 4}px`
                 info.style.marginTop = `${header.offsetHeight * 1.8}px`
