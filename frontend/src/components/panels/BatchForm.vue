@@ -174,6 +174,7 @@
                     batchId: this.batchId,
                     invoice: this.invoice,
                     brand: this.brand,
+                    power: this.power,
                     client: this.client,
                     panelsCount: this.count,
                     inputDate: this.inputDate,
@@ -226,7 +227,8 @@
                     brand: this.brand,
                     invoice: this.invoice,
                     client: this.client,
-                    power: this.power
+                    power: this.power,
+                    panelsCount: this.count
 
                 }
 
@@ -269,24 +271,25 @@
 
                 })
 
-                /* 
                 //data updated for tracking
                 const dataTracking = {
 
                     id: this.trackingId,
                     batchId: this.batchId,
                     invoice: this.invoice,
+                    power: this.power,
                     brand: this.brand,
                     client: this.client,
                     panelsCount: this.count,
                     inputDate: this.inputDate,
-                    inputChecked: this.inputChecked
+                    inputChecked: this.inputChecked,
+                    type: "Entrada"
 
                 }
 
                 const jsonDataTracking = JSON.stringify(dataTracking)
 
-                await fetch(`${this.apiURL}/api/trackings/output`, {
+                await fetch(`${this.apiURL}/api/trackings/`, {
                     method: "PUT",
                     headers:{
                         "Content-type":"application/json"
@@ -315,7 +318,7 @@
 
                     }
 
-                }) */
+                })
 
             }
 

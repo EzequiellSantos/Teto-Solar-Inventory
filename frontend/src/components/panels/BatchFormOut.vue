@@ -191,6 +191,7 @@ export default {
                 batchId: this.id,
                 invoice: this.invoice,
                 brand: this.brand,
+                power: this.power,
                 client: this.client,
                 panelsCount: this.count,
                 inputDate: this.inputDate,
