@@ -252,7 +252,7 @@ router.put('/', async(req, res) => {
         
         const material = {
 
-            id: id,
+            _id: id,
             type: type,
             code: code, 
             description: description, 
