@@ -258,6 +258,7 @@
         background-color: var(--color-main00);
         color: #fff;
         height: 60px;
+        z-index: 2;
     }
 
     #headerOrder > h1{
