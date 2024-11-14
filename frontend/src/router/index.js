@@ -126,12 +126,18 @@ const routes = [
   {
     path: '/registerInput',
     name: "registerInput",
-    component: () => import(/* webpackChunkName: "inputalmox" */ '../views/stockroom/InputAlmox.vue')
+    component: () => import(/* webpackChunkName: "inputalmox" */ '../views/stockroom/InputAlmox.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/registerOutput',
     name: "registeroutput",
-    component: () => import(/* webpackChunkName: "registeroutput" */ '../views/stockroom/OutputAlmox.vue')
+    component: () => import(/* webpackChunkName: "registeroutput" */ '../views/stockroom/OutputAlmox.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/materials',
