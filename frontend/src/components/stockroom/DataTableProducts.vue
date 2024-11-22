@@ -5,7 +5,7 @@
         <section class="bar" :id="`${product.code}`" v-for="(product, index) in products" :key="index">
 
             <p class="item" @click="exibir(product.code)">
-                <span class="index">{{index}}</span> 
+                <span class="index">{{index + 1}}</span> 
                 <span class="code">{{product.code}}</span> 
                 <span class="description">{{ product.description }}</span> 
                 <span :class="`state-quantity ${product.stateQuantity}`">{{product.quantity}}</span>

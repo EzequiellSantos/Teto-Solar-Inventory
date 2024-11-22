@@ -292,8 +292,6 @@
 
                 const jsonData = JSON.stringify(data)
 
-                console.log(jsonData, " Registro ")
-
                 await fetch(`${this.apiURL}/api/histories`, {
                     method: "POST",
                     headers: {
@@ -310,8 +308,6 @@
                         this.msgClass = 'error'
 
                     } else {
-
-                        console.log(data)
 
                         window.scrollTo({
                             top: 0,

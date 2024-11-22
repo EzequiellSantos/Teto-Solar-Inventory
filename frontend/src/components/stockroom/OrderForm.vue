@@ -48,7 +48,7 @@
                     <section class="defining-quant">
                         <span class="span-description">{{material.description}}</span>
                         <input  type="number" class="input-quant" name="quantOrder" id="quantOrder" v-model="quantOrder" placeholder="Quanti.">
-                        <button @click="adicionarPedido($event, material.code, material.description, material.quantExist, this.quantOrder)">
+                        <button @click="adicionarPedido($event, material._id, material.code, material.description, material.quantExist, this.quantOrder)">
                             <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add">
                         </button>
                     </section>
@@ -223,12 +223,13 @@
 
             },
 
-            adicionarPedido(e, code, description, quant, order){
+            adicionarPedido(e, id, code, description, quant, order){
 
                 e.preventDefault()
                 
                 const jsonOrder = {
 
+                    _id: id,
                     code: code,
                     description: description,
                     quantExist: quant,

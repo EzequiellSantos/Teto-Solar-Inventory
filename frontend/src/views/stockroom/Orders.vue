@@ -149,6 +149,7 @@
                     materialFind.stateQuantity = "Pedido"
                     const jsonDataMaterial = JSON.stringify(materialFind)
                     this.updateMaterialForInventory(jsonDataMaterial) 
+                    
 
                 }
 

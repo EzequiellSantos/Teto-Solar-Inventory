@@ -60,7 +60,6 @@
 
                         this.product = data.material
                         this.componentKey += 1
-                        console.log(this.product);
 
                     }
 

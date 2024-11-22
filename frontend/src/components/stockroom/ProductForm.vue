@@ -146,7 +146,6 @@
 
                         this.msg = data.msg
                         this.msgClass = 'sucess'
-                        console.log(data)
 
                     }
 
@@ -183,8 +182,6 @@
                 }
                 
                 const jsonData = JSON.stringify(data)
-
-                console.log(jsonData)
 
                 await fetch(`${this.apiURL}/api/materials`, {
                     method: "PUT",
