@@ -79,7 +79,13 @@
                 orders: {},
                 arrived: false,
                 msg: null,
-                msgClass: null
+                msgClass: null,
+                materialFind: {
+                    id: null,
+                    quantity: null,
+                    minQuantity: null,
+                    stateQuantity: null,
+                }
             }
 
         },
@@ -91,10 +97,13 @@
         },
         methods: {
 
+            // função para coletar dados e atualizar de acordo com o select clicado
             async uniqueOrdedSelected(idOrder, idMaterial, isArrivedSeparate){
 
+                //coleta do elemento html
                 const sectionElementCode = document.getElementById(`section${idMaterial}`)
 
+                //atualização dos styles
                 if(isArrivedSeparate){
 
                     sectionElementCode.classList.add('arrived')
@@ -112,8 +121,8 @@
                 }
 
                 const jsonData = JSON.stringify(data)
-                const materialFind = {}
 
+                //coletando informações do produto selecionado
                 await fetch(`${this.apiURL}/api/materials/${idMaterial}`,{
                     method: "GET",
                     headers: {
@@ -129,30 +138,32 @@
 
                     } else {
 
-                        materialFind.id = data.material._id
-                        materialFind.minQuantity = data.material.minQuantity
-                        materialFind.quantity = data.material.quantity
-                        materialFind.stateQuantity = "Alto"
+                        //coleta os campos do material selecionado
+                        this.materialFind.id = data.material._id
+                        this.materialFind.minQuantity = data.material.minQuantity
+                        this.materialFind.quantity = data.material.quantity
+                        this.materialFind.stateQuantity = "Alto"
 
                     }
 
                 })
 
+                //verificar se o material foi selecionado como chegado
                 if(sectionElementCode.classList.contains('arrived')){
 
-                    const jsonDataMaterial = JSON.stringify(materialFind)
-
+                    const jsonDataMaterial = JSON.stringify(this.materialFind)
                     this.updateMaterialForInventory(jsonDataMaterial)
 
                 } else {
 
-                    materialFind.stateQuantity = "Pedido"
-                    const jsonDataMaterial = JSON.stringify(materialFind)
+                    //caso o usuário ative e desative a caixa de select, o material é atualizado como pedido novamente
+                    this.materialFind.stateQuantity = "Pedido"
+                    const jsonDataMaterial = JSON.stringify(this.materialFind)
                     this.updateMaterialForInventory(jsonDataMaterial) 
-                    
 
                 }
 
+                //atualiza como uniqueOrderArrived de acordo com o que o usuario definiu (true or false)
                 await fetch(`${this.apiURL}/api/orders/updateUniqueOrder`, {
                     method: "PUT",
                     headers: {
@@ -180,7 +191,14 @@
 
             },
 
+            //atualizando o material que chegou no estoque de acordo com o state quantity
+            /* 
 
+                pode-se adicionar uma feature para atualizar automaticamente a quantidade
+                ja pedida no estoque evitando assim o trabalho de inserir manualmente na seção
+                de entrada.
+            
+            */
             async updateMaterialForInventory(json){
 
                 await fetch(`${this.apiURL}/api/materials/`, {
@@ -206,6 +224,7 @@
                 })
             },
 
+            //coletando todas os pedidos
             async getOrders(){
 
                 await fetch(`${this.apiURL}/api/orders/all`, {
@@ -236,6 +255,7 @@
 
             },
 
+            //rolagem para baixo --- precisa ser melhorada
             scrollBottom(){
 
                 window.scrollTo({

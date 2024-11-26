@@ -265,7 +265,7 @@ router.put('/', async(req, res) => {
 
         }
 
-        const updateMaterial = await Material.findOneAndUpdate({_id: id}, {$set: material}, {new: true})
+        const updateMaterial = await Material.findOneAndUpdate({_id: id}, {$set: material})
 
         res.status(200).json({msg: "Material atualizado com sucesso", updateMaterial: updateMaterial})
 

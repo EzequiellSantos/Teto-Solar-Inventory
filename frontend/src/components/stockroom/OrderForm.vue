@@ -144,7 +144,7 @@
 
             async gerarPDF(jsonData, date) {
 
-                const jsonSimplificado = jsonData.map(({ code, isArrivedSeparate, ...resto }) => resto)
+                const jsonSimplificado = jsonData.map(({ _id, code, isArrivedSeparate, ...resto }) => resto)
                 
                 const jsonRenomeado = jsonSimplificado.map(({description, quantExist, quantOrder, ...resto}) => ({
                     ...resto,
@@ -209,6 +209,7 @@
 
                 if(!this.materialsId.includes(product._id)){
                     const objectProduct = {
+                        _id: product._id,
                         code: product.code,
                         description: product.description,
                         quantExist: product.quantity,
