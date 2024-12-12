@@ -38,6 +38,7 @@
                             <li class="sub-item" id="ChoiceEQUIPE 06" @click="getHistoryForSector('EQUIPE 06')">Equipe 06</li>
                             <li class="sub-item" id="ChoiceEQUIPE 07" @click="getHistoryForSector('EQUIPE 07')">Equipe 07</li>
                             <li class="sub-item" id="ChoiceALMOXARIFADO" @click="getHistoryForSector('ALMOXARIFADO')">Almoxarifado</li>
+                            <li class="sub-item" id="ChoiceMANUTENCAO" @click="getHistoryForSector('MANUTENCAO')">Manutenção</li>
                             <li class="sub-item" id="ChoiceLOJA" @click="getHistoryForSector('LOJA')">Loja</li>
                             <li class="sub-item" id="Choice" @click="getHistoryForSector()"></li>
                         </ul>
