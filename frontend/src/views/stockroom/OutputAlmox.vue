@@ -64,7 +64,7 @@
                         <option value="EQUIPE 05">EQUIPE 05</option>
                         <option value="EQUIPE 06">EQUIPE 06</option>
                         <option value="EQUIPE 07">EQUIPE 07</option>
-                        <option value="MANUTENÇÂO">Manutenção</option>
+                        <option value="MANUTENCAO">Manutenção</option>
                         <option value="LOJA">Loja</option>
                         <option value="ALMOXARIFADO">Almoxarifado</option>
                         <!-- <option value="FINANCEIRO">Financeiro</option> -->
