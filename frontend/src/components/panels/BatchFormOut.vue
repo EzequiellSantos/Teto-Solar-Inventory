@@ -227,7 +227,7 @@ export default {
 
                     if(this.count == 0){
 
-                        this.deleteBatch()
+                        this.hiddenBatch()
 
                     } else {
 
@@ -254,18 +254,19 @@ export default {
 
         },
         
-        async deleteBatch(){
+        async hiddenBatch(){
 
             const id = this.id
 
             const data = {
-                id: id
+                id: id,
+                panelsCount: this.count
             }
 
             const jsonData = JSON.stringify(data)
 
-            await fetch(`${this.apiURL}/api/batchs/`, {
-                method:"DELETE",
+            await fetch(`${this.apiURL}/api/batchs/hidden`, {
+                method:"PUT",
                 headers:{
                     "Content-type":"application/json"
                 },
@@ -304,7 +305,8 @@ export default {
                 brand: this.brand,
                 invoice: this.invoice,
                 power: this.power,
-                panelsCount: this.count
+                panelsCount: this.count,
+                stateInventory: this.count == 0 ? "Cliente" : "Estoque"
             }
 
             const jsonData = JSON.stringify(data)

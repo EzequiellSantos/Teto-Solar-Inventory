@@ -10,7 +10,7 @@ router.post('/power', async(req, res) => {
     
     try{
 
-        const result = await Batch.find({ "brand": brand, "power": power }) 
+        const result = await Batch.find({ "brand": brand, "power": power, stateInventory:"Estoque" }) 
 
         if(result.length === 0){
 
@@ -38,7 +38,7 @@ router.post('/panels', async(req, res) => {
     try{
 
         //retorna apenas o embeded document correspondente aos itens
-        const panels = await Batch.find({invoice: invoice, panels: panelSn})
+        const panels = await Batch.find({invoice: invoice, panels: panelSn, stateInventory:"Estoque"})
 
         //verifica se existe resultado para a query
         if(panels[0]){
@@ -87,7 +87,23 @@ router.post('/invoice', async(req, res) => {
 
 })
 
-// resgatando todas as marcas
+//resgatando os lotes no estoque
+router.get('/', async (req, res) => {
+
+    try{
+
+        const batchs = await Batch.find({stateInventory: "Estoque"})
+        res.json({error: null, batchs: batchs})
+
+    } catch (error){
+
+        res.status(400).json({ error: "Erro ao coletar marcas diferentes" })
+
+    }
+
+})
+
+// resgatando todas as marcas de todos os clientes
 router.get('/all', async (req, res) => {
 
     try{
@@ -110,7 +126,7 @@ router.get('/:brand', async (req, res) => {
     
     try {
         
-        const batchData = await Batch.find({brand: brand}) 
+        const batchData = await Batch.find({brand: brand, stateInventory:"Estoque"}) 
         res.status(201).json({ error: null, msg: "Marca encontrada", brand: batchData })
 
     } catch (error) {
@@ -165,7 +181,7 @@ router.post('/id', async(req, res) => {
 //enviando dados
 router.post('/', async (req, res) => {
 
-    const { brand, invoice, client, power, panels, panelsCount } = req.body
+    const { brand, invoice, client, power, panels, panelsCount, stateInventory } = req.body
 
     try{
 
@@ -175,11 +191,12 @@ router.post('/', async (req, res) => {
             client: client,
             power: power,
             panels: panels,
-            panelsCount: panelsCount
+            panelsCount: panelsCount,
+            stateInventory: stateInventory
         }
        
         // caso não exista, cria uma nova marca
-        const batch = new Batch({ brand: brand, invoice: invoice, client: client, panels: panels, power: power, panelsCount: panelsCount })
+        const batch = new Batch({ brand: brand, invoice: invoice, client: client, panels: panels, power: power, panelsCount: panelsCount, stateInventory: stateInventory })
 
         await batch.save()
 
@@ -204,6 +221,7 @@ router.put('/', async(req, res) => {
     const power = req.body.power
     const panels = req.body.panels
     const panelsCount = req.body.panelsCount
+    const stateInventory = req.body.stateInventory
 
     const batchData = {
         id: batchId,
@@ -212,7 +230,8 @@ router.put('/', async(req, res) => {
         client: client,
         power: power,
         panels: panels,
-        panelsCount: panelsCount
+        panelsCount: panelsCount,
+        stateInventory: stateInventory
     }
 
     try {
@@ -225,12 +244,32 @@ router.put('/', async(req, res) => {
 
         }
 
-        res.status(201).json({error: null, msg:"Lote atualizado com sucesso", data: batchData})
+        res.status(201).json({error: null, msg:"Saida de placas registradas", data: batchData})
         
     } catch (error) {
         
         res.status(400).json({ error: "Erro ao atualizar item" })
         console.log(error);
+        
+    }
+
+})
+
+router.put("/hidden", async (req, res) => {
+
+    const id = req.body.id
+    const panelsCount = req.body.panelsCount
+
+    try {
+        
+        const batch = await Batch.findOneAndUpdate({_id: id}, {stateInventory: "Cliente", panelsCount: panelsCount}, {new: true})
+
+        res.status(200).json({msg: "Lote enviado para cliente", data: batch});
+
+    } catch (error) {
+     
+        res.status(400).json({error: "Erro ao atualizar lote completo"})
+        console.log(error)
         
     }
 

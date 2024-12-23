@@ -22,6 +22,9 @@ const BatchSchema = new mongoose.Schema({
     panelsCount: {
         type: Number,
         required: true
+    },
+    stateInventory: {
+        type: String
     }
 
 })
