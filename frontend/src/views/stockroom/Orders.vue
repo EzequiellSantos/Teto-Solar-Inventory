@@ -142,7 +142,7 @@
                         this.materialFind.id = data.material._id
                         this.materialFind.minQuantity = data.material.minQuantity
                         this.materialFind.quantity = data.material.quantity
-                        this.materialFind.stateQuantity = "Alto"
+                        this.materialFind.stateQuantity = " "
 
                     }
 

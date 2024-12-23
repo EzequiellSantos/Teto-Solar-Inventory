@@ -83,7 +83,7 @@
 
                 try{
 
-                    await fetch(`${this.apiURL}/api/batchs/all`, {
+                    await fetch(`${this.apiURL}/api/batchs/`, {
 
                         method:"GET",
                         headers: {

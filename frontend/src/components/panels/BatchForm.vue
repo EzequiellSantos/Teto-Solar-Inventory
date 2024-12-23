@@ -178,7 +178,8 @@
                     client: this.client,
                     panelsCount: this.count,
                     inputDate: this.inputDate,
-                    inputChecked: this.inputChecked
+                    inputChecked: this.inputChecked,
+                    stateInventory: "Estoque"
 
                 }
 
@@ -228,7 +229,8 @@
                     invoice: this.invoice,
                     client: this.client,
                     power: this.power,
-                    panelsCount: this.count
+                    panelsCount: this.count,
+                    stateInventory: this.count == 0 ? "Cliente" : "Estoque"
 
                 }
 
