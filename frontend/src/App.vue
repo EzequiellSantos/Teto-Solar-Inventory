@@ -4,7 +4,7 @@
 
     <router-view class="container"></router-view>
     
-    <!-- <SpeedInsights/> -->
+    <SpeedInsights/>
 
   </div>
 
