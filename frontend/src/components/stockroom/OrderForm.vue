@@ -233,7 +233,6 @@
                     _id: id,
                     code: code,
                     description: description,
-                    quantExist: quant,
                     quantOrder: order,
                     isArrivedSeparate: false
 
