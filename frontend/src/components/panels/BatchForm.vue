@@ -129,7 +129,8 @@
                     client: this.client,
                     power: this.power,
                     panels:null,
-                    panelsCount: this.count
+                    panelsCount: this.count,
+                    stateInventory: "Estoque"
 
                 }
 
@@ -179,7 +180,6 @@
                     panelsCount: this.count,
                     inputDate: this.inputDate,
                     inputChecked: this.inputChecked,
-                    stateInventory: "Estoque"
 
                 }
 
