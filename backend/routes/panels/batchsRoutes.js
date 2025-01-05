@@ -10,7 +10,7 @@ router.post('/power', async(req, res) => {
     
     try{
 
-        const result = await Batch.find({ "brand": brand, "power": power, stateInventory:"Estoque" }) 
+        const result = await Batch.find({ "brand": brand, "power": power, stateInventory:"Estoque" }).limit(333)
 
         if(result.length === 0){
 
@@ -38,7 +38,7 @@ router.post('/panels', async(req, res) => {
     try{
 
         //retorna apenas o embeded document correspondente aos itens
-        const panels = await Batch.find({invoice: invoice, panels: panelSn, stateInventory:"Estoque"})
+        const panels = await Batch.find({invoice: invoice, panels: panelSn, stateInventory:"Estoque"}).limit(333)
 
         //verifica se existe resultado para a query
         if(panels[0]){
@@ -69,7 +69,7 @@ router.post('/invoice', async(req, res) => {
         //verifica se existe resultado para a query
         if(brand[0]){
 
-            return res.status(200).json({ error: null, msg: "Lote encontrado!", data: brand }) 
+            return res.status(200).json({ error: null, msg: "Lote encontrado!", data: brand })
                       
         } else {
 
@@ -92,7 +92,7 @@ router.get('/', async (req, res) => {
 
     try{
 
-        const batchs = await Batch.find({stateInventory: "Estoque"})
+        const batchs = await Batch.find({stateInventory: "Estoque"}).limit(333)
         res.json({error: null, batchs: batchs})
 
     } catch (error){
@@ -126,7 +126,7 @@ router.get('/:brand', async (req, res) => {
     
     try {
         
-        const batchData = await Batch.find({brand: brand, stateInventory:"Estoque"}) 
+        const batchData = await Batch.find({brand: brand, stateInventory:"Estoque"}).limit(333)
         res.status(201).json({ error: null, msg: "Marca encontrada", brand: batchData })
 
     } catch (error) {
@@ -145,7 +145,7 @@ router.post('/search', async(req, res) => {
 
     try {
         
-        const batch = await Batch.find({$text: {$search: search}})
+        const batch = await Batch.find({$text: {$search: search}}).limit(333)
         res.status(200).json({error: null, batch: batch})
 
     } catch (error) {
