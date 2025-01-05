@@ -7,12 +7,61 @@ router.get('/all', async(req, res) => {
     try {
         
         const trackings = await Tracking.find({})
-
         res.status(200).json({error: null, trackings: trackings})
 
     } catch (error) {
 
         res.status(401).json({error: "Erro ao coletar os registros"})
+        console.log(error)
+        
+    }
+
+})
+
+//coletando pesquisa
+router.get('/search', async(req, res) => {
+
+    let type = ""
+    let trackings = ""
+
+    const search = req.query.search
+    type = req.query.type
+
+    try {
+
+        if(type == "null"){
+
+            trackings = await Tracking.find({$text: { $search: search}})
+            
+            if(trackings.length != 0){
+
+                return res.status(200).json({error: null, trackings: trackings})
+
+            } else {
+
+                return res.status(200).json({error: "Erro de busca por registros :/"})
+
+            }
+
+        } else {
+
+            trackings = await Tracking.find({$text: { $search: search}, type: type})
+            
+            if(trackings.length != 0){
+
+                return res.status(200).json({error: null, trackings: trackings})
+
+            } else {
+
+                return res.status(200).json({error: "Erro de busca por registros"})
+
+            }
+
+        }
+
+    } catch (error) {
+
+        res.status(401).json({error: `Erro ao coletar os registros de ${search}`})
         console.log(error)
         
     }
@@ -29,7 +78,7 @@ router.get('/input', async(req, res) => {
 
     } catch (error) {
         
-        res.status(400).json({ error: "Fala na coleta de movimentos" })
+        res.status(400).json({ error: "Falha na coleta de movimentos" })
         console.log(error)
 
     }
