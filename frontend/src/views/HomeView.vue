@@ -38,7 +38,7 @@
         <section class="card">
 
           <img id="materialsIcon" class="icon-links" src="../../public/almox_img100.png" alt="panel">
-          <p id="panels">Almoxarifado</p>
+          <p id="almox">Almoxarifado</p>
 
         </section>
 
@@ -169,7 +169,7 @@ export default {
     margin-top: 5px;
   }
 
-  p#panels{
+  p#panels, p#almox{
     margin-top: 5px;
   }
 
