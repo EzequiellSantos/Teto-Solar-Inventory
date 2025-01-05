@@ -87,7 +87,7 @@
 
                         method:"GET",
                         headers: {
-                            "Content-type":"application/json"
+                            "Content-type":"application/x-www-form-urlencoded"
                         }
 
                     })
