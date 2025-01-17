@@ -155,7 +155,10 @@ const routes = [
   {
     path: '/editProduct/:id',
     name: "editproduct",
-    component: () => import(/* webpackChunkName: "editproduct" */ '../views/stockroom/EditProduct.vue')
+    component: () => import(/* webpackChunkName: "editproduct" */ '../views/stockroom/EditProduct.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/orders',
