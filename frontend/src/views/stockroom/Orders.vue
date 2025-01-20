@@ -242,7 +242,8 @@
 
                     } else {
 
-                        this.orders = data.data 
+                        this.orders = data.data
+                        this.scrollBottom()
 
                     }
 
