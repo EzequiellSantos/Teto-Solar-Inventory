@@ -114,7 +114,8 @@
         },
         mounted () {
 
-            this.getTypeHistory('Saida')
+            this.getTypeHistory('Saida'),
+            this.scrollBottom()
 
         },
         methods:{
