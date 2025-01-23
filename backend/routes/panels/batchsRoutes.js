@@ -131,7 +131,7 @@ router.get('/:brand', async (req, res) => {
 
     } catch (error) {
        
-        res.status(401).json({ error: "Falaha ao buscar marca" })
+        res.status(401).json({ error: "Falha ao buscar marca" })
         console.log(error);
         
     }
