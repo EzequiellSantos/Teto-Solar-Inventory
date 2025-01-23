@@ -100,7 +100,7 @@
     .section-nav > a{
         text-decoration: none;
         font-size: clamp(0.75rem, 0.6375rem + 0.6vw, 1.125rem);
-        padding: 5px 24px ;
+        padding: 21px 24px ;
         border-radius: 30px;
         color: #2e2e2e;   
         cursor: pointer;
