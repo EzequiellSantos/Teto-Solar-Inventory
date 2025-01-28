@@ -228,7 +228,7 @@ import { provide } from 'vue'
                     quantity: this.selectProduct.quantity - this.outputQuant,
                     minQuantity: this.selectProduct.minQuantity,
                     uniMed: this.selectProduct.uniMed,
-                    location: this.selectProduct.uniMed,
+                    location: this.selectProduct.location,
                     stateQuantity: this.selectProduct.stateQuantity,
                     isActive: this.selectProduct.isActive
                 }
