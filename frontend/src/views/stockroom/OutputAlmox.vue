@@ -26,8 +26,8 @@
 
                     <section class="list-itens">
 
-                        <button type="button" class="select-product-item" @click="addSelectedProduct(product.code, product.quantity)" >
-                            <span>{{ product?.code }}</span> 
+                        <button type="button" class="select-product-item" @click="addSelectedProduct(product.code, product.quantity, product.minQuantity, product.stateQuantity)" >
+                            <span>{{ product?.code }}</span>
                             <span class="span-description-list">{{ product?.description }}</span>
                             <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
                         </button>
@@ -171,7 +171,7 @@ import { provide } from 'vue'
 
             },
 
-            async addSelectedProduct(code, quantity){
+            async addSelectedProduct(code, quantity, minQuantity, state){
 
                 await fetch(`${this.apiURL}/api/materials/search?query=${code}`, {
                     method:"GET",
@@ -198,11 +198,14 @@ import { provide } from 'vue'
                                 type: product.type,
                                 description: product.description,
                                 quantity: quantity,
+                                minQuantity: minQuantity,
                                 uniMed: product.uniMed,
                                 location: product.location,
-                                stateQuantity: product.stateQuantity,
+                                stateQuantity: state,
                                 isActive: product.isActive
                             }
+
+                            console.log(this.selectProduct)
                          
                         }
 
