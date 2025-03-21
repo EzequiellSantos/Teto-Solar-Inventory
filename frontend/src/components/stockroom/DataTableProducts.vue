@@ -63,6 +63,7 @@
         margin: auto;
         margin-block: 20px;
         padding: 5px 0 0 0;
+        cursor: pointer;
         transition: all 0.4s ease-in-out;
     }
 
