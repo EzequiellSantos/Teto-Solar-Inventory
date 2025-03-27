@@ -7,6 +7,12 @@
         <section id="headerOrder">
             <h1>Pedidos</h1>
 
+            <p>{{this.allPrices}} R$</p>
+
+            <section class="date-choice">
+                <input type="date" name="dataChoice" id="dataChoice" v-model="dataChoice" @change="getOrders(this.dataChoice)">
+            </section>
+
             <router-link id="home" to="/">
             
                 <img src="/img/logo_icon_transparent_short_2.fa07d0c2.png" alt="Logo Teto Solar ">
@@ -48,6 +54,9 @@
                 </div>
 
                 <span class="span-date">{{order.date}}</span>
+                <span>Fornecedor: {{order.supplier}}</span>
+                <span>Valor: {{order.price}}</span>
+                <router-link :to="`editOrder/${order._id}`">Editar</router-link>
 
             </div>
 
@@ -74,9 +83,18 @@
         },
         data() {
 
+            var data = new Date();
+            var dia = data.getDate();
+            var mes = data.getMonth() + 1;
+            var ano = data.getFullYear();
+
             return {
+                
                 apiURL: BASE_URL,
                 orders: {},
+                allPrices: 0,
+                dataChoice: `${ano}-${String(mes).padStart(2, '0')}-${dia}`,
+                diasUteis: [],
                 arrived: false,
                 msg: null,
                 msgClass: null,
@@ -91,7 +109,8 @@
         },
         created() {
 
-            this.getOrders()
+            this.getOrders(this.dataChoice)
+            console.log(this.dataChoice)
             this.scrollBottom()
 
         },
@@ -191,6 +210,28 @@
 
             },
 
+            colletingWeek(data){
+                
+                this.diasUteis = [];
+                
+                // Converte a string de data para um objeto Date
+                const dataInicio = new Date(data);
+                
+                // Ajuste para a segunda-feira da semana da data fornecida
+                const diaDaSemana = dataInicio.getDay();
+                const diasParaSubtrair = (diaDaSemana === 0 ? 6 : diaDaSemana - 1);
+                const dataSegundaFeira = new Date(dataInicio);
+                dataSegundaFeira.setDate(dataInicio.getDate() - diasParaSubtrair);
+                
+                // Preenche o array com os dias úteis (segunda a sexta-feira)
+                for (let i = -1; i < 4; i++) {
+                    const dia = new Date(dataSegundaFeira);
+                    dia.setDate(dataSegundaFeira.getDate() + i);
+                    this.diasUteis.push(dia.toISOString().split('T')[0]);  // Formato 'YYYY-MM-DD'
+                }
+                
+            },
+
             //atualizando o material que chegou no estoque de acordo com o state quantity
             /* 
 
@@ -199,6 +240,7 @@
                 de entrada.
             
             */
+
             async updateMaterialForInventory(json){
 
                 await fetch(`${this.apiURL}/api/materials/`, {
@@ -225,9 +267,15 @@
             },
 
             //coletando todas os pedidos
-            async getOrders(){
+            async getOrders(data){
 
-                await fetch(`${this.apiURL}/api/orders/all`, {
+                console.log(data, " teste")
+
+                this.diasUteis = [];
+
+                this.colletingWeek(`${data}`);
+
+                await fetch(`${this.apiURL}/api/orders/week?seg=${this.diasUteis[0]}&sex=${this.diasUteis[4]}`, {
                     method: "GET",
                     headers: {
                         "Content-type":"application/json"
@@ -244,6 +292,20 @@
 
                         this.orders = data.data
                         this.scrollBottom()
+
+                        for (let i = 0; i < this.orders.length; i++) {
+
+                            if(this.orders[i].price == null){
+
+                                this.orders[i].price = 0
+
+                            }
+
+                            this.allPrices += this.orders[i].price;
+                            console.log(this.allPrices);
+                            
+                            
+                        }
 
                     }
 

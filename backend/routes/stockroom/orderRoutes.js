@@ -2,6 +2,27 @@ const express = require('express')
 const router = express.Router()
 const Order = require('../../models/stockroom/order')
 
+//coletando apenas os pedidos da semana
+router.get('/week', async(req, res) => {
+
+    const seg = req.query.seg
+    const sex = req.query.sex
+
+    try {
+        
+        const orders = await Order.find({date: { $gte: seg, $lte: sex }});
+
+        res.status(200).json({error: null, data: orders})
+
+    } catch (error) {
+        
+        res.status(401).json({error: "Erro ao buscar pedidos da semana"})
+        console.log(error)
+
+    }
+
+})
+
 //coletando todos os pedidos
 router.get('/all', async(req, res) => {
 
@@ -48,14 +69,41 @@ router.get('/search', async(req, res) => {
 
 })
 
+//resgattando pedido por id
+router.get('/:id', async(req, res) => {
+
+    const id = req.query.id
+
+    try {
+        
+        const order = await Order.findById(id)
+
+        if(order !== null){
+
+            res.status(200).json({error: null, order: order})
+
+        } else {
+
+            res.status(200).json({error: "Pedido não encontrado"})
+
+        }
+
+    } catch (error) {
+        
+        res.status(401).json({error: "Erro ao buscar pedido"})
+        console.log(error)
+
+    }
+});
+
 //cadastrando pedido
 router.post('/', async(req, res) => {
 
-    const  {materialsId, date, materials, isArrived} = req.body
+    const  {materialsId, date, materials, isArrived, supplier, price} = req.body
 
     try {
 
-        const order = new Order({materialsId, date, materials, isArrived})
+        const order = new Order({materialsId, date, materials, isArrived, supplier, price})
 
         await order.save()
 
@@ -74,7 +122,7 @@ router.post('/', async(req, res) => {
 // rota de atualização
 router.put('/', async(req, res) => {
 
-    const { id, materialsId, date, materials, isArrived} = req.body 
+    const { id, materialsId, date, materials, isArrived, price, supplier} = req.body 
 
     try {
         
@@ -84,7 +132,9 @@ router.put('/', async(req, res) => {
             materiaslsId: materialsId,
             date: date,
             materials: materials,
-            isArrived: isArrived
+            isArrived: isArrived,
+            price: price,
+            supplier: supplier
 
         }
 

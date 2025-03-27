@@ -4,7 +4,7 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <form id="formOrder" enctype="multipart/form-data" @submit="register($event)">
+        <form id="formOrder" enctype="multipart/form-data" @submit="page === 'registerOrder' ? register($event) : update($event)">
 
             <div class="input-container">
                 <label for="search">Procurar pelo produto:</label>
@@ -91,10 +91,26 @@
 
             <div class="input-container">
 
+                <label for="supplier">Fornecedor:</label>
+                <input type="text" name="supplier" id="supplier" v-model="supplier" required>
+
+            </div>
+
+            <div class="input-container">
+
+                <label for="price">Valor:</label>
+                <input type="number" name="price" id="price" v-model="price" required>
+
+            </div>
+
+            <div class="input-container">
+
                 <label for="date">Data:</label>
                 <input type="date" name="date" id="date" v-model="date" required>
 
             </div>
+
+            <input type="hidden" name="dateArrived" id="dateArrived" v-model="dateArrived" required>
 
             <InputSubmit text="Criar"/>
 
@@ -115,7 +131,7 @@
             Message,
             InputSubmit
         },
-        props: ['order'],
+        props: ['order', 'page'],
         data() {
             
             return {
@@ -127,6 +143,9 @@
                 selectedMaterials: [],
                 ordedMaterials: [],
                 date: this.order.date || null,
+                dateArrived: this.order.dateArrived || null,
+                supplier: this.order.supplier || null,
+                price: this.order.price || null,
                 materialsId: this.order.materialsId || [],
                 date: this.order.date || null,
                 materials: this.order.materials || [],
@@ -142,7 +161,37 @@
         },
         methods: {
 
+
             async gerarPDF(jsonData, date) {
+
+                let contOrders = 0;
+
+                await fetch(`${this.apiURL}/api/materials/search?query=${search}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msg = 'error'
+
+                    } else {
+                        
+                        contOrders = data.histories.length
+
+                    }
+                })
+                .catch((err) => {
+                    
+                    this.msg = "Erro ao gerar PDF"
+                    this.msgClass = 'error'
+
+                })
 
                 const jsonSimplificado = jsonData.map(({ _id, code, isArrivedSeparate, ...resto }) => resto)
                 
@@ -168,7 +217,7 @@
                 });
 
                 // Baixa o PDF
-                doc.save(`PEDIDOS-${date}.pdf`);
+                doc.save(`PEDIDOS-${date}-${contOrders + 1}.pdf`);
             },
 
             async getProductInfo(search){
@@ -260,7 +309,9 @@
                     materialsId: this.materialsId,
                     date: this.date,
                     materials: this.ordedMaterials,
-                    isArrived: this.isArrived
+                    isArrived: this.isArrived,
+                    price: this.price,
+                    supplier: this.supplier
                 }
 
                 const jsonData = JSON.stringify(data)

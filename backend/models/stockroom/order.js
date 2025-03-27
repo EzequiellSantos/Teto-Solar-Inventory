@@ -31,8 +31,17 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    dateArrived: {
+        type: String
+    },
     materials: [materialsSchema],
     isArrived: Boolean,
+    supplier: {
+        type: String
+    },
+    price: {
+        type: Number
+    }
 
 })
 

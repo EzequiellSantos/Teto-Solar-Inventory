@@ -174,7 +174,7 @@ const routes = [
     }
   },
   {
-    path: '/editOrder',
+    path: '/editOrder/:id',
     name: "editorder",
     component: () => import(/* webpackChunkName: "editOrder" */ '../views/stockroom/EditOrder.vue'),
     meta: {
