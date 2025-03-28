@@ -7,7 +7,7 @@
         <section id="headerOrder">
             <h1>Pedidos</h1>
 
-            <p>{{this.allPrices}} R$</p>
+            <p>Valor comprado Semanalmente: {{this.allPrices}} R$</p>
 
             <section class="date-choice">
                 <input type="date" name="dataChoice" id="dataChoice" v-model="dataChoice" @change="getOrders(this.dataChoice)">
@@ -53,10 +53,12 @@
 
                 </div>
 
-                <span class="span-date">{{order.date}}</span>
-                <span>Fornecedor: {{order.supplier}}</span>
-                <span>Valor: {{order.price}}</span>
-                <router-link :to="`editOrder/${order._id}`">Editar</router-link>
+                <section class="info-container">
+                    <span class="info-supplier">Fornecedor: {{order.supplier}}</span>
+                    <span class="info-supplier">Valor: {{order.price}} R$</span>
+                    <span class="span-date">{{order.date}}</span>
+                    <router-link class="edit-button" :to="`editOrder/${order._id}`">Editar</router-link>
+                </section>
 
             </div>
 
@@ -110,7 +112,6 @@
         created() {
 
             this.getOrders(this.dataChoice)
-            console.log(this.dataChoice)
             this.scrollBottom()
 
         },
@@ -212,6 +213,7 @@
 
             colletingWeek(data){
                 
+                this.allPrices = 0
                 this.diasUteis = [];
                 
                 // Converte a string de data para um objeto Date
@@ -269,8 +271,6 @@
             //coletando todas os pedidos
             async getOrders(data){
 
-                console.log(data, " teste")
-
                 this.diasUteis = [];
 
                 this.colletingWeek(`${data}`);
@@ -302,7 +302,6 @@
                             }
 
                             this.allPrices += this.orders[i].price;
-                            console.log(this.allPrices);
                             
                             
                         }
@@ -341,7 +340,7 @@
         padding: 10px 0;
         background-color: var(--color-main00);
         color: #fff;
-        height: 60px;
+        height: 90px;
         z-index: 2;
     }
 
@@ -352,12 +351,12 @@
 
     #headerOrder > a#home{
         position: absolute;
-        top: 0px;
+        top: 10px;
         left: 0px;
     }
 
     #headerOrder > a#home > img{
-        width: 80px;
+        width: 90px;
     }
 
     #headerOrder >  a#new{
@@ -365,7 +364,7 @@
         text-decoration: none;
         position: absolute;
         right: 10px;
-        top: 3px;
+        top: 15px;
         display: block;
 
     }
@@ -442,14 +441,39 @@
         text-decoration-line: line-through;
     }
 
+    .info-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        align-items: baseline;
+        gap: 10px;
+    }
+
+    .info-supplier{
+        padding: 3px 4px;
+        background-color: #e4e4e4;
+        border-radius: 7px;
+        font-size: 0.9em;
+    }
+
     .span-date{
         position: relative;
         margin-left: auto;
         margin-top: 15px;
         margin-right: 10px;
-        background-color: var(--color-main01);
+        background-color: var(--color-main00);
+        font-size: 0.9em;
         padding: 4px;
         color: #fff;
+        border-radius: 7px;
+    }
+
+    .edit-button{
+        text-decoration: none;
+        color:#fff;
+        background-color: rgb(0, 124, 207);
+        padding: 4px 5px;
         border-radius: 7px;
     }
 

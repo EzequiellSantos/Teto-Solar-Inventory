@@ -72,21 +72,14 @@ router.get('/search', async(req, res) => {
 //resgattando pedido por id
 router.get('/:id', async(req, res) => {
 
-    const id = req.query.id
+    const id = req.params.id
 
     try {
         
-        const order = await Order.findById(id)
+        const order = await Order.findOne({_id: id})
 
-        if(order !== null){
+        res.status(200).json({error: null, order: order})   
 
-            res.status(200).json({error: null, order: order})
-
-        } else {
-
-            res.status(200).json({error: "Pedido não encontrado"})
-
-        }
 
     } catch (error) {
         
@@ -138,9 +131,11 @@ router.put('/', async(req, res) => {
 
         }
 
-        const updateOrder = await Order.findByIdAndUpdate({_id: id}, {$set: order}, {new: true})
+        const updateOrder = await Order.findOneAndUpdate({_id: id}, {$set: order}, {new: true})
 
         res.status(200).json({error: null, msg:"Pedido atualizado com sucesso", data: updateOrder})
+        console.log(order)
+        console.log(updateOrder)
 
     } catch (error) {
         

@@ -63,7 +63,7 @@
                     <p>Lista de pedidos</p>
                 </strong>
 
-                <aside id="headerList" v-if="ordedMaterials.length !== 0">
+                <aside id="headerList" v-if="ordedMaterials !== []">
                     <span class="span-description">Descrição</span> 
                     <span class="span-quant">Quanti</span>
                     <span class="span-order">Pedido</span>
@@ -112,7 +112,7 @@
 
             <input type="hidden" name="dateArrived" id="dateArrived" v-model="dateArrived" required>
 
-            <InputSubmit text="Criar"/>
+            <InputSubmit :text="btnText"/>
 
         </form>
 
@@ -131,7 +131,7 @@
             Message,
             InputSubmit
         },
-        props: ['order', 'page'],
+        props: ['order', 'page', "btnText"],
         data() {
             
             return {
@@ -142,6 +142,7 @@
                 search: null,
                 selectedMaterials: [],
                 ordedMaterials: [],
+                id: this.order._id || null,
                 date: this.order.date || null,
                 dateArrived: this.order.dateArrived || null,
                 supplier: this.order.supplier || null,
@@ -159,14 +160,20 @@
             }
 
         },
-        methods: {
+        created(){
 
+            if(this.order.supplier){
+                this.ordedMaterials = this.order.materials
+            } 
+
+        },
+        methods: {
 
             async gerarPDF(jsonData, date) {
 
                 let contOrders = 0;
 
-                await fetch(`${this.apiURL}/api/materials/search?query=${search}`, {
+                await fetch(`${this.apiURL}/api/materials/search?query=${date}`, {
                     method: "GET",
                     headers: {
                         "Content-type":"application/json"
@@ -297,6 +304,7 @@
 
                 e.preventDefault()
                 this.ordedMaterials.splice(index, 1)
+                this.materialsId.splice(index, 1)
 
             },
 
@@ -388,7 +396,7 @@
                         this.msg = null
                             
 
-                        this.$router.push('/orders')
+                        this.$router.push(`/orders#${this.order._id}`)
 
                     }, 1400);
 
@@ -401,7 +409,44 @@
 
                 e.preventDefault()
 
-                console.log('')
+                const data = {
+
+                    id: this.id,
+                    materialsId: this.materialsId,
+                    date: this.date,
+                    materials: this.ordedMaterials,
+                    isArrived: this.isArrived,
+                    price: this.price,
+                    supplier: this.supplier
+                }
+
+                const jsonData = JSON.stringify(data)
+
+                await fetch(`${this.apiURL}/api/orders`, {
+                    method:"PUT",
+                    headers:{
+                        "Content-type":"application/json"
+                    },
+                    body: jsonData
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass = 'sucess'
+                        this.updateMaterials(this.materialsId)
+
+                    }
+
+                })
+
 
             }
 

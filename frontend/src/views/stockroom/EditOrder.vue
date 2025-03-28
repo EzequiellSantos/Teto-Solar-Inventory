@@ -4,7 +4,7 @@
 
         <h1>Editando Pedido</h1>
 
-        <OrderForm :order="order" page="registerOrder" btnText="Editar" :key="componentKey"/>
+        <OrderForm :order="order" page="updateOrder" btnText="Editar" :key="componentKey"/>
 
     </div>
 
