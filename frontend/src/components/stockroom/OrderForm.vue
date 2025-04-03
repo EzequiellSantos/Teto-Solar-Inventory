@@ -173,7 +173,7 @@
 
                 let contOrders = 0;
 
-                await fetch(`${this.apiURL}/api/materials/search?query=${date}`, {
+                await fetch(`${this.apiURL}/api/orders/day?date=${date}`, {
                     method: "GET",
                     headers: {
                         "Content-type":"application/json"
@@ -189,7 +189,7 @@
 
                     } else {
                         
-                        contOrders = data.histories.length
+                        contOrders = data.data.length
 
                     }
                 })

@@ -2,6 +2,26 @@ const express = require('express')
 const router = express.Router()
 const Order = require('../../models/stockroom/order')
 
+
+router.get('/day', async(req, res) => {
+
+    const date = req.query.date
+
+    try {
+        const orders = await Order.find({date: date});
+        console.log(orders.length)
+
+        res.status(200).json({error: null, data: orders})
+
+    } catch (error) {
+        
+        res.status(401).json({error: "Erro ao buscar pedidos do dia"})
+        console.log(error)
+
+    }
+
+})
+
 //coletando apenas os pedidos da semana
 router.get('/week', async(req, res) => {
 
