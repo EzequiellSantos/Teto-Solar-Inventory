@@ -96,7 +96,7 @@
     import Footer from '@/components/stockroom/Footer.vue'
     import {BASE_URL} from  '@/config'
     import InputSubmit from '@/components/form/inputSubmit.vue'
-import { provide } from 'vue'
+    import { provide } from 'vue'
 
     export default {
         components:{
@@ -126,6 +126,15 @@ import { provide } from 'vue'
 
         },
         methods: {
+
+            enviarNotificacao(header, body) {
+                if (Notification.permission === "granted") {
+                    new Notification(`${header}`, {
+                    body: `${body}`,
+                    icon: "https://raw.githubusercontent.com/EzequiellSantos/Teto-Solar-Inventory/refs/heads/main/frontend/public/logo_icon_transparent_short.png"
+                    });
+                }
+            },
 
             getDate(){
 
@@ -191,6 +200,14 @@ import { provide } from 'vue'
                         const product = data.materials.find((item) => item.code == code)
 
                         if(product){
+
+                            if(state == "Critico"){
+                                this.enviarNotificacao(`Alerta de quantidade ${state}`, "Repor Imediatamente")
+                            }
+
+                            if(state == "Mediano"){        
+                                this.enviarNotificacao(`Alerta de quantidade ${state}`, "Solicitar Compra")
+                            }
                          
                             this.selectProduct = {
                                 _id: product._id,
@@ -204,8 +221,6 @@ import { provide } from 'vue'
                                 stateQuantity: state,
                                 isActive: product.isActive
                             }
-
-                            console.log(this.selectProduct)
                          
                         }
 
@@ -223,12 +238,19 @@ import { provide } from 'vue'
 
                 e.preventDefault()
 
+                let quantAtual = this.selectProduct.quantity - this.outputQuant
+
+                if(quantAtual < 0){
+                    quantAtual = 0
+                    this.enviarNotificacao("Alerta de Quantidade", `${this.selectProduct.description} em falta no estoque !!!`)
+                }
+
                 const data = {
                     id: this.selectProduct._id,
                     type: this.selectProduct.type,
                     code: this.selectProduct.code,
                     description: this.selectProduct.description,
-                    quantity: this.selectProduct.quantity - this.outputQuant,
+                    quantity: quantAtual,
                     minQuantity: this.selectProduct.minQuantity,
                     uniMed: this.selectProduct.uniMed,
                     location: this.selectProduct.location,

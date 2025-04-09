@@ -22,7 +22,25 @@
       // recurso da vercel para medir desempenho do site
       SpeedInsights
 
-    } 
+    },
+    created(){
+      this.pedirPermissao()
+    },
+    methods:{
+      pedirPermissao() {
+        if ("Notification" in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            console.log("Permissão concedida!");
+          } else {
+            console.log("Permissão negada.");
+          }
+        });
+        } else {
+          console.log("Notificações não são suportadas neste navegador.");
+        }
+      },
+    }
 
   }
 
