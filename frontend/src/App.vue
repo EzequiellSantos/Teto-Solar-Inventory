@@ -108,10 +108,6 @@
     z-index: 1;
   }
 
-  a:active{
-    color: #fff;
-  }
-
   nav {
     padding: 30px;
   }
@@ -254,25 +250,36 @@
     width: 90px;
   }
 
+  .container-all{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .data-table-body{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px; /* Espaço entre os itens */
     margin: auto;
     max-width: 800px;
     width: 100%;
-    margin-top: 40px;
     padding-bottom: 70px;
     text-transform: uppercase;
+    justify-items: stretch;
+    align-items: baseline;
+    justify-content: center;
   }
 
   .data-row{
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    align-content: center;
 
-    margin: 20px 0;
-    padding: 3px;
-    border-radius: 30px;
+    width: 200px;
+    margin: 10px 0;
+    padding: 6px 0px;
+    border-radius: 15px;
     text-decoration: none;
     background-color: #f0f0f071;
     color: #000;
@@ -328,29 +335,27 @@
   }
 
   .data-sn-container{
-    width: 140px;
     margin: auto;
+    padding: 4px 0;
   }
 
   .data-description-container{
-    width: 400px;
-    margin: auto;
     text-align: center;
   }
 
   .data-description-container > p{
+    font-size: 80%;
     padding: 8px 8px;
     margin: auto;
-    border-radius: 40px;
   }
 
   .data-type-container {
-    width: 120px;
+    width: 45%;
     padding: 4px 6px;
   }
 
   .data-type-container > p {
-    max-width: 110px;
+    font-size: 70%;
     padding: 8px;
     margin: 0;
     border-radius: 20px;
@@ -391,10 +396,6 @@
     margin: 0 15px 0 10px;
   }
 
-  .data-type-container{
-    text-align: center;
-  }
-
   .data-container{
     width: calc(100% - 30px);
     margin: auto;
@@ -431,6 +432,15 @@
   }
 
   @media (450px >= width){
+
+    .data-table-body{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .data-row{
+      width: 40vw;
+    }
 
     #search-container{
       left: 55%;

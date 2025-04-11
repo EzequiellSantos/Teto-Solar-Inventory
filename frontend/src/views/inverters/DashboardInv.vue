@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <DataTableInv :inverters="inverters"  />
+                <DataTableInv :inverters="inverters"/>
 
             </div>
 
@@ -58,7 +58,7 @@
         data() {
 
             return {
-                inputBusca: '',
+                inputBusca: localStorage.getItem("inputBusca")? localStorage.getItem("inputBusca") : "",
                 inverters: [],
                 apiURL : BASE_URL,
                 loading: false,
@@ -69,7 +69,11 @@
         },
         created() {
 
-            this.getInverters()
+            if(localStorage.getItem("inputBusca")){
+                this.inputTextoBusca()
+            } else {
+                this.getInverters()
+            }
 
         },
         components: {
@@ -86,6 +90,7 @@
 
                 this.loading = true
                 this.inverters = []
+                localStorage.setItem("inputBusca", `${this.inputBusca}`);
 
                 try {
                     
@@ -117,10 +122,11 @@
                             let inputValue = this.inputBusca
 
                             if(inputValue == "" || inputValue.length == 0){
+                                localStorage.removeItem("inputBusca");
                                 this.getInverters()
                             }
 
-                        }, 2000) 
+                        }, 1500) 
 
                         this.inverters = data.inverter
 
@@ -185,6 +191,7 @@
                 const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
     
                     this.inputBusca = decodedText;
+                    localStorage.setItem("inputBusca", `${inputBusca}`);
                     console.log("Lido :))", decodedText)
                     this.inputTextoBusca()
                     divReader.style.display = "none"

@@ -64,7 +64,7 @@
         },
         data () {
             return {
-                inputBusca: '',
+                inputBusca: localStorage.getItem("inputLogBusca")? localStorage.getItem("inputLogBusca"): "",
                 logs: [],
                 apiURL: BASE_URL,
                 loading: false,
@@ -75,7 +75,11 @@
         },
         created() {
 
-            this.getLogs()
+            if(localStorage.getItem("inputLogBusca")){
+                this.inputTextoBusca()
+            } else {
+                this.getLogs()
+            }
 
         },
         methods: {
@@ -84,6 +88,8 @@
             async inputTextoBusca(){
                 this.loading = true
                 this.logs = []
+
+                localStorage.setItem("inputLogBusca", `${this.inputBusca}`)
 
                 try {
                     
@@ -115,10 +121,11 @@
                             let inputValue = this.inputBusca
 
                             if(inputValue == "" || inputValue.length == 0){
+                                localStorage.removeItem("inputLogBusca")
                                 this.getLogs()
                             }
 
-                        }, 2000)
+                        }, 1500)
 
                         this.logs = data.log
 
@@ -178,6 +185,7 @@
                 const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
 
                     this.inputBusca = decodedText;
+                    localStorage.setItem("inputLogBusca", `${this.inputBusca}`)
                     console.log("Lido :))", decodedText)
                     this.inputTextoBusca()
                     divReader.style.display = "none"

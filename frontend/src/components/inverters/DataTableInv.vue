@@ -4,29 +4,9 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <div class="data-table-heading">
-
-            <div class="indexes-number">
-                #
-            </div>
-
-            <div class="data-sn-heading">
-                S/N:
-            </div>
-
-            <div class="data-description-heading">
-                Descrição:
-            </div>
-
-            <div class="data-type-heading">
-                Tipo:
-            </div>
-
-        </div>
-
         <div class="data-table-body">
 
-            <div v-for="(inverter, index) in inverters" :key="inverter.sn"  >
+            <div class="container-all" v-for="(inverter, index) in inverters" :key="inverter.sn"  >
 
                     <router-link :id="inverter.sn" class="data-row" :to="`/inverter/${ inverter._id }`" >  
                     <div class="index-container">
