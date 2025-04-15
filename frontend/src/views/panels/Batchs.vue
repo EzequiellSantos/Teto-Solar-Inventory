@@ -46,7 +46,7 @@
 
         </section>
 
-        <aside class="info" id="infoContainer" v-if="notFound != true" >
+        <aside class="info" id="infoContainer" v-if="notFound != true && this.clientCount != 0" >
 
             <div class="info-clients">
 
@@ -72,14 +72,19 @@
                     <p>Cliente: {{ batch.client }}</p>
                     <p v-if="batch.panelsCount > 1">Quant: {{ batch.panelsCount }} Placas</p>
                     <p v-else>Quant: {{ batch.panelsCount }} Placa</p>
-                    <button id="editButton">
-                        <router-link :to="`/editBatch/${batch._id}`">Editar</router-link>
-                    </button>
+                    <section class="actions-batch">
+                        <button id="editButton">
+                            <router-link :to="`/editBatch/${batch._id}`">Editar</router-link>
+                        </button>
+                        <button id="outputButton">
+                            <router-link :to="{ name: 'registerTracking', params: { invoiceNumber: batch.invoice } }">Saída</router-link>
+                        </button>
+                    </section>
                 </div>
             </main>
         </section>
 
-        <article v-if="notFound == true || this.clientCount == 0">
+        <article class="not-found" v-if="notFound == true || this.clientCount == 0">
 
             <svg xmlns="http://www.w3.org/2000/svg" id="panelCloudy" version="1.0" width="230px" height="230px" viewBox="0 0 1024.000000 1024.000000" preserveAspectRatio="xMidYMid meet">
 
@@ -493,14 +498,29 @@
         margin-block: 2px ;
     }
 
-    #editButton{
+    .actions-batch button{
         margin-top: 5px;
-        padding: 4px 2px;
+        padding: 4px 8px;
         max-width: 60px;
+    }
+
+    .actions-batch{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #editButton{
         background-color: var(--color-main00);
     }
 
-    .card > #editButton > a{
+    #outputButton{
+        background-color: var(--color-main01);
+    }
+
+    .actions-batch > button > a{
         text-decoration: none;
         color: #fff;
         font-family: var(--font-base);
@@ -514,7 +534,7 @@
         min-width: 140px;
         max-width: 150px;
         margin: auto;
-        margin-top: 180px;
+        margin-top: 220px;
         padding: 4px 0;
         border-radius: 10px;
     }
@@ -532,7 +552,6 @@
     article{
         margin-top: 160px;
     }
-
 
     @media (width > 700px) {
         

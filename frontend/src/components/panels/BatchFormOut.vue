@@ -73,7 +73,7 @@ export default {
         Message,
         InputSubmit
     },
-    props: ["tracking", "batch", "btnText"],
+    props: ["tracking", "batch", "btnText", "invoiceNumber"],
     data() {
         return {
             msg: null,
@@ -82,7 +82,7 @@ export default {
             trackingId: null,
             id: this.batch._id || null,
             count: this.batch.panelsCount || null,
-            invoice: this.batch.invoice || null,
+            invoice: this.$route.params.invoiceNumber|| null,
             clientbatch: this.batch.client || null,
             client: this.batch.client || null,
             brand: this.batch.brand || null,
@@ -94,6 +94,9 @@ export default {
             panelsCount: this.tracking?.panelsCount || null,
             typeChoice: "Saida"
         }
+    },
+    created(){
+        this.colletingBrand(this.invoice)
     },
     methods:{
 

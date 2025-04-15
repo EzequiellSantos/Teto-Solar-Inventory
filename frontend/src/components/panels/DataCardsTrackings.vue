@@ -2,8 +2,17 @@
     
     <div id="DataCardsInput">
 
+        <div v-if="trackings.type == null || trackings.length == 0">
+            <div class="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
         <div class="cards-container" v-for="(tracking, index) in trackings" :key="index">
-            
 
             <div v-if="(tracking.type == 'Entrada' )">
 

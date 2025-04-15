@@ -34,6 +34,15 @@
 
         <main>
 
+            <div v-if="batchs == null || brands.length == 0">
+                <div class="spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
             <DataCardsBatchs :brands="brands"/>
 
         </main>

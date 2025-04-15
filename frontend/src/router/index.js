@@ -106,9 +106,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "trackings" */ '../views/panels/DashboardTrackings.vue')
   },
   {
-    path: '/registerTracking',
+    path: '/registerTracking/:invoiceNumber',
     name: "registerTracking",
     component: () => import(/* webpackChunkName: "registerTracking" */ '../views/panels/NewTrackingOut.vue'),
+    props: true,
     meta: {
       requireAuth: true
     }

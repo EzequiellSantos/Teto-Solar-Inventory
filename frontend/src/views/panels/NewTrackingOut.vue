@@ -4,7 +4,7 @@
 
         <h1>Registrando Saídas</h1>
         
-        <BatchFormOut :tracking="{}" :batch="{}" page="registerOutBatch" btnText="Registrar"/>
+        <BatchFormOut :tracking="{}" :batch="{}" :invoiceNumber="invoiceNumber" page="registerOutBatch" btnText="Registrar"/>
 
     </div>
 
@@ -18,6 +18,14 @@
     export default {
         components:{
             BatchFormOut
+        },
+        data(){
+            return {
+                invoiceNumber: ""
+            }
+        },
+        mounted(){
+            this.invoiceNumber = this.$route.params.invoiceNumber
         }
     }
 
