@@ -659,6 +659,33 @@
     }
   }
 
+    .loader {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: auto;
+  }
+
+  .loader-two {
+    position: absolute;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
   /* configurações para o scanner de QRCode */
   
   #startButton{

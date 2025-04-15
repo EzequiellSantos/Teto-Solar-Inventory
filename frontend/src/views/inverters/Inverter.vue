@@ -10,17 +10,6 @@
             Sem Nota Fiscal
         </h1>
 
-        <div v-if="this.inverter._id == null">
-
-            <div class="spinner">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-
-        </div>
         
         <div class="inverter-container">
             <div class="details">
@@ -34,6 +23,8 @@
                     <p class="bold">Descrição:</p>
                     <p class="description-text">{{ inverter.description }}</p>
                 </section>
+
+                <div class="loader" v-if="inverter.description == null"></div>  
 
                 <section class="paragraph">
                     <p class="bold">Tipo:</p>
@@ -156,6 +147,23 @@
 
     .spinner{
         top: 55%;
+    }
+
+    .loader {
+        position: absolute;
+        left: 50%;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #ccc;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin: auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
 </style>

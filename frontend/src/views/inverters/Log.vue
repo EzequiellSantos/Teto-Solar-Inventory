@@ -11,18 +11,6 @@
                 <p> {{ this.textDescription}} </p>
                 <p> {{ this.textType }} </p>
             </div>
-
-            <div v-if="log.sn === undefined">
-
-                <div class="spinner">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-
-            </div>
   
             <div class="log-container" >
         
@@ -37,6 +25,8 @@
                         <p class="bold">Cliente:</p>
                         <p class="text">{{ log.client }}</p>
                     </section>
+
+                    <div class="loader-two" v-if="log.logDate == null"></div>
 
                     <section class="paragraph">
                         <p class="bold">Data:</p>
@@ -200,21 +190,6 @@
 
     .inverter-details > p{
         margin: 10px 0;
-    }
-
-    .loader {
-        width: 12px;
-        height: 12px;
-        border: 2px solid #ccc;
-        border-top: 2px solid transparent;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin: auto;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
     }
 
     .spinner{

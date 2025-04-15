@@ -40,6 +40,8 @@
             <p class="text-description">{{ this.textDescription}}</p>
             <input type="hidden" id="textDescription" name="textDescription" v-model="textDescription">
 
+            <div class="loader" v-if="load"></div>
+
             <p class="title-description">Tipo:</p>
             <p class="text-description">{{ this.textType }}</p>
             <input type="hidden" id="textType" name="textType" v-model="textType">
@@ -121,6 +123,7 @@
             return {
                 originalDate: '',
                 formattedDate: '',
+                load: false,
 
                 allSn: this.log.sn ||  [],
                 textDescription: this.textDescription || null,
@@ -274,6 +277,8 @@
             // função para buscar as informações dos inversores com base em seus SNs
             async inverterIdBusca () {
 
+                this.load = true
+
                 await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[0]}`, {
                     method: "GET",
                     headers: {
@@ -284,13 +289,15 @@
                 .then((data) => {
                     
                     if(data.inverter){
-                        
+
                         this.textDescription = data.inverter[0].description
                         this.textType = data.inverter[0].type
 
                     }
 
                 })
+
+                this.load = false
 
             }, 
 
