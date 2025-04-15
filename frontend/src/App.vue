@@ -961,6 +961,14 @@
     color: #fff;
   }
 
+  .sub-item:hover{
+    cursor: pointer;
+  }
+
+  .sub-item:active{
+    transform: scale(1.05);
+  }
+
   .menu-item{
     position: relative;
     display: flex;

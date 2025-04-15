@@ -47,7 +47,7 @@
     </div>
 
     <footer>
-      <p>&copy; 2024</p>
+      <p>&copy; {{ano}}</p>
       <button id="logout" @click="logout($event)" v-show="authenticated">Sair</button>
     </footer>
 
@@ -62,6 +62,9 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'HomeView',
+  data(){
+    this.ano = new Date().getUTCFullYear()
+  },
   methods:{
 
     // realizar logout

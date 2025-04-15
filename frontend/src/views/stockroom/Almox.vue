@@ -55,16 +55,6 @@
 
         <main id="mainAlmox">
 
-                <div v-if="products == null || products.length == 0">
-                    <div class="spinner">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </div>
-
             <DataTableProducts :products="products" />
 
         </main>

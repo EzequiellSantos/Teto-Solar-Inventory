@@ -7,7 +7,7 @@
                 <section id="allSn">
                     <p class="sn" v-for="(eachSn) in log.sn" :key="eachSn" >{{ eachSn }}</p>
                 </section>
-
+                <div class="loader" v-if="this.textDescription == null"></div>
                 <p> {{ this.textDescription}} </p>
                 <p> {{ this.textType }} </p>
             </div>
@@ -199,9 +199,22 @@
     }
 
     .inverter-details > p{
-
         margin: 10px 0;
+    }
 
+    .loader {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #ccc;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .spinner{

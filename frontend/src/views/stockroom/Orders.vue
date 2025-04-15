@@ -27,6 +27,20 @@
 
         <main id="mainOrder">
 
+            <div v-if="loading">
+                <div class="spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="error-image" v-if="errorImage">
+                Sem Pedidos :(
+            </div>
+
             <div id="eachOrder" class="card-order" v-for="(order, index) in orders" :key="index">
 
                 <div class="div-header-orders">
@@ -91,7 +105,8 @@
             var ano = data.getFullYear();
 
             return {
-                
+                errorImage: false,
+                loading: true,
                 apiURL: BASE_URL,
                 orders: {},
                 allPrices: 0,
@@ -271,6 +286,8 @@
             //coletando todas os pedidos
             async getOrders(data){
 
+                this.loading = true
+                this.errorImage = false
                 this.diasUteis = [];
 
                 this.colletingWeek(`${data}`);
@@ -292,6 +309,11 @@
 
                         this.orders = data.data
                         this.scrollBottom()
+                        this.loading = false
+
+                        if(this.orders.length == 0){
+                            this.errorImage = true
+                        }
 
                         for (let i = 0; i < this.orders.length; i++) {
 
@@ -475,6 +497,10 @@
         background-color: rgb(0, 124, 207);
         padding: 4px 5px;
         border-radius: 7px;
+    }
+
+    .error-image{
+        margin-top:100px ;
     }
 
 </style>

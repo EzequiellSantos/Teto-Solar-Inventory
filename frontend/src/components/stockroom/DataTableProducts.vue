@@ -2,6 +2,16 @@
     
     <div id="DataTableProducts">
 
+        <div v-if="products[0]?.description == null || products.length == 0">
+            <div class="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
         <section class="bar" :id="`${product.code}`" v-for="(product, index) in products" :key="index">
 
             <p class="item" @click="exibir(product.code)">
