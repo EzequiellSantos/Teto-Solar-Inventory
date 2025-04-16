@@ -68,13 +68,15 @@
         justify-content: space-evenly;
         background-color: #F8F8F8;
         border-radius: 20px;
-        width: 70%;
+        width: 95%;
+        max-width: 800px;
         height: 40px;
         margin: auto;
         margin-block: 20px;
-        padding: 5px 0 0 0;
+        padding: 3px 6px 3px 6px;
         cursor: pointer;
         transition: all 0.4s ease-in-out;
+        font-size: clamp(0.5rem, 0.3125rem + 0.8571vw, 1.0625rem);
     }
 
     .bar > p.item{
@@ -96,7 +98,7 @@
     }
 
     .description{
-        min-width: 500px;
+        width: 60%;
     }
 
     .info-extra{

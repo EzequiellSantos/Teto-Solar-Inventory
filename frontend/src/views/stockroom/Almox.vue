@@ -335,8 +335,9 @@
         border-radius: 50px;
         background-color: #F2F2F2;
         color: #000;
-        width: 70%;
-        padding: 4px;
+        width: 95%;
+        max-width: 800px;
+        padding: 4px 7px;
         margin: auto;
         display: flex;
         flex-direction: row;

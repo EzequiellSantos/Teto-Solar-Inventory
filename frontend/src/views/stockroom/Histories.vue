@@ -69,7 +69,7 @@
                     
                     <span class="code">{{product.code}}</span> 
                     <span class="description">{{product.description}}</span> 
-                    <span class="sector">{{ product.sector }}</span> 
+                    <span class="sector" v-if="product.sector">{{ product.sector }}</span> 
                     <span class="quant">{{product.quant}}</span> 
                     <!-- <router-link :to="`/editHistory/${product._id}`">
                         editar
@@ -307,13 +307,14 @@
         display: flex;
         flex-direction: row;
         align-content: center;
-        justify-content: center;
+        justify-content: space-around;
 
         background-color: #F8F8F8;
-        padding: 13px;
+        padding: 13px 5px;
         border-radius: 20px;
-        width: 70%;
+        width: 90vw;
         margin: auto;
+        max-width: 800px;
         margin-block: 10px;
     }
 
@@ -323,17 +324,33 @@
     }
 
     .code{
-        min-width: 150px;
+        width: 20%;
         flex-grow:0 ;
         text-align: center;
     }
 
     .description{
-        min-width: 600px;
+        width: 40vw;
+        min-width: 260px;
+        font-size: clamp(0.625rem, 0.5208rem + 0.4762vw, 0.9375rem);
+    }
+
+    span.sector{
+        width: 10vw;
+        min-width: 70px;
     }
 
     .quant{
-        min-width: 100px;
+        width: 30%;
+        min-width: 30px;
+        max-width: 44px;
+        padding: 3px;
+        background-color: rgb(226, 226, 226);
+        border-radius: 7px;
+    }
+
+    .index, .code, .quant, .sector{
+        font-size: clamp(0.625rem, 0.4792rem + 0.6667vw, 1.0625rem);
     }
 
     .info-extra{

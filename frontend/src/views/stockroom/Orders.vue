@@ -365,7 +365,6 @@
                     } else {
 
                         this.orders = data.data
-                        console.log(this.orders[0].materials)
                         this.scrollBottom()
                         this.loading = false
 
@@ -467,7 +466,7 @@
         min-width: 350px;
         padding: 20px;
         border-radius: 20px;
-        margin-block: 20px;
+        margin-block: 30px;
         background-color: #f2f2f2;
     }
 
@@ -510,6 +509,10 @@
         height: 30px;
         border-radius: 10px;
         background-color: aquamarine;
+    }
+
+    input[type=checkbox]:focus{
+        box-shadow: none;
     }
 
     .input-check{
@@ -573,7 +576,7 @@
     }
 
     .info-container, .info-supplier, .span-date, .edit-button, .pdf-button{
-        font-size: clamp(0.5rem, 0.3636rem + 0.7273vw, 1rem);
+        font-size: clamp(0.5rem, 0.3807rem + 0.6364vw, 0.9375rem);
     }
 
     .small{
