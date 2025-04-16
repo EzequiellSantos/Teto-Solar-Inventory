@@ -169,64 +169,6 @@
         },
         methods: {
 
-            async gerarPDF(jsonData, date) {
-
-                let contOrders = 0;
-
-                await fetch(`${this.apiURL}/api/orders/day?date=${date}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-type":"application/json"
-                    }
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
-                    
-                    if(data.error){
-
-                        this.msg = data.error
-                        this.msg = 'error'
-
-                    } else {
-                        
-                        contOrders = data.data.length
-
-                    }
-                })
-                .catch((err) => {
-                    
-                    this.msg = "Erro ao gerar PDF"
-                    this.msgClass = 'error'
-
-                })
-
-                const jsonSimplificado = jsonData.map(({ _id, code, isArrivedSeparate, ...resto }) => resto)
-                
-                const jsonRenomeado = jsonSimplificado.map(({description, quantExist, quantOrder, ...resto}) => ({
-                    ...resto,
-                    descricao: description,
-                    quantidade: quantExist,
-                    pedido: quantOrder
-                }))
-
-                // Transforma o JSON em um array de arrays para a tabela
-                const colunas = Object.keys(jsonRenomeado[0]); // Cabeçalhos das colunas
-                const linhas = jsonRenomeado.map(item => Object.values(item)); // Linhas dos dados
-
-                // Cria o documento PDF
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                // Adiciona a tabela ao PDF
-                doc.autoTable({
-                    head: [colunas],
-                    body: linhas
-                });
-
-                // Baixa o PDF
-                doc.save(`PEDIDOS-${date}-${contOrders + 1}.pdf`);
-            },
-
             async getProductInfo(search){
 
                 if(search.length > 3) {
@@ -323,8 +265,6 @@
                 }
 
                 const jsonData = JSON.stringify(data)
-
-                this.gerarPDF(this.ordedMaterials, this.date)
 
                 await fetch(`${this.apiURL}/api/orders/`, {
                     method:"POST",

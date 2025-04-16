@@ -58,7 +58,7 @@
 
                         <div class="div-materials">
                             <span class="code-orders">{{material.code}} </span>
-                            <span class="description-orders">{{ material.description }} </span>
+                            <span class="description-orders small">{{ material.description }} </span>
                             <span class="quant-orders">{{material.quantOrder}} </span>
                             <input type="checkbox" class="input-check" :name="material.code" :id="material.code" v-model="material.isArrivedSeparate" @click="uniqueOrdedSelected(order._id, material._id, material.isArrivedSeparate == true ? false : true)"> 
                         </div>
@@ -72,7 +72,10 @@
                     <span class="info-supplier">Valor: {{order.price}} R$</span>
                     <span class="span-date">{{order.date}}</span>
                     <router-link class="edit-button" :to="`editOrder/${order._id}`">Editar</router-link>
-                </section>
+                    <button class="pdf-button" @click="OrderProcess(order.materials, order.date, String(index + 1).padStart(2, '0'))">
+                        Gerar PDF
+                    </button>
+                </section> 
 
             </div>
 
@@ -109,6 +112,7 @@
                 loading: true,
                 apiURL: BASE_URL,
                 orders: {},
+                ordedMaterials: [],
                 allPrices: 0,
                 dataChoice: `${ano}-${String(mes).padStart(2, '0')}-${dia}`,
                 diasUteis: [],
@@ -131,6 +135,59 @@
 
         },
         methods: {
+
+            OrderProcess(array, data, index){
+                this.ordedMaterials = []
+                for (let i = 0; i < array.length; i++) {
+                    this.adicionarPedido(array[i]._id, array[i].code, array[i].description, array[i].quantOrder, array[i].quantOrder)
+                }
+                this.gerarPDF(this.ordedMaterials, data, index)
+            },
+
+            adicionarPedido(id, code, description, quant, order){
+                
+                const jsonOrder = {
+
+                    _id: id,
+                    code: code,
+                    description: description,
+                    quantOrder: order,
+                    isArrivedSeparate: false
+
+                }
+
+                this.ordedMaterials.push(jsonOrder)
+            },
+
+            // gerar PDF
+            async gerarPDF(jsonData, date, index) {
+
+                const jsonSimplificado = jsonData.map(({ _id, code, isArrivedSeparate, ...resto }) => resto)
+                
+                const jsonRenomeado = jsonSimplificado.map(({description, quantExist, quantOrder, ...resto}) => ({
+                    ...resto,
+                    descricao: description,
+                    /* quantidade: quantExist, */
+                    pedido: quantOrder
+                }))
+
+                // Transforma o JSON em um array de arrays para a tabela
+                const colunas = Object.keys(jsonRenomeado[0]); // Cabeçalhos das colunas
+                const linhas = jsonRenomeado.map(item => Object.values(item)); // Linhas dos dados
+
+                // Cria o documento PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Adiciona a tabela ao PDF
+                doc.autoTable({
+                    head: [colunas],
+                    body: linhas
+                });
+
+                // Baixa o PDF
+                doc.save(`PEDIDOS-${date}-${index}.pdf`);
+            },
 
             // função para coletar dados e atualizar de acordo com o select clicado
             async uniqueOrdedSelected(idOrder, idMaterial, isArrivedSeparate){
@@ -308,6 +365,7 @@
                     } else {
 
                         this.orders = data.data
+                        console.log(this.orders[0].materials)
                         this.scrollBottom()
                         this.loading = false
 
@@ -405,7 +463,8 @@
         justify-content: center;
         align-items: center;
         margin: auto;
-        width: 60%;
+        width: 70%;
+        min-width: 350px;
         padding: 20px;
         border-radius: 20px;
         margin-block: 20px;
@@ -413,6 +472,7 @@
     }
 
     .div-header-orders{
+        font-size: clamp(0.75rem, 0.6477rem + 0.5455vw, 1.125rem);
         color: #000;
         display: flex;
         justify-content: space-between;
@@ -421,11 +481,15 @@
     }
 
     .div-materials{
+        font-size: clamp(0.75rem, 0.6648rem + 0.4545vw, 1.0625rem);
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin: auto;
         margin-block: 4px;
+        width: 55vw;
+        min-width: 300px;
     }
 
     .code-orders{
@@ -497,6 +561,23 @@
         background-color: rgb(0, 124, 207);
         padding: 4px 5px;
         border-radius: 7px;
+    }
+
+    .pdf-button{
+        text-decoration: none;
+        color:#fff;
+        background-color: rgb(0, 124, 207);
+        padding: 4px 5px;
+        border-radius: 7px;
+        font-size: 1em;
+    }
+
+    .info-container, .info-supplier, .span-date, .edit-button, .pdf-button{
+        font-size: clamp(0.5rem, 0.3636rem + 0.7273vw, 1rem);
+    }
+
+    .small{
+        font-size: clamp(0.5rem, 0.3466rem + 0.8182vw, 1.0625rem);
     }
 
     .error-image{
