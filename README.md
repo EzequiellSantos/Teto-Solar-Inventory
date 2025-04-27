@@ -2,7 +2,9 @@
 
 > [Acesse Aqui](https://teto-solar-inventory.vercel.app/)
 
-Sistema web desenvolvido para substituir planilhas e automatizar da melhor maneira a forma como os dados de estoque são armazenados. Contém acesso a API diretamente do próprio banco de dados, suporte para scanner de QR code para facilitar a coleta de dados, registros, buscas e permissões para editar dados dentro do próprio sistema online.
+
+
+Sistema web desenvolvido para a empresa Teto Solar, feito para substituir planilhas e automatizar da melhor maneira a forma como os dados de estoque são armazenados. Contém acesso a API diretamente do próprio banco de dados, suporte para scanner de QR code para facilitar a coleta de dados, registros, buscas e permissões para editar dados dentro do próprio sistema online.
 
 ## Como a aplicação opera e supre as necessidades?
 
