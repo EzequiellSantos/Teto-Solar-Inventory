@@ -89,6 +89,41 @@ router.get('/search', async(req, res) => {
 
 })
 
+// Rota para somar todos os preços de um mês específico
+router.get('/prices/sum/month', async (req, res) => {
+    const { year, month } = req.query;
+
+    if (!year || !month) {
+        return res.status(400).json({ error: "Ano e mês são obrigatórios" });
+    }
+
+    const startDate = `${year}-${String(month).padStart(2, '0')}-01`; // Primeiro dia do mês
+    const endDate = `${year}-${String(Number(month) + 1).padStart(2, '0')}-01`; // Primeiro dia do próximo mês
+
+    try {
+        const result = await Order.aggregate([
+            {
+                $match: {
+                    $expr: {
+                        $and: [
+                            { $gte: [{ $dateFromString: { dateString: "$date" } }, { $dateFromString: { dateString: startDate } }] },
+                            { $lt: [{ $dateFromString: { dateString: "$date" } }, { $dateFromString: { dateString: endDate } }] }
+                        ]
+                    }
+                }
+            },
+            { $group: { _id: null, totalPrice: { $sum: "$price" } } } // Soma os preços
+        ]);
+
+        const totalPrice = result.length > 0 ? result[0].totalPrice : 0;
+
+        res.status(200).json({ error: null, totalPrice });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao calcular a soma dos preços" });
+        console.log(error);
+    }
+});
+
 //resgattando pedido por id
 router.get('/:id', async(req, res) => {
 
