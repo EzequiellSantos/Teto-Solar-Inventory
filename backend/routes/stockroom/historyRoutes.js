@@ -60,6 +60,135 @@ router.get('/sector', async(req, res) => {
 
 })
 
+// Rota para gerar relatórios com base nos históricos
+router.get('/reports', async (req, res) => {
+    const { year, month, search } = req.query;
+
+    if (!year || !month) {
+        return res.status(400).json({ error: "Ano e mês são obrigatórios" });
+    }
+
+    const startDate = `${year}-${String(month).padStart(2, '0')}-01`; // Primeiro dia do mês
+    const endDate = `${year}-${String(Number(month) + 1).padStart(2, '0')}-01`; // Primeiro dia do próximo mês
+
+    try {
+        // 1. Top 5 materiais com maior quantidade no tipo "Saida"
+        const topMaterialsByQuantity = await History.aggregate([
+            { $match: { date: { $gte: startDate, $lt: endDate }, type: "Saida", $text: {$search:search} } },
+            { $group: { _id: "$description", totalQuantity: { $sum: "$quant" } } },
+            { $sort: { totalQuantity: 1 } },
+            { $limit: 5 },
+            { $project: { _id: 0, description: "$_id", totalQuantity: 1 } }
+        ]);
+
+        // 2. Top 5 materiais com mais registros no tipo "Compra"
+        const topMaterialsByPurchase = await History.aggregate([
+            { $match: { date: { $gte: startDate, $lt: endDate }, type: "Compra" } },
+            { $group: { _id: "$description", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 },
+            { $project: { _id: 0, description: "$_id", count: 1 } }
+        ]);
+
+        // 3. Top 3 equipes com mais registros no tipo "Saida"
+        const topTeamsByExits = await History.aggregate([
+            { $match: { date: { $gte: startDate, $lt: endDate }, type: "Saida" } },
+            { $group: { _id: "$sector", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 3 },
+            { $project: { _id: 0, sector: "$_id", count: 1 } }
+        ]);
+
+        res.status(200).json({
+            error: null,
+            report: {
+                topMaterialsByQuantity,
+                topMaterialsByPurchase,
+                topTeamsByExits
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao gerar relatório" });
+        console.log(error);
+    }
+})
+
+// Rota para somar todas as saídas de um produto específico em um mês
+router.get('/product/exit/month/sum', async (req, res) => {
+    const { code, year, month } = req.query;
+
+    if (!code || !year || !month) {
+        return res.status(400).json({ error: "Código, ano e mês são obrigatórios" });
+    }
+
+    const startDate = `${year}-${String(month).padStart(2, '0')}-01`; // Primeiro dia do mês
+    const endDate = `${year}-${String(Number(month) + 1).padStart(2, '0')}-01`; // Primeiro dia do próximo mês
+
+    try {
+        const result = await History.aggregate([
+            { 
+                $match: { 
+                    code: code, 
+                    type: "Saida", 
+                    date: { $gte: startDate, $lt: endDate } 
+                } 
+            }, // Filtra pelo código, tipo "Saida" e intervalo de datas
+            { 
+                $group: { 
+                    _id: null, 
+                    totalQuantity: { $sum: "$quant" } 
+                } 
+            } // Soma os valores de "quant"
+        ]);
+
+        const totalQuantity = result[0].totalQuantity;
+
+        res.status(200).json({ error: null, totalQuantity: totalQuantity });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao calcular a soma das saídas do produto" });
+        console.log(error);
+    }
+});
+
+// Rota para somar todas as saídas de um produto específico em um intervalo de datas
+router.get('/product/exit/date-range/sum', async (req, res) => {
+    const { code, startDate, endDate } = req.query;
+
+    if (!code || !startDate || !endDate) {
+        return res.status(400).json({ error: "Código, data inicial e data final são obrigatórios" });
+    }
+
+    try {
+        const result = await History.aggregate([
+            {
+                $match: {
+                    code: code,
+                    type: "Saida",
+                    $expr: {
+                        $and: [
+                            { $gte: [{ $dateFromString: { dateString: "$date" } }, { $dateFromString: { dateString: startDate } }] },
+                            { $lte: [{ $dateFromString: { dateString: "$date" } }, { $dateFromString: { dateString: endDate } }] }
+                        ]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalQuantity: { $sum: "$quant" }
+                }
+            }
+        ]);
+
+        const totalQuantity = result.length > 0 ? result[0].totalQuantity : 0;
+
+        res.status(200).json({ error: null, totalQuantity });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao calcular a soma das saídas do produto no intervalo de datas" });
+        console.log(error);
+    }
+});
+
 //coletando historico especifico de um setor
 router.get('/searchSeparate', async(req, res) => {
 
