@@ -22,5 +22,10 @@ As principais tecnologias utilizadas são a linguagem *JavaScript* juntamente co
 
 ## Visualizações do Projeto
 
-> Em breve
+Interfaces
 
+![Interface Inicial do Projeto](https://raw.githubusercontent.com/EzequiellSantos/Teto-Solar-Inventory/refs/heads/main/frontend/public/interface01.png)
+
+![Sessão de materiais 1](https://raw.githubusercontent.com/EzequiellSantos/Teto-Solar-Inventory/refs/heads/main/frontend/public/interface02.png)
+
+![Sessão de materiais 2](https://raw.githubusercontent.com/EzequiellSantos/Teto-Solar-Inventory/refs/heads/main/frontend/public/interface03.png)
