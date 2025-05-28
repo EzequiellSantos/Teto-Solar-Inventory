@@ -221,6 +221,38 @@ router.get('/searchSeparate', async(req, res) => {
 
 })
 
+//coletando historico especifico de um type
+router.get('/searchSeparate/type', async(req, res) => {
+
+    const type = req.query.param1
+    const search = req.query.param2
+
+    try {
+        
+        //coleta o setor escolhido e pesquisa os produtos que ele levou
+        const historySpecifc = await History.find({type: type, $text: {$search: search}})
+
+        // verifica se o produto foi encontrado
+        if(historySpecifc.length != 0){
+
+            res.status(200).json({error: null, msg:"encontrado", history: historySpecifc })
+
+        } else{
+
+            res.status(200).json({error:"Este type não utilizou o produto especificado"})
+
+        }
+
+
+    } catch (error) {
+        
+        res.status(401).json({error: "Histórico não encontrado :/"})
+        console.log(error)
+
+    }
+
+})
+
 router.post('/', async(req, res) => {
 
     const { code, description, quant, date, sector, type } = req.body
