@@ -104,6 +104,7 @@
 
             return {
                 products: {},
+                type: null,
                 sector: null,
                 search: null,
                 apiURL: BASE_URL,
@@ -161,7 +162,7 @@
 
                 }
 
-                await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}`, {
+                await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}&param3=${this.type}`, {
                     method: "GET",
                     headers: {
                         "Content-type":"application/json"
@@ -173,6 +174,8 @@
                     if (data.error) {
                         
                         // console.error(data.error)
+                        this.msg = data.error
+                        this.msgClass = 'error'
 
                     } else {
                         
@@ -189,11 +192,16 @@
                         
                 })
 
+                setTimeout({
+                    this.msg = null
+                }, 1400)
+
             },
 
             async getTypeHistory(type){
 
                 this.adequedStyles(type)
+                this.type = type
 
                 await fetch(`${this.apiURL}/api/histories/type?choice=${type}`, {
                     method:"GET",
