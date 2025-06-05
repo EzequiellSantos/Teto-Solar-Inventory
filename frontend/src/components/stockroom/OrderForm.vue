@@ -99,7 +99,7 @@
             <div class="input-container">
 
                 <label for="price">Valor:</label>
-                <input type="number" name="price" id="price" v-model="price" required>
+                <input type="number" name="price" id="price" v-model="price" step="0.01" min="0" max="" value="0.00" required>
 
             </div>
 

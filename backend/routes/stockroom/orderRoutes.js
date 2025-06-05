@@ -89,6 +89,58 @@ router.get('/search', async(req, res) => {
 
 })
 
+// Rota para retornar os pedidos de um fornecedor específico
+router.get('/supplier', async (req, res) => {
+
+    const supplierName = req.query.supplier;
+
+    try {
+        
+       const orders = await Order.find({supplier: { $regex: `^${supplierName}$`, $options: 'i' }});
+
+        if (orders.length > 0) {
+            res.status(200).json({ error: null, data: orders });
+        } else {
+            res.status(404).json({ error: "Nenhum pedido encontrado para este fornecedor" });
+        }
+
+    } catch (error) {
+        
+        res.status(500).json({ error: "Erro ao buscar pedidos do fornecedor" });
+        console.log(error);
+
+    }
+
+})
+
+// procurar por nome ou codigo do material
+router.get('/productName', async(req, res) => {
+
+    const search = req.query.productName
+    
+    try {
+        
+        const orders = await Order.find({$text: { $search: search }}).sort({ _id: 1 });
+
+        if(orders !== null){
+
+            res.status(200).json({error: null, data: orders})
+
+        } else {
+
+            res.status(200).json({ error: "Pedido não encontrado" })
+
+        }
+
+    } catch (error) {
+        
+        res.status(401).json({ error: "Erro ao buscar pedidos" })
+        console.log(error)
+
+    }
+
+})
+
 // Rota para somar todos os preços de um mês específico
 router.get('/prices/sum/month', async (req, res) => {
     const { year, month } = req.query;

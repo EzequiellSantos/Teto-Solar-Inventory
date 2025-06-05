@@ -6,9 +6,7 @@
 
         <section id="headerOrder">
             <h1>Pedidos</h1>
-
-            <p>Valor comprado Semanalmente: {{this.allPrices}} R$</p>
-
+            <p>Pedidos feitos entre: <span class="date-choice">{{diasUteis[0]}}</span> e <span class="date-choice">{{diasUteis[4]}}</span></p>
             <section class="date-choice">
                 <input type="date" name="dataChoice" id="dataChoice" v-model="dataChoice" @change="getOrders(this.dataChoice)">
             </section>
@@ -26,6 +24,46 @@
         </section>
 
         <main id="mainOrder">
+
+
+            <span class="show-Info" v-if="showInfo == false" @click="showInfoOrders">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256">
+                <g fill="#f5f5f5" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M24,4c-11.02771,0 -20,8.97229 -20,20c0,3.27532 0.86271,6.33485 2.26172,9.06445l-2.16797,7.76367c-0.50495,1.8034 1.27818,3.58449 3.08203,3.08008l7.76758,-2.16797c2.72769,1.39712 5.7836,2.25977 9.05664,2.25977c11.02771,0 20,-8.97229 20,-20c0,-11.02771 -8.97229,-20 -20,-20zM24,7c9.40629,0 17,7.59371 17,17c0,9.40629 -7.59371,17 -17,17c-3.00297,0 -5.80774,-0.78172 -8.25586,-2.14648c-0.34566,-0.19287 -0.75354,-0.24131 -1.13477,-0.13477l-7.38672,2.0625l2.0625,-7.38281c0.10655,-0.38122 0.05811,-0.7891 -0.13477,-1.13477c-1.36674,-2.4502 -2.15039,-5.25915 -2.15039,-8.26367c0,-9.40629 7.59371,-17 17,-17zM23.97656,12.97852c-0.82766,0.01293 -1.48843,0.69381 -1.47656,1.52148v12c-0.00765,0.54095 0.27656,1.04412 0.74381,1.31683c0.46725,0.27271 1.04514,0.27271 1.51238,0c0.46725,-0.27271 0.75146,-0.77588 0.74381,-1.31683v-12c0.00582,-0.40562 -0.15288,-0.7963 -0.43991,-1.08296c-0.28703,-0.28666 -0.67792,-0.44486 -1.08353,-0.43852zM24,31c-1.10457,0 -2,0.89543 -2,2c0,1.10457 0.89543,2 2,2c1.10457,0 2,-0.89543 2,-2c0,-1.10457 -0.89543,-2 -2,-2z"></path></g></g>
+                </svg>
+            </span>
+            <section v-if="showInfo" class="orders-info">
+
+                <div class="orders-info-card">
+
+                    <button class="close-info" @click="showInfo = false">X</button>
+                    <h2>Informações</h2>
+                    <p>Total de Pedidos: <span class="total-orders">{{orders.length}}</span></p>
+                    <p>Total de Gastos: <span class="total-price info-prices">{{allPrices.toFixed(2)}} R$</span></p>
+                    <p>Total de Gastos Mensais: <span class="total-month info-prices"> {{ allPricesMonth.toFixed(2) }} R$</span> </p>
+
+                    <label for="supplierName">Escolha um fornecedor Especifico:</label>
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                        <input type="text" name="supplierName" id="supplierName" value=" " v-model="supplierName" @keyup.enter="getOrdersBySupplier(supplierName)" placeholder="Nome do Fornecedor">
+                        <button class="btn-get-orders" @click="getOrdersBySupplier(supplierName)">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="23" viewBox="0 0 30 30">
+                            <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <label for="productName">Escolha um Produto Especifico:</label>
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                        <input type="text" name="productName" id="productName" v-model="productName" @keyup.enter="getOrdersByProduct(productName)" placeholder="Cod ou Descrição">
+                        <button class="btn-get-orders" @click="getOrdersByProduct(productName)">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="23" viewBox="0 0 30 30">
+                            <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
 
             <div v-if="loading">
                 <div class="spinner">
@@ -69,7 +107,7 @@
 
                 <section class="info-container">
                     <span class="info-supplier">Fornecedor: {{order.supplier}}</span>
-                    <span class="info-supplier">Valor: {{order.price}} R$</span>
+                    <span class="info-supplier">Valor: {{order.price?.toFixed(2)}} R$</span>
                     <span class="span-date">{{order.date}}</span>
                     <router-link class="edit-button" :to="`editOrder/${order._id}`">Editar</router-link>
                     <button class="pdf-button" @click="OrderProcess(order.materials, order.date, String(index + 1).padStart(2, '0'))">
@@ -110,11 +148,15 @@
             return {
                 errorImage: false,
                 loading: true,
+                showInfo: false,
                 apiURL: BASE_URL,
                 orders: {},
                 ordedMaterials: [],
                 allPrices: 0,
-                dataChoice: `${ano}-${String(mes).padStart(2, '0')}-${dia}`,
+                supplierName: "",
+                productName: "",
+                allPricesMonth: 0,
+                dataChoice: `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`,
                 diasUteis: [],
                 arrived: false,
                 msg: null,
@@ -136,12 +178,154 @@
         },
         methods: {
 
+            showInfoOrders(){
+
+                this.showInfo = !this.showInfo
+
+            },
+
+            // função para coletar o preço mensal
+            async getMonthlyPrice(){
+
+                const data = this.dataChoice.split('-')
+                const ano = data[0]
+                const mes = data[1]
+
+                await fetch(`${this.apiURL}/api/orders/prices/sum/month?year=${ano}&month=${mes}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        console.log(data.error)
+
+                    } else {
+
+                        this.allPricesMonth = data.totalPrice
+
+                    }
+
+                })
+            },
+
             OrderProcess(array, data, index){
                 this.ordedMaterials = []
                 for (let i = 0; i < array.length; i++) {
                     this.adicionarPedido(array[i]._id, array[i].code, array[i].description, array[i].quantOrder, array[i].quantOrder)
                 }
                 this.gerarPDF(this.ordedMaterials, data, index)
+            },
+
+            // função para pesquisar nome do fornecedor
+            async getOrdersBySupplier(supplierName){
+
+                this.loading = true
+                this.errorImage = false
+                this.diasUteis = [];
+                this.allPricesMonth = 0
+
+                await fetch(`${this.apiURL}/api/orders/supplier?supplier=${supplierName}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    if(data.error){
+
+                        console.log(data.error)
+
+                    } else {
+
+                        this.showInfo = false
+                        this.orders = data.data
+                        this.scrollBottom()
+                        this.loading = false
+
+                        if(this.orders.length == 0){
+                            this.errorImage = true
+                        }
+
+                        this.allPrices = 0
+                        for (let i = 0; i < this.orders.length; i++) {
+
+                            if(this.orders[i].price == null){
+
+                                this.orders[i].price = 0
+
+                            }
+
+                            this.allPrices += this.orders[i].price;
+                         
+                        }
+
+                            this.dataChoice = ''
+                            this.diasUteis = [];	
+                            this.diasUteis[0] = this.orders[0].date.split('T')[0];
+                            this.diasUteis[4] = this.orders[this.orders.length - 1].date.split('T')[0];              
+
+                    }
+                })
+                .catch(err => {
+
+                    console.log(err)
+
+                })
+            },
+
+            // função para pesquisar nome do produto
+            async getOrdersByProduct(productName){
+
+                this.loading = true
+                this.errorImage = false
+                this.diasUteis = [];
+                this.allPricesMonth = 0
+
+                await fetch(`${this.apiURL}/api/orders/productName?productName=${productName}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        console.log(data.error)
+
+                    } else {
+
+                        this.showInfo = false
+                        this.orders = data.data
+                        this.scrollBottom()
+                        this.loading = false
+
+                        if(this.orders.length == 0){
+                            this.errorImage = true
+                        }
+
+                        this.allPrices = 0
+
+                        this.dataChoice = ''
+                        this.diasUteis = [];	
+                        this.diasUteis[0] = this.orders[0].date.split('T')[0];
+                        this.diasUteis[4] = this.orders[this.orders.length - 1].date.split('T')[0];              
+
+                    }
+                })
+                .catch(err => {
+
+                    console.log(err)
+
+                })
+
             },
 
             adicionarPedido(id, code, description, quant, order){
@@ -226,7 +410,7 @@
 
                     if(data.error){
 
-                        console.error(data.error, " erro ao coletar quantidade ")
+                        console.log(data.error, " erro ao coletar quantidade ")
 
                     } else {
 
@@ -329,7 +513,7 @@
                     
                     if(data.error){
                         
-                        console.error(data.error)
+                        console.log(data.error)
 
                     } else {
 
@@ -381,6 +565,7 @@
                             }
 
                             this.allPrices += this.orders[i].price;
+                            this.getMonthlyPrice()
                             
                             
                         }
@@ -539,7 +724,7 @@
         gap: 10px;
     }
 
-    .info-supplier{
+    .info-supplier, .info-prices{
         padding: 3px 4px;
         background-color: #e4e4e4;
         border-radius: 7px;
@@ -586,5 +771,128 @@
     .error-image{
         margin-top:100px ;
     }
+
+    /* Estilo para o botão "Mostrar" (show-Info) */
+.show-Info {
+    position: fixed;
+    left: 10px;
+    top: 115px; /* logo abaixo do headerOrder */
+    z-index: 10;
+    background: var(--color-main00);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: background 0.2s, color 0.2s;
+}
+
+.show-Info:hover {
+    background: #005fa3;
+    color: #e4e4e4;
+}
+
+/* Estilo para o overlay escuro ao redor do card de informações */
+.orders-info {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: rgba(0,0,0,0.65);
+    padding-top: 120px;
+}
+
+/* Card sobreposto e destacado */
+.orders-info-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    padding: 36px 44px 32px 44px;
+    min-width: 340px;
+    max-width: 420px;
+    margin: auto;
+    margin-top: -60px;
+    position: relative;
+    z-index: 101;
+    color: #222;
+    font-size: 1.08em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+}
+
+.orders-info .close-info {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: background 0.2s;
+}
+
+.orders-info .close-info:hover {
+    background: #c0392b;
+}
+
+/* Estilo minimalista para os dados */
+.orders-info-card h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--color-main00);
+}
+
+.orders-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.orders-info-list span {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05em;
+    color: #333;
+    font-weight: 500;
+}
+
+.orders-info-list .label {
+    color: #888;
+    font-weight: 400;
+    margin-right: 8px;
+}
+
+.orders-info-list .value {
+    font-weight: 600;
+    color: #222;
+}
+
+.orders-info-card > div > input[type="text"] {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.btn-get-orders{
+    padding: 5px;
+    border-radius: 50%;
+}
+
+
 
 </style>
