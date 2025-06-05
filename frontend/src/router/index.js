@@ -182,6 +182,15 @@ const routes = [
       requireAuth: true
     }
   },
+  {
+    path: '/teams',
+    name: "teams",
+    component: () => import(/* webpackChunkName: "editOrder" */ '../views/teams/Teams.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+    
 ]
 
 const router = createRouter({

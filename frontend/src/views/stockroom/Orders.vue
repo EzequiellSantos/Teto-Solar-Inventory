@@ -60,6 +60,8 @@
                             </svg>
                         </button>
                     </div>
+                        
+                    <div class="loader" v-if="loadingSearch"></div>
 
                 </div>
 
@@ -148,6 +150,7 @@
             return {
                 errorImage: false,
                 loading: true,
+                loadingSearch: false,
                 showInfo: false,
                 apiURL: BASE_URL,
                 orders: {},
@@ -225,9 +228,11 @@
             async getOrdersBySupplier(supplierName){
 
                 this.loading = true
+                this.loadingSearch = true
                 this.errorImage = false
                 this.diasUteis = [];
                 this.allPricesMonth = 0
+                this.allPrices = 0
 
                 await fetch(`${this.apiURL}/api/orders/supplier?supplier=${supplierName}`, {
                     method: "GET",
@@ -252,7 +257,6 @@
                             this.errorImage = true
                         }
 
-                        this.allPrices = 0
                         for (let i = 0; i < this.orders.length; i++) {
 
                             if(this.orders[i].price == null){
@@ -265,10 +269,11 @@
                          
                         }
 
-                            this.dataChoice = ''
-                            this.diasUteis = [];	
-                            this.diasUteis[0] = this.orders[0].date.split('T')[0];
-                            this.diasUteis[4] = this.orders[this.orders.length - 1].date.split('T')[0];              
+                        this.dataChoice = ''
+                        this.diasUteis = [];	
+                        this.diasUteis[0] = this.orders[0].date.split('T')[0];
+                        this.diasUteis[4] = this.orders[this.orders.length - 1].date.split('T')[0];   
+                        this.loadingSearch = false           
 
                     }
                 })
@@ -283,6 +288,7 @@
             async getOrdersByProduct(productName){
 
                 this.loading = true
+                this.loadingSearch = true
                 this.errorImage = false
                 this.diasUteis = [];
                 this.allPricesMonth = 0
@@ -316,7 +322,8 @@
                         this.dataChoice = ''
                         this.diasUteis = [];	
                         this.diasUteis[0] = this.orders[0].date.split('T')[0];
-                        this.diasUteis[4] = this.orders[this.orders.length - 1].date.split('T')[0];              
+                        this.diasUteis[4] = this.orders[this.orders.length - 1].date.split('T')[0];   
+                        this.loadingSearch = false           
 
                     }
                 })
@@ -773,126 +780,139 @@
     }
 
     /* Estilo para o botão "Mostrar" (show-Info) */
-.show-Info {
-    position: fixed;
-    left: 10px;
-    top: 115px; /* logo abaixo do headerOrder */
-    z-index: 10;
-    background: var(--color-main00);
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    transition: background 0.2s, color 0.2s;
-}
+    .show-Info {
+        position: fixed;
+        left: 10px;
+        top: 115px; /* logo abaixo do headerOrder */
+        z-index: 10;
+        background: var(--color-main00);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        transition: background 0.2s, color 0.2s;
+    }
 
-.show-Info:hover {
-    background: #005fa3;
-    color: #e4e4e4;
-}
+    .show-Info:hover {
+        background: #005fa3;
+        color: #e4e4e4;
+    }
 
-/* Estilo para o overlay escuro ao redor do card de informações */
-.orders-info {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 100;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    background: rgba(0,0,0,0.65);
-    padding-top: 120px;
-}
+    /* Estilo para o overlay escuro ao redor do card de informações */
+    .orders-info {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        background: rgba(0,0,0,0.65);
+        padding-top: 120px;
+    }
 
-/* Card sobreposto e destacado */
-.orders-info-card {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-    padding: 36px 44px 32px 44px;
-    min-width: 340px;
-    max-width: 420px;
-    margin: auto;
-    margin-top: -60px;
-    position: relative;
-    z-index: 101;
-    color: #222;
-    font-size: 1.08em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-}
+    /* Card sobreposto e destacado */
+    .orders-info-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        padding: 36px 44px 32px 44px;
+        min-width: 340px;
+        max-width: 420px;
+        margin: auto;
+        margin-top: -60px;
+        position: relative;
+        z-index: 101;
+        color: #222;
+        font-size: 1.08em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 18px;
+    }
 
-.orders-info .close-info {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 1.2em;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    transition: background 0.2s;
-}
+    .orders-info .close-info {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: #e74c3c;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        font-size: 1.2em;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        transition: background 0.2s;
+    }
 
-.orders-info .close-info:hover {
-    background: #c0392b;
-}
+    .orders-info .close-info:hover {
+        background: #c0392b;
+    }
 
-/* Estilo minimalista para os dados */
-.orders-info-card h2 {
-    font-size: 1.4em;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: var(--color-main00);
-}
+    /* Estilo minimalista para os dados */
+    .orders-info-card h2 {
+        font-size: 1.4em;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: var(--color-main00);
+    }
 
-.orders-info-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+    .orders-info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-.orders-info-list span {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.05em;
-    color: #333;
-    font-weight: 500;
-}
+    .orders-info-list span {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.05em;
+        color: #333;
+        font-weight: 500;
+    }
 
-.orders-info-list .label {
-    color: #888;
-    font-weight: 400;
-    margin-right: 8px;
-}
+    .orders-info-list .label {
+        color: #888;
+        font-weight: 400;
+        margin-right: 8px;
+    }
 
-.orders-info-list .value {
-    font-weight: 600;
-    color: #222;
-}
+    .orders-info-list .value {
+        font-weight: 600;
+        color: #222;
+    }
 
-.orders-info-card > div > input[type="text"] {
-    width: 100%;
-    border: 1px solid #ccc;
-}
+    .orders-info-card > div > input[type="text"] {
+        width: 100%;
+        border: 1px solid #ccc;
+    }
 
-.btn-get-orders{
-    padding: 5px;
-    border-radius: 50%;
-}
+    .btn-get-orders{
+        padding: 5px;
+        border-radius: 50%;
+    }
 
+    .loader {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #ccc;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: auto;
+    }
 
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
 </style>
