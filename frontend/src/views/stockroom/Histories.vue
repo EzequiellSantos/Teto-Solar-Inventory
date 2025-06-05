@@ -192,8 +192,9 @@
                         
                 })
 
-                setTimeout({
+                setTimeout(() => {
                     this.msg = null
+                    this.msgClass = null
                 }, 1400)
 
             },
