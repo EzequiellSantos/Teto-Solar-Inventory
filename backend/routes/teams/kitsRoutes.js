@@ -54,7 +54,7 @@ router.delete('/:id', async (req, res) => {
 router.get('/search/team', async (req, res) => {
     const teamName = req.query.name;
     try {
-        const kits = await Kits.find({ teamName: { $regex: teamName, $options: 'i' } });
+        const kits = await Kits.find({ teamName: teamName });
         res.status(200).json({ error: null, data: kits });
     } catch (error) {
         res.status(400).json({ error: "Erro ao buscar kits por equipe" });
