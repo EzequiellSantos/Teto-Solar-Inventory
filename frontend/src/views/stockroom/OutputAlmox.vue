@@ -356,7 +356,7 @@
 
                 // 2. Buscar o kit da equipe selecionada
                 let kitEquipe = null;
-                await fetch(`${this.apiURL}/api/kits/search/team?name=${encodeURIComponent(this.sector)}`, {
+                await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
                     method: "GET",
                     headers: {
                         "Content-type": "application/json",
