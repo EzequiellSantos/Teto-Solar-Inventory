@@ -16,11 +16,88 @@
 
         </section>
 
-        <form id="clientForm" enctype="multipart/form-data" @submit="updateKits($event)" v-if="!outputClient">
+        <form id="clientForm" enctype="multipart/form-data" @submit="updateKits($event)" v-if="outputClient">
         
 
+            <div class="almox-containers">
+                <label for="nameClient">Nome do Cliente:</label>
+                <input ref="nameClient" type="text" name="nameClient" id="nameClient" v-model="nameClient" required placeholder="Nome / cidade">
+            </div>
 
+            <div class="almox-containers">
 
+                <label for="search">Procurar por Código ou Descrição:</label>
+                <input ref="search" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
+            </div>
+
+            <div class="almox-containers" >
+                
+                <h2>Lista de Produtos:</h2>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
+
+                <aside style="text-align: left; min-width: 200px; width:100%;" v-for="(product, Index) in this.products" :key="Index">
+
+                    <section class="list-itens">
+
+                        <button type="button" class="select-product-item" @click="addSelectedProductKits(product.code, product.quantity)" >
+                            <span>{{ product?.code }}</span>
+                            <span class="span-description-list">{{ product?.description }}</span>
+                            <img width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                        </button>
+
+                    </section>
+                     
+                </aside>
+            </div>
+
+            <div class="almox-containers" ref="productSelect">
+                <h3>Produtos Selecionados:</h3>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
+                <section v-if="selectProductKits.code?.length != 0">
+                    <p class="select-product">{{selectProductKits.code}} {{selectProductKits.description}}</p>
+                    <input type="number" v-model="quantKit" placeholder="Quantidade">
+                    <img @click="addProductKit" width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                </section>
+            </div>    
+
+            <div class="almox-containers">
+
+                <h3>Materiais do Cliente:</h3>
+                <aside id="headerList"><span>Cód.</span> <span>Descri.</span> <span>Quant.</span></aside>
+
+                <section v-for="(material, index) in allClientMaterial" :key="index" class="list-itens">
+                    <p class="select-product">{{material.code}} {{material.description}} - {{material.quantity}}</p>
+                </section>
+            </div>
+
+            <div class="almox-containers">
+
+                <label for="sector">Setor de Saída:</label>
+                <select name="sector" id="sector" v-model="sector" required>
+                    <optgroup label="Setor que levou">
+                        <option value="EQUIPE 01">EQUIPE 01</option>
+                        <option value="EQUIPE 02">EQUIPE 02</option>
+                        <option value="EQUIPE 03">EQUIPE 03</option>
+                        <option value="EQUIPE 04">EQUIPE 04</option>
+                        <option value="EQUIPE 05">EQUIPE 05</option>
+                        <option value="EQUIPE 06">EQUIPE 06</option>
+                        <option value="EQUIPE 07">EQUIPE 07</option>
+                        <option value="MANUTENCAO">Manutenção</option>
+                    </optgroup>
+                </select>
+
+            </div>
+
+            <div class="almox-containers">
+
+                <label for="outputDate">Data de Sáida</label>
+                <input type="date" name="outputDate" id="outputDate" v-model="outputDate">
+
+            </div>
+
+            <InputSubmit text="Registrar" />
+
+            <p style="position:fixed; bottom: 70px;"><small>versão em protótipo</small></p>
         
         </form>
 
@@ -36,7 +113,7 @@
                 <h2>Lista de Produtos:</h2>
                 <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
 
-                <aside style="text-align: left; min-width: 200px; width:100%;" v-for="(product, Index) in this.products" :key="Index">
+                <aside style="text-align: left; min-width: 200px; width:100%" v-for="(product, Index) in this.products" :key="Index">
 
                     <section class="list-itens">
 
@@ -104,6 +181,7 @@
 
 </template>
 
+
 <script>
 
     import Message from  '@/components/Message.vue'
@@ -126,11 +204,15 @@
                 apiKey: BASE_API_KEY,
                 msg: null,
                 msgClass: null,
-                products: {},
+                allProducts: [],
+                products: [],
                 selectProduct: {},
+                selectProductKits: {},
+                allClientMaterial: [],
                 search: null,
                 outputQuant: null,
-                sector: null
+                sector: null,
+                quantKit: null,
 
             }
 
@@ -138,9 +220,199 @@
         created(){
 
             this.getDate()
+            this.getProducts()
 
         },
         methods: {
+
+            controlChoice(type) {
+
+                if(type == 'stockroom'){
+
+                    this.outputClient = false
+                    this.selectProductKits = {}
+                    this.allClientMaterial = []
+                    this.search = null
+                    this.outputQuant = null
+                    this.products = {}
+                    this.selectProduct = {}
+
+                } else if(type == 'clients'){
+
+                    this.outputClient = true
+                    this.selectProductKits = {}
+                    this.allClientMaterial = []
+                    this.search = null
+                    this.outputQuant = null
+                    this.products = {}
+                    this.selectProduct = {}
+
+                }
+
+            },
+
+            addProduct() {
+
+                if(this.selectProductKits.code?.length != 0 && this.quantKit > 0){
+
+                    const data = {
+                        code: this.selectProductKits.code,
+                        description: this.selectProductKits.description,
+                        quantity: this.quantKit,
+                    }
+
+                    this.allClientMaterial.push(data)
+
+                    this.selectProductKits = {}
+                    this.quantKit = null
+
+                } else {
+
+                    this.msg = "Selecione um produto e informe a quantidade"
+                    this.msgClass = 'error'
+
+                    setTimeout(() => {
+                        this.msg = null
+                    }, 1600);
+
+                }
+
+            },
+
+            addProductKit(e){
+
+                e.preventDefault()
+
+                if(this.selectProductKits.code?.length != 0 && this.quantKit > 0){
+
+                    const data = {
+                        code: this.selectProductKits.code,
+                        description: this.selectProductKits.description,
+                        quantity: this.quantKit,
+                    }
+
+                    this.allClientMaterial.push(data)
+
+                    this.selectProductKits = {}
+                    this.quantKit = null
+
+                } else {
+
+                    this.msg = "Selecione um produto e informe a quantidade"
+                    this.msgClass = 'error'
+
+                    setTimeout(() => {
+                        this.msg = null
+                    }, 1600);
+
+                }
+
+            },
+
+            addSelectedProductKits(code, quantity){
+
+                const product = this.allProducts.find((item) => item.code == code)
+
+                if(product){
+
+                    this.selectProductKits = {
+                        code: code,
+                        description: product.description,
+                    }
+
+                }
+
+            },
+
+            async updateKits(e) {
+                e.preventDefault();
+
+                if (this.allClientMaterial.length == 0) {
+                    this.msg = "Selecione pelo menos um produto";
+                    this.msgClass = 'error';
+                    setTimeout(() => { this.msg = null }, 1600);
+                    return;
+                }
+
+                // Monta o objeto conforme o model de historiesKit
+                const data = {
+                    teamName: this.sector,
+                    clientName: this.nameClient,
+                    date: this.outputDate,
+                    materials: this.allClientMaterial
+                };
+
+                const jsonData = JSON.stringify(data);
+
+                // 1. Registrar o histórico do kit do cliente
+                await fetch(`${this.apiURL}/api/historiesKits`, {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
+                    },
+                    body: jsonData
+                });
+
+                // 2. Buscar o kit da equipe selecionada
+                let kitEquipe = null;
+                await fetch(`${this.apiURL}/api/kits/search/team?name=${encodeURIComponent(this.sector)}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
+                    }
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.data && data.data.length > 0) {
+                        kitEquipe = data.data[0];
+                    }
+                });
+
+                if (!kitEquipe) {
+                    this.msg = "Kit da equipe não encontrado!";
+                    this.msgClass = 'error';
+                    setTimeout(() => { this.msg = null }, 1600);
+                    return;
+                }
+
+                // 3. Atualizar os materiais do kit da equipe
+                const updatedMaterials = kitEquipe.materials.map(mat => {
+                    const found = this.allClientMaterial.find(m => m.code === mat.code);
+                    if (found) {
+                        // Subtrai a quantidade retirada, nunca deixando negativo
+                        return {
+                            ...mat,
+                            quantity: Math.max((mat.quantity || 0) - (found.quantity || 0), 0)
+                        };
+                    }
+                    return mat;
+                });
+
+                // 4. Atualizar o kit da equipe no banco
+                await fetch(`${this.apiURL}/api/kits/${kitEquipe._id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
+                    },
+                    body: JSON.stringify({ materials: updatedMaterials })
+                });
+
+                // Feedback e reset
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.msg = "Saída registrada e kit da equipe atualizado!";
+                this.msgClass = 'sucess';
+                this.search = null;
+                this.outputQuant = null;
+                this.products = [];
+                this.selectProductKits = {};
+                this.allClientMaterial = [];
+                this.$refs.search.focus();
+
+                setTimeout(() => { this.msg = null }, 1700);
+            },
 
             enviarNotificacao(header, body) {
                 if (Notification.permission === "granted") {
@@ -164,36 +436,59 @@
 
             },
 
-            async searchProduct(){
+            async getProducts(){
 
-                if(this.search != '' && this.search?.length > 2) {
+                await fetch(`${this.apiURL}/api/materials/all`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
 
-                    await fetch(`${this.apiURL}/api/materials/search?query=${this.search}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-type":"application/json",
-                            "x-api-key": `${this.apiKey}`
-                        }
-                    })
-                    .then((resp) => resp.json())
-                    .then((data) => {
+                    if(data.error){
 
-                        if(data.error){
+                        this.msg = data.error
+                        this.msgClass = 'error'
 
-                            this.msg = data.error
-                            this.msgClass = 'error'
+                    } else {
 
-                        } else {
+                        this.allProducts = data.data;
 
-                            this.msg = null
-                            this.products = data.materials
 
-                        }
+                    }
 
-                    })
+                })
 
+            },
+
+            searchProduct() {
+                const normalize = str => {
+                    if (typeof str !== 'string') return '';
+                    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                };
+
+                const termoBusca = normalize(this.search);
+
+                // Garante que allProducts é sempre um array
+                const baseProducts = Array.isArray(this.allProducts) ? this.allProducts : [];
+
+                let filtered = [];
+                if (termoBusca.length > 0) {
+                    filtered = baseProducts.filter(product => {
+                        const codeMatch = product.code && normalize(product.code).includes(termoBusca);
+                        const descriptionMatch = product.description && normalize(product.description).includes(termoBusca);
+                        return codeMatch || descriptionMatch;
+                    });
+                } else {
+                    filtered = baseProducts;
                 }
 
+                // Limita o array a no máximo 20 itens
+                this.products = filtered.slice(0, 20);
+                
             },
 
             async addSelectedProduct(code, quantity, minQuantity, state){
@@ -277,54 +572,89 @@
 
                 const jsonData = JSON.stringify(data)
 
+                // Atualiza o produto no estoque geral
                 await fetch(`${this.apiURL}/api/materials`, {
-                    method:"PUT",
+                    method: "PUT",
                     headers: {
-                        "Content-type":"application/json",
+                        "Content-type": "application/json",
                         "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
                 .then((resp) => resp.json())
-                .then((data) => {
-
-                    if(data.error){
-
-                        this.msg = error
-                        this.msgClass = 'error'
-
+                .then(async (data) => {
+                    if (data.error) {
+                        this.msg = data.error;
+                        this.msgClass = 'error';
                     } else {
+                        this.msg = data.msg;
+                        this.msgClass = 'sucess';
 
-                        this.msg = data.msg
-                        this.msgClass = 'sucess'
-                        
+                        // Atualiza o kit da equipe selecionada
+                        // 1. Busca o kit da equipe
+                        let kitEquipe = null;
+                        await fetch(`${this.apiURL}/api/kits/search/team?name=${encodeURIComponent(this.sector)}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-type": "application/json",
+                                "x-api-key": `${this.apiKey}`
+                            }
+                        })
+                        .then(resp => resp.json())
+                        .then(data => {
+                            if (data.data && data.data.length > 0) {
+                                kitEquipe = data.data[0];
+                            }
+                        });
+
+                        if (kitEquipe) {
+                            // 2. Atualiza ou adiciona o produto no kit
+                            let found = false;
+                            const updatedMaterials = kitEquipe.materials.map(mat => {
+                                if (mat.code === this.selectProduct.code) {
+                                    found = true;
+                                    return {
+                                        ...mat,
+                                        quantity: (mat.quantity || 0) + Number(this.outputQuant)
+                                    };
+                                }
+                                return mat;
+                            });
+
+                            // Se não encontrou, adiciona o produto ao kit
+                            if (!found) {
+                                updatedMaterials.push({
+                                    code: this.selectProduct.code,
+                                    description: this.selectProduct.description,
+                                    quantity: Number(this.outputQuant)
+                                });
+                            }
+
+                            // 3. Atualiza o kit no banco
+                            await fetch(`${this.apiURL}/api/kits/${kitEquipe._id}`, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "x-api-key": `${this.apiKey}`
+                                },
+                                body: JSON.stringify({ materials: updatedMaterials })
+                            });
+                        }
+
                         setTimeout(() => {
-
-                            this.sendingRegister()
-
-                        }, 1000)
-                        
-
+                            this.sendingRegister();
+                        }, 1000);
                     }
-
                 })
                 .catch((err) => {
-
-                    this.msg = 'Erro ao registrar'
-                    this.msgClass = 'error'
-                    console.log(err)
+                    this.msg = 'Erro ao registrar';
+                    this.msgClass = 'error';
+                    console.log(err);
 
                     setTimeout(() => {
-                        
-                        this.msg = null
-
+                        this.msg = null;
                     }, 1600);
-
-                })
-
-                
-
-
+                });
             },
 
             async sendingRegister(){
@@ -385,7 +715,7 @@
 
                 })
 
-            }
+            },
 
         }
 

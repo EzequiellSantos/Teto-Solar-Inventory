@@ -190,6 +190,14 @@ const routes = [
       requireAuth: true
     }
   },
+  {
+    path: '/team/:id',
+    name: "team",
+    component: () => import(/* webpackChunkName: "editOrder" */ '../views/teams/Team.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
     
 ]
 
