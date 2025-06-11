@@ -283,7 +283,8 @@
                 await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[0]}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"  
+                        "Content-type":"application/json",
+                        "x-api-key":`${this.apiKey}`  
                     }
                 })
                 .then((resp) => resp.json())
@@ -323,7 +324,8 @@
 
                     method: "POST",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key":`${this.apiKey}`
                     },
                     body: jsonData
 
@@ -391,7 +393,8 @@
                 await fetch(`${this.apiURL}/api/logs`, {
                     method:"PUT",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key":`${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -449,7 +452,8 @@
                     await fetch(`${this.apiURL}/api/inverters/search?query=${this.allSn[v]}`, {
                         method: "GET",
                         headers: {
-                            "Content-type":"application/json"  
+                            "Content-type":"application/json",
+                            "x-api-key":`${this.apiKey}` 
                         }
                     })
                     .then((resp) => resp.json())
@@ -485,7 +489,10 @@
 
                     await fetch(`${this.apiURL}/api/inverters`, {
                         method: "PUT",
-                        headers: { "Content-type":"application/json" },
+                        headers: {
+                            "Content-type":"application/json",
+                            "x-api-key":`${this.apiKey}` 
+                        },
                         body: jsonData
                     })
                     .then((resp) => resp.json())
