@@ -593,7 +593,7 @@
                         // Atualiza o kit da equipe selecionada
                         // 1. Busca o kit da equipe
                         let kitEquipe = null;
-                        await fetch(`${this.apiURL}/api/kits/search/team?name=${encodeURIComponent(this.sector)}`, {
+                        await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
                             method: "GET",
                             headers: {
                                 "Content-type": "application/json",
