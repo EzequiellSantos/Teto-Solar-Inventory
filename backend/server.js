@@ -54,6 +54,10 @@ const trackingRoutes = require('./routes/panels/trackingRoutes')
 const materialRoutes = require('./routes/stockroom/materialRoutes')
 const historyRoutes = require('./routes/stockroom/historyRoutes')
 const orderRoutes = require('./routes/stockroom/orderRoutes')
+const historiesRoutes = require('./routes/teams/historiesKitsRoutes')
+const kitsRoutes = require('./routes/teams/kitsRoutes')
+const reports = require('./routes/teams/reportsRoutes')
+const teamRoutes = require('./routes/teams/teamRoutes')
 
 app.use('/api/batchs', checkApiKey, batchsRoutes)
 app.use('/api/trackings', checkApiKey, trackingRoutes)
@@ -63,6 +67,10 @@ app.use('/api/auth', checkApiKey, authRoutes)
 app.use('/api/materials', checkApiKey, materialRoutes)
 app.use('/api/histories', checkApiKey, historyRoutes)
 app.use('/api/orders', checkApiKey, orderRoutes)
+app.use('/api/historiesKits', checkApiKey, historiesRoutes)
+app.use('/api/kits', checkApiKey, kitsRoutes)
+app.use('/api/reports', checkApiKey, reports)
+app.use('/api/teams', checkApiKey, teamRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;
