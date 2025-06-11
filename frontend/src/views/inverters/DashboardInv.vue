@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <DataTableInv :inverters="inverters"/>
+                <DataTableInv :inverters="processedInv"/>
 
             </div>
 
@@ -51,7 +51,7 @@
     import InputInv from '@/components/form/inputText.vue'
     import Message from '@/components/Message.vue'
     import Footer from '@/components/inverters/Footer.vue' 
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
     import { Html5QrcodeScanner } from 'html5-qrcode'
 
     export default {
@@ -60,7 +60,9 @@
             return {
                 inputBusca: localStorage.getItem("inputBusca")? localStorage.getItem("inputBusca") : "",
                 inverters: [],
+                processedInv:[],
                 apiURL : BASE_URL,
+                apiKey: BASE_API_KEY,
                 loading: false,
                 msg: null,
                 msgClass: null,
@@ -70,6 +72,7 @@
         created() {
 
             if(localStorage.getItem("inputBusca")){
+                this.getInverters()
                 this.inputTextoBusca()
             } else {
                 this.getInverters()
@@ -86,68 +89,39 @@
         methods: {
 
             // realizar query de busca de inversores
-            async inputTextoBusca () {
+            inputTextoBusca() {
+                const normalize = str => {
+                    if (typeof str !== 'string') return '';
+                    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                };
 
-                this.loading = true
-                this.inverters = []
-                localStorage.setItem("inputBusca", `${this.inputBusca}`);
+                const termoBusca = normalize(this.inputBusca);
 
-                try {
-                    
-                    await fetch(`${this.apiURL}/api/inverters/search?query=${this.inputBusca}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-type":"application/json"
-                        }
-                    } )
-                    .then((resp) => resp.json())
-                    .then((data) => {
-                    
-                        if(data.error){
+                localStorage.setItem("inputBusca", this.inputBusca || '');
 
-                            this.msg = data.error
-                            this.msgClass = 'error'
+                this.processedInv = this.inverters.filter(inverter => {
+                    // Busca por SN, type, invoice ou descrição (todos são string)
+                    const snMatch = inverter.sn && normalize(inverter.sn).includes(termoBusca);
+                    const typeMatch = inverter.type && normalize(inverter.type).includes(termoBusca);
+                    const invoiceMatch = inverter.invoice && normalize(inverter.invoice).includes(termoBusca);
+                    const descriptionMatch = inverter.description && normalize(inverter.description).includes(termoBusca);
 
-                        }  else {
+                    return snMatch || typeMatch || invoiceMatch || descriptionMatch;
+                });
 
-                            this.msg = data.msg
-                            this.msgClass = 'sucess'
-
-                        }
-
-                        setTimeout(() => {
-
-                            this.msg = null
-
-                            let inputValue = this.inputBusca
-
-                            if(inputValue == "" || inputValue.length == 0){
-                                localStorage.removeItem("inputBusca");
-                                this.getInverters()
-                            }
-
-                        }, 1500) 
-
-                        this.inverters = data.inverter
-
-                    })
-
-                } catch (error) {
-                    
-                    console.log(error)
-
-                    this.msg = data.error
-                    this.msgClass = 'error'
-
-                    setTimeout(() => {
-
-                        this.msg = null
-                        this.msgClass = null
-
-                    }, 2000)
-
+                if (!this.processedInv || this.processedInv.length === 0) {
+                    this.msg = "Nenhum inversor encontrado com esse SN, tipo, nota fiscal ou descrição";
+                    this.msgClass = 'error';
                 }
 
+                setTimeout(() => {
+                    this.msg = null;
+
+                    if (this.inputBusca == "" || this.inputBusca.length === 0) {
+                        localStorage.removeItem("inputBusca");
+                        this.processedInv = this.inverters;
+                    }
+                }, 1500);
             },
 
             // trazer todos os inversores
@@ -160,7 +134,8 @@
                         method: "GET",
                         headers: {
 
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "x-api-key": `${this.apiKey}`
 
                         }
 
@@ -169,6 +144,7 @@
                     .then((data) => {
 
                         this.inverters = data.inverters
+                        this.processedInv = this.inverters
 
 
                     })

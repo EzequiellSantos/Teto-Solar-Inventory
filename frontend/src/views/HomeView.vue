@@ -3,13 +3,11 @@
 
     <div id="header">
 
-      <h1>Teto Solar</h1>
-      <h2>Energia Renovável</h2>
-      <p><small>Conectamos você ao sol</small></p>
+      <h1>Inventário Teto Solar</h1>
 
     </div>
 
-    <div id="card-links">
+    <div id="cardsLinks">
 
       <router-link to="/inverters">
 
@@ -26,7 +24,7 @@
       
         <section class="card">
 
-          <img id="panelsIcon" class="icon-links" src="../../public/panel_img100.png" alt="panel">
+          <img class="icon-links" id="panelsIcon" src="../../public/panel_img100.png" alt="panel">
           <p id="panels">Placas</p>
 
         </section>
@@ -37,12 +35,23 @@
       
         <section class="card">
 
-          <img id="materialsIcon" class="icon-links" src="../../public/almox_img100.png" alt="panel">
+          <img id="materialsIcon" class="icon-links" src="../../public/almox_img100.png" alt="almox-icon">
           <p id="almox">Almoxarifado</p>
 
         </section>
 
       </router-link>      
+
+       <router-link to="/teams">
+      
+        <section class="card">
+
+          <img id="teamIcon" class="icon-links" src="../../public/team_img100.png" alt="team-icon">
+          <p id="team">Equipes</p>
+
+        </section>
+
+      </router-link> 
 
     </div>
 
@@ -96,11 +105,11 @@ export default {
     margin: auto;
     position:relative;
     width: 100%;
-    max-width: 600px;
     font-size: 0.9em;
   }
 
   #header{
+    margin: auto;
     height: 130px;
     width: 100%;
     max-width: 600px;
@@ -108,16 +117,8 @@ export default {
   }
 
   #header > h1{
+    margin-top: 30px;
     padding: 10px 0;
-    color: #fff;
-  }
-
-  #header > h2{
-    color: #fff;
-    padding: 0 10px 10px 10px;
-  }
-
-  #header > p{
     color: #fff;
   }
 
@@ -127,7 +128,7 @@ export default {
     top: -1000px;
     right: 10%;
     width: 500px;
-    height: 1800px;
+    height: 2000px;
     opacity: 0.6;
     transform: rotate(80deg);
     background-color: #005db9;
@@ -141,7 +142,7 @@ export default {
     top: -900px;
     right: 45%;
     width: 440px;
-    height: 1600px;
+    height: 1800px;
     opacity: 0.9;
     transform: rotate(-84deg);
     background-color: #F9AB01;
@@ -155,10 +156,21 @@ export default {
     font-size: 1.1em;
   }
 
+  #cardsLinks{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 100px;
+    padding: 10px 0;
+  }
   .card{
     width: 140px;
     height: 130px;
-    margin: 10px;
+    margin: 10px 30px;
     color: rgb(161, 161, 161);
     background-color: rgba(241, 241, 241, 0.445);
     border-radius: 10px;
@@ -170,6 +182,10 @@ export default {
 
   #panelsIcon{
     margin-top: 5px;
+  }
+
+  #teamIcon{
+    height: 90px;
   }
 
   p#panels, p#almox{

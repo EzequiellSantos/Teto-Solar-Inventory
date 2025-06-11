@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <DataTableLog :logs="logs" />
+                <DataTableLog :logs="processedLogs" />
 
             </div>
 
@@ -51,7 +51,7 @@
     import InputLog from '@/components/form/inputText.vue'
     import Message from '@/components/Message.vue'
     import Footer from '@/components/inverters/Footer.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
     import { Html5QrcodeScanner } from 'html5-qrcode'
 
     export default {
@@ -66,16 +66,20 @@
             return {
                 inputBusca: localStorage.getItem("inputLogBusca")? localStorage.getItem("inputLogBusca"): "",
                 logs: [],
+                processedLogs: [],
+                logsSearch: [],
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 loading: false,
                 msg: null,
                 msgClass: null
             }
         
         },
-        created() {
+        mounted() {
 
             if(localStorage.getItem("inputLogBusca")){
+                this.getLogs()
                 this.inputTextoBusca()
             } else {
                 this.getLogs()
@@ -84,69 +88,45 @@
         },
         methods: {
 
-            // realizar uma query de busca de logs
-            async inputTextoBusca(){
-                this.loading = true
-                this.logs = []
+            inputTextoBusca() {
+                const normalize = str => {
+                    if (typeof str !== 'string') return '';
+                    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                };
 
-                localStorage.setItem("inputLogBusca", `${this.inputBusca}`)
+                const termoBusca = normalize(this.inputBusca);
 
-                try {
-                    
-                    await fetch(`${this.apiURL}/api/logs/search?query=${this.inputBusca}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-type":"application/json"
+                localStorage.setItem("inputLogBusca", this.inputBusca || '');
+
+                this.processedLogs = this.logs.filter(log =>
+                    Object.entries(log).some(([key, value]) => {
+                        if (key === 'sn' && Array.isArray(value)) {
+                            // Busca em cada SN do array
+                            return value.some(snItem => normalize(snItem).includes(termoBusca));
+                        } else if (typeof value === 'string') {
+                            return normalize(value).includes(termoBusca);
+                        } else if (typeof value === 'number') {
+                            return value.toString().includes(termoBusca);
                         }
+                        return false;
                     })
-                    .then((resp) => resp.json())
-                    .then((data) => {
+                );
 
-                        if(data.error){
-
-                            this.msg = data.error
-                            this.msgClass = 'error'
-
-                        } else {
-
-                            this.msg = data.msg
-                            this.msgClass =  'sucess'
-
-                        }
-
-                        setTimeout(() => {
-
-                            this.msg = null
-
-                            let inputValue = this.inputBusca
-
-                            if(inputValue == "" || inputValue.length == 0){
-                                localStorage.removeItem("inputLogBusca")
-                                this.getLogs()
-                            }
-
-                        }, 1500)
-
-                        this.logs = data.log
-
-                    })
-
-                } catch (error) {
-                    
-                    console.log(error);
-                    this.msg = data.error
-                    this.msgClass = 'error'
-
-                    setTimeout(() => {
-
-                        this.msg = null
-                        this.msgClass = null
-
-                    }, 2000)
-
+                if (!this.processedLogs || this.processedLogs.length === 0) {
+                    this.msg = "Nenhum log encontrado com esse SN ou Cliente";
+                    this.msgClass = 'error';
                 }
 
-            },
+                setTimeout(() => {
+                    this.msg = null;
+
+                    if (this.inputBusca == "" || this.inputBusca.length === 0) {
+                        localStorage.removeItem("inputLogBusca");
+                        this.processedLogs = this.logs;
+                    }
+                }, 1500);
+            }
+            ,
 
             // trazer todos os logs
             async getLogs() {
@@ -156,13 +136,15 @@
                     await fetch(`${this.apiURL}/api/logs/all`, {
                         method:"GET",
                         headers: {
-                            "Content-Type":"application/json"
+                            "Content-Type":"application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
                     .then((resp) => resp.json())
                     .then((data) => {
 
                         this.logs = data.logs
+                        this.processedLogs = this.logs
 
                     })
 

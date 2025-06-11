@@ -107,7 +107,7 @@
 
     import Message from '../Message.vue'
     import InputSubmit from '../form/inputSubmit.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
     import { parseISO, format, parse } from 'date-fns'
     import { Html5QrcodeScanner } from 'html5-qrcode'
 
@@ -143,6 +143,7 @@
                 msg: null,
                 msgClass: null,
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
             }
         },
         created(){

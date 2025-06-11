@@ -102,7 +102,7 @@
 
     import Message from '../Message.vue'
     import InputSubmit from '../form/inputSubmit.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
     import { Html5QrcodeScanner } from 'html5-qrcode'
 
 export default {
@@ -117,7 +117,8 @@ export default {
             state: this.inverter.state || null,
             msg: null,
             msgClass: null,
-            apiURL: BASE_URL
+            apiURL: BASE_URL,
+            apiKey: BASE_API_KEY,
         }
     },
     components: {
@@ -195,7 +196,7 @@ export default {
             await fetch(`${this.apiURL}/api/inverters/`, {
 
                 method: "POST",
-                headers: {"Content-type":"application/json"},
+                headers: {"Content-type":"application/json", "x-api-key": `${this.apiKey}`},
                 body: jsonData
 
             })
@@ -264,7 +265,7 @@ export default {
 
             await fetch(`${this.apiURL}/api/inverters`, {
                 method: "PUT",
-                headers: { "Content-type":"application/json" },
+                headers: { "Content-type":"application/json", "x-api-key": `${this.apiKey}`},
                 body: jsonData
             })
             .then((resp) => resp.json())

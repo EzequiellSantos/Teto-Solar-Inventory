@@ -70,7 +70,7 @@
     import Message from '@/components/Message.vue'
     import Footer from '@/components/stockroom/Footer.vue'
     import DataTableProducts from '@/components/stockroom/DataTableProducts.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
 
     export default {
         
@@ -88,7 +88,8 @@
                 products: {},
                 search: null,
                 state: null,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
 
             }
 
@@ -117,7 +118,8 @@
                     await fetch(`${this.apiURL}/api/materials/searchChoice?param1=${this.search}&param2=${this.state}`, {
                         method:"GET",
                         headers: {
-                            "Content-type":"Application/json"
+                            "Content-type":"Application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
                     .then((resp) => resp.json())
@@ -140,7 +142,8 @@
                     await fetch(`${this.apiURL}/api/materials/searchChoice?param1=${this.search}`, {
                         method:"GET",
                         headers: {
-                            "Content-type":"Application/json"
+                            "Content-type":"Application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
                     .then((resp) => resp.json())
@@ -170,7 +173,8 @@
                 await fetch(`${this.apiURL}/api/materials/state?query=${state}`, {
                     method:"GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -220,12 +224,13 @@
                  
             },
 
-            async getAllMaterials(){
+            async getAllMaterials(){    
 
                 await fetch(`${this.apiURL}/api/materials/all`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

@@ -67,7 +67,7 @@
 import Message from '@/components/Message.vue'
 import InputSubmit from '@/components/form/inputSubmit.vue'
 import { Html5QrcodeScanner } from 'html5-qrcode'
-import {BASE_URL} from '@/config'
+import {BASE_URL, BASE_API_KEY} from '@/config'
 export default {
     components:{
         Message,
@@ -79,6 +79,7 @@ export default {
             msg: null,
             msgClass: null,
             apiURL: BASE_URL,
+            apiKey: BASE_API_KEY,
             trackingId: null,
             id: this.batch._id || null,
             count: this.batch.panelsCount || null,
@@ -117,7 +118,8 @@ export default {
             await fetch(`${this.apiURL}/api/batchs/invoice`, {
                 method:"POST",
                 headers:{
-                    "Content-type":"application/json"
+                    "Content-type":"application/json",
+                    "x-api-key": `${this.apiKey}`
                 },
                 body: jsonData
             })
@@ -163,7 +165,8 @@ export default {
             await fetch(`${this.apiURL}/api/trackings/${this.id}`, {
                 method:"GET",
                 headers:{
-                    "Content-type":"application/json"
+                    "Content-type":"application/json",
+                    "x-api-key": `${this.apiKey}`
                 }
             })
             .then((resp) => resp.json())
@@ -209,7 +212,8 @@ export default {
             await fetch(`${this.apiURL}/api/trackings/output`, {
                 method:"POST",
                 headers: {
-                "Content-type":"application/json"
+                    "Content-type":"application/json",
+                    "x-api-key": `${this.apiKey}`
                 },
                 body: jsonData
             })
@@ -271,7 +275,8 @@ export default {
             await fetch(`${this.apiURL}/api/batchs/hidden`, {
                 method:"PUT",
                 headers:{
-                    "Content-type":"application/json"
+                    "Content-type":"application/json",
+                    "x-api-key": `${this.apiKey}`
                 },
                 body:jsonData
             })
@@ -317,7 +322,8 @@ export default {
             await fetch(`${this.apiURL}/api/batchs`, {
                 method:"PUT",
                 headers: {
-                    "Content-type":"application/json"
+                    "Content-type":"application/json",
+                    "x-api-key": `${this.apiKey}`
                 },
                 body:jsonData
             })

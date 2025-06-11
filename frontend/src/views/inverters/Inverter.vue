@@ -77,7 +77,7 @@
 
 <script>
 
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
     import NavbarInv from '@/components/inverters/NavbarInv.vue'
     import Footer from '@/components/inverters/Footer.vue'
 
@@ -88,7 +88,8 @@
             return {
                 inverter: {},
                 msg:null,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
             }
 
         },
@@ -110,7 +111,8 @@
                 await fetch(`${this.apiURL}/api/inverters/${id}`, {
                     method: "GET",
                     headers: {
-                        "Content-type": "application/json"
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

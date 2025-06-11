@@ -129,7 +129,7 @@
 
 <script>
 
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
     import OrderForm from '@/components/stockroom/OrderForm.vue'
     import  Footer from '@/components/stockroom/Footer.vue'
     import Message from '@/components/Message.vue'
@@ -153,6 +153,7 @@
                 loadingSearch: false,
                 showInfo: false,
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 orders: {},
                 ordedMaterials: [],
                 allPrices: 0,
@@ -197,7 +198,8 @@
                 await fetch(`${this.apiURL}/api/orders/prices/sum/month?year=${ano}&month=${mes}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -237,7 +239,8 @@
                 await fetch(`${this.apiURL}/api/orders/supplier?supplier=${supplierName}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -296,7 +299,8 @@
                 await fetch(`${this.apiURL}/api/orders/productName?productName=${productName}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -409,7 +413,8 @@
                 await fetch(`${this.apiURL}/api/materials/${idMaterial}`,{
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -450,7 +455,8 @@
                 await fetch(`${this.apiURL}/api/orders/updateUniqueOrder`, {
                     method: "PUT",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -511,7 +517,8 @@
                 await fetch(`${this.apiURL}/api/materials/`, {
                     method:"PUT",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: json
                 })
@@ -543,7 +550,8 @@
                 await fetch(`${this.apiURL}/api/orders/week?seg=${this.diasUteis[0]}&sex=${this.diasUteis[4]}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

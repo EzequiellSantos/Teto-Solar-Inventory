@@ -81,7 +81,7 @@
 
     import InputSubmit from '@/components/form/inputSubmit.vue'
     import Message from '@/components/Message.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
 
     export default {
 
@@ -110,7 +110,8 @@
                 typeChoice: this.tracking.type || "Entrada",
                 msg: null,
                 msgClass: null,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
 
             }
 
@@ -139,7 +140,8 @@
                 await fetch(`${this.apiURL}/api/batchs`, {
                     method:"POST",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body:jsonData
                 })
@@ -188,7 +190,8 @@
                 await fetch(`${this.apiURL}/api/trackings`, {
                     method:"POST",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonDataTracking
                 })
@@ -239,7 +242,8 @@
                 await fetch(`${this.apiURL}/api/batchs`, {
                     method:"PUT",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -294,7 +298,8 @@
                 await fetch(`${this.apiURL}/api/trackings/`, {
                     method: "PUT",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonDataTracking
                 })

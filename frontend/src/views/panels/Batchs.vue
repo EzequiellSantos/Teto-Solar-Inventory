@@ -117,7 +117,7 @@
 <script>
 
     import Message from '@/components/Message.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY} from '@/config'
     import { Html5QrcodeScanner } from 'html5-qrcode'
 
     export default {
@@ -127,6 +127,7 @@
         data() {
             return {
                 APIurl: BASE_URL,
+                apiKey: BASE_API_KEY,
                 msg: null,
                 msgClass: null,
                 brand: {},
@@ -158,7 +159,8 @@
                 await fetch(`${this.APIurl}/api/batchs/${brand}`, {
                     method:"GET",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -236,7 +238,8 @@
                 await fetch(`${this.APIurl}/api/batchs/power`, {
                     method: "POST",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -286,7 +289,8 @@
                 await fetch(`${this.APIurl}/api/batchs/search`, {
                     method:"POST",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body:jsonData
                 }) 

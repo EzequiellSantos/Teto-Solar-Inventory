@@ -15,7 +15,7 @@
 <script>
 
     import LogForm from '@/components/inverters/LogForm.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
 
     export default {
         components: {
@@ -26,7 +26,8 @@
             return {
                 log: {},
                 componentKey: 0,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
             }
 
         },
@@ -45,7 +46,8 @@
                 await fetch(`${this.apiURL}/api/logs/${id}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

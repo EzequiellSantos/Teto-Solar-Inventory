@@ -56,7 +56,7 @@
     import DataCardsTrackingsVue from '@/components/panels/DataCardsTrackings.vue'
     import PanelsFooter from '@/components/panels/Footer.vue'
     import MessageVue from '@/components/Message.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
     
@@ -73,6 +73,7 @@
                 msgClass: null,
                 trackings: {},
                 apiUrl: BASE_URL,
+                apiKey: BASE_API_KEY,
                 search: null,
                 type: "null",
                 contador: 0
@@ -95,7 +96,8 @@
 
                     method:"GET",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
 
                 })
@@ -151,7 +153,8 @@
 
                     method:"GET",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
 
                 })

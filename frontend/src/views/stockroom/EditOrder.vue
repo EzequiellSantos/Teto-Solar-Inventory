@@ -12,7 +12,7 @@
 
 <script>
     import OrderForm from '@/components/stockroom/OrderForm.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         
@@ -24,6 +24,7 @@
             return {
 
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 order: {},
                 componentKey: 0
 
@@ -44,7 +45,8 @@
                 await fetch(`${this.apiURL}/api/orders/${id}`, {
                     method: "GET",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

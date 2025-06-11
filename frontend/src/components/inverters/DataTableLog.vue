@@ -47,7 +47,7 @@
 <script>
 
     import Message from '../Message.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         name: "DataTableLog",
@@ -60,7 +60,8 @@
 
                 msg: null,
                 msgClass: null,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
 
             }
         },

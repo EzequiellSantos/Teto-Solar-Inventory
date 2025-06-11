@@ -3,13 +3,30 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors')
-
+const API_KEY = process.env.API_KEY;
 const app = express();
 
 const corsOptions = {
   origin: '*',
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  allowedHeaders: ['Content-Type', 'x-api-key'] 
 };
+
+function checkApiKey(req, res, next) {
+
+  const userKey = req.headers['x-api-key'];
+
+  if (userKey && userKey === API_KEY) {
+
+    next();
+
+  } else {
+
+    res.status(403).json({ error: 'Chave de API inválida ou ausente' });
+    
+  }
+
+}
 
 app.use(cors(corsOptions))
 app.options('/api/', cors(corsOptions)); // Habilita CORS para requisições OPTIONS
@@ -38,14 +55,14 @@ const materialRoutes = require('./routes/stockroom/materialRoutes')
 const historyRoutes = require('./routes/stockroom/historyRoutes')
 const orderRoutes = require('./routes/stockroom/orderRoutes')
 
-app.use('/api/batchs', batchsRoutes)
-app.use('/api/trackings', trackingRoutes)
-app.use('/api/inverters', invertersRoutes)
-app.use('/api/logs', logRoutes)
-app.use('/api/auth', authRoutes)
-app.use('/api/materials', materialRoutes)
-app.use('/api/histories', historyRoutes)
-app.use('/api/orders', orderRoutes)
+app.use('/api/batchs', checkApiKey, batchsRoutes)
+app.use('/api/trackings', checkApiKey, trackingRoutes)
+app.use('/api/inverters', checkApiKey, invertersRoutes)
+app.use('/api/logs', checkApiKey, logRoutes)
+app.use('/api/auth', checkApiKey, authRoutes)
+app.use('/api/materials', checkApiKey, materialRoutes)
+app.use('/api/histories', checkApiKey, historyRoutes)
+app.use('/api/orders', checkApiKey, orderRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;

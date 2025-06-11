@@ -75,7 +75,7 @@
 
     import Message from '@/components/Message.vue'
     import InputSubmit from '@/components/form/inputSubmit.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         name: "ProductForm" ,
@@ -92,6 +92,7 @@
                 msg: null,
                 msgClass: null,
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 code: this.product.code || null,
                 type: this.product.type || null,
                 description: this.product.description || null, 
@@ -130,7 +131,8 @@
                 await fetch(`${this.apiURL}/api/materials`, {
                     method:"POST",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -186,7 +188,8 @@
                 await fetch(`${this.apiURL}/api/materials`, {
                     method: "PUT",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })

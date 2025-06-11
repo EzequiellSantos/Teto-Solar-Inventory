@@ -58,7 +58,7 @@
     import Message from '@/components/Message.vue'
     import DataCardsBatchs from '@/components/panels/DataCardsBatchs.vue'
     import PanelsFooter from  '@/components/panels/Footer.vue'
-    import { BASE_URL } from '@/config'
+    import { BASE_URL, BASE_API_KEY } from '@/config'
 
     export default {
         components:{
@@ -75,6 +75,7 @@
                 batchs: {},
                 batchsCount: 0,
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 brands: [],
                 totalPanelsCount: 0
 
@@ -96,7 +97,8 @@
 
                         method:"GET",
                         headers: {
-                            "Content-type":"application/x-www-form-urlencoded"
+                            "Content-type":"application/x-www-form-urlencoded",
+                            "x-api-key": `${this.apiKey}`
                         }
 
                     })
@@ -201,7 +203,8 @@
                     await fetch(`${this.apiURL}/api/batchs/${brands[i].brand}`,{
                         method:"GET",
                         headers: {
-                            "Content-type":"application/json"
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
                     .then((resp) => resp.json())

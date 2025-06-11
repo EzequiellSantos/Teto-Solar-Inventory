@@ -91,7 +91,7 @@
 <script>
 
     import Message from '@/components/Message.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
     import Footer from '@/components/stockroom/Footer.vue'
 
     export default {
@@ -108,6 +108,7 @@
                 sector: null,
                 search: null,
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 msg: null,
                 msgClass: null
             }
@@ -165,7 +166,8 @@
                 await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}&param3=${this.type}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -207,7 +209,8 @@
                 await fetch(`${this.apiURL}/api/histories/type?choice=${type}`, {
                     method:"GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -246,7 +249,8 @@
                 await fetch(`${this.apiURL}/api/histories/sector?choice=${sector}`, {
                     method:"GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

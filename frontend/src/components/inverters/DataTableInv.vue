@@ -44,7 +44,7 @@
 <script>
 
     import Message from "../Message.vue"
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         name:"DataTableInv", 
@@ -57,7 +57,8 @@
             return {
                 msgClass: null,
                 msg: null,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
             }
             
         },
@@ -77,7 +78,8 @@
                 await fetch(`${this.apiURL}/api/...key....`, {
                     method: "DELETE",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })

@@ -7,7 +7,7 @@
 
 <script>
 
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         name: "InputText",
@@ -15,7 +15,7 @@
 
             return {
                 apiURL: BASE_URL,
-                
+                apiKey: BASE_API_KEY
             }
 
         },
@@ -41,7 +41,8 @@
                 await fetch(`${this.apiURL}/api/inverters/search`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

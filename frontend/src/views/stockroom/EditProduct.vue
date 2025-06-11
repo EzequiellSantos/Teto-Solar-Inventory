@@ -13,7 +13,7 @@
 <script>
 
     import ProductForm from '@/components/stockroom/ProductForm.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         
@@ -25,6 +25,7 @@
             return {
 
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 product: {},
                 componentKey: 0
 
@@ -45,7 +46,8 @@
                 await fetch(`${this.apiURL}/api/materials/${id}`, {
                     method: "GET",
                     headers:{
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())

@@ -89,7 +89,7 @@
     import Message from  '@/components/Message.vue'
     import Footer from '@/components/stockroom/Footer.vue'
     import InputSubmit from '@/components/form/inputSubmit.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         components:{
@@ -102,6 +102,7 @@
             return {
 
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 msg: null,
                 msgClass: null,
                 products: {},
@@ -140,7 +141,8 @@
                     await fetch(`${this.apiURL}/api/materials/search?query=${this.search}`, {
                         method: "GET",
                         headers: {
-                            "Content-type":"application/json"
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
                     .then((resp) => resp.json())
@@ -171,7 +173,8 @@
                 await fetch(`${this.apiURL}/api/materials/search?query=${code}`, {
                     method:"GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -236,7 +239,8 @@
                 await fetch(`${this.apiURL}/api/materials`, {
                     method:"PUT",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -298,7 +302,8 @@
                 await fetch(`${this.apiURL}/api/histories`, {
                     method: "POST",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })

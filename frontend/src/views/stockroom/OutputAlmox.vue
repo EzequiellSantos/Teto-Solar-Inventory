@@ -4,13 +4,27 @@
 
         <Message :msg="msg" :msgClass="msgClass" />
 
-        <section id="headerTittle">
+        <section id="choiceTypeChoice" >
 
-            <h1>Registrar Saída do Estoque</h1>
+            <div id="stockroom" @click="controlChoice('stockroom')" :class="{ 'active': !outputClient }">
+                Estoque
+            </div>
+
+            <div id="clients" @click="controlChoice('clients')" :class="{ 'active': outputClient }">
+                Clientes
+            </div>
 
         </section>
 
-        <form id="productForm" enctype="multipart/form-data" @submit="update($event)">
+        <form id="clientForm" enctype="multipart/form-data" @submit="updateKits($event)" v-if="!outputClient">
+        
+
+
+
+        
+        </form>
+
+        <form id="productForm" enctype="multipart/form-data" @submit="update($event)" v-if="!outputClient">
 
             <div class="almox-containers">
                 <label for="search">Procurar por Código ou Descrição:</label>
@@ -94,7 +108,7 @@
 
     import Message from  '@/components/Message.vue'
     import Footer from '@/components/stockroom/Footer.vue'
-    import {BASE_URL} from  '@/config'
+    import {BASE_URL, BASE_API_KEY} from  '@/config'
     import InputSubmit from '@/components/form/inputSubmit.vue'
     import { provide } from 'vue'
 
@@ -107,8 +121,9 @@
         data() {
 
             return {
-
+                outputClient: false,
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 msg: null,
                 msgClass: null,
                 products: {},
@@ -156,7 +171,8 @@
                     await fetch(`${this.apiURL}/api/materials/search?query=${this.search}`, {
                         method: "GET",
                         headers: {
-                            "Content-type":"application/json"
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
                     .then((resp) => resp.json())
@@ -185,7 +201,8 @@
                 await fetch(`${this.apiURL}/api/materials/search?query=${code}`, {
                     method:"GET",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -263,7 +280,8 @@
                 await fetch(`${this.apiURL}/api/materials`, {
                     method:"PUT",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -327,7 +345,8 @@
                 await fetch(`${this.apiURL}/api/histories`, {
                     method: "POST",
                     headers: {
-                        "Content-type":"application/json"
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
                     },
                     body: jsonData
                 })
@@ -394,5 +413,34 @@
     aside p, h2{
         padding: 3px 0;
     }
+
+    #choiceTypeChoice{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    #choiceTypeChoice div{
+        width: 150px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        background-color: var(--color-primary);
+        color: var(--color-text);
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #choiceTypeChoice div.active{
+        background-color: var(--color-secondary);
+    }
+
+    #choiceTypeChoice div:hover{
+        background-color: var(--color-secondary);
+    }
+
 
 </style>

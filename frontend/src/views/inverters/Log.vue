@@ -77,7 +77,7 @@
 
 <script>
 
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
     import NavbarLog from '@/components/inverters/NavbarLogs.vue'
 
     export default {
@@ -88,6 +88,7 @@
 
                 log: {},
                 apiURL: BASE_URL,
+                apiKey: BASE_API_KEY,
                 textType: null || this.type,
                 textDescription: null || this.textDescription
 
@@ -117,7 +118,8 @@
                     const response = await fetch(`${this.apiURL}/api/logs/${id}`, {
                         method: "GET",
                         headers: {
-                            "Content-type":"application/json"
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
                         }
                     })
 
@@ -147,7 +149,8 @@
                 await fetch(`${this.apiURL}/api/inverters/search?query=${this.log.sn}`, {
                     method: "GET",
                     headers: {
-                        "Content-type":"application/json"  
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`  
                     }
 
                 })
