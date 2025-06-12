@@ -97,7 +97,7 @@
 
             <InputSubmit text="Registrar" />
 
-            <p style="position:fixed; bottom: 70px;"><small>versão em protótipo</small></p>
+            <p style="position:fixed; bottom: 70px; right: 45%;"><small>versão em protótipo</small></p>
         
         </form>
 

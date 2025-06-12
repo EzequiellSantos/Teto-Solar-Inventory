@@ -257,4 +257,25 @@ export default {
     background-color: #d6d6d6;
   }
 
+  @media (max-width: 600px) {
+  #cardsLinks {
+    margin-top: 150px;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 16px;
+    padding-bottom: 16px;
+    /* Efeito de rolagem suave */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  .card {
+    min-width: 140px;
+    flex: 0 0 auto;
+    margin: 10px 8px;
+  }
+}
+
 </style>
