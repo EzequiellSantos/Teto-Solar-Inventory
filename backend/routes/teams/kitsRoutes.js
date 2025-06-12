@@ -29,14 +29,30 @@ router.get('/:id', async (req, res) => {
 });
 
 // Atualizar kit por ID
-router.put('/:id', async (req, res) => {
+router.put('/', async (req, res) => {
+
+    const {teamName, materials, teamId} = req.body
+
+    const kit = {
+        teamName: teamName,
+        materials: materials
+    }
+
+        console.log(kit);
+    
     try {
-        const kit = await Kits.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json({ error: null, data: kit });
+        
+        const updateKit = await Kits.findOneAndUpdate({ teamName: teamName },{ $set: kit },{ new: true });
+        res.status(200).json({ error: null, data: updateKit });
+        console.log(updateKit);
+        
     } catch (error) {
+
         res.status(400).json({ error: "Erro ao atualizar kit" });
         console.log(error);
+
     }
+
 });
 
 // Deletar kit por ID
