@@ -14,32 +14,38 @@
                     {{ index + 1}} {{ material.description }} - <span class="quantity">{{ material.quantity }}</span>
                 </li>
             </ul>
-            <button class="edit-kit" @click="showEditMaterials = true" >Editar</button>
+            <button id="editKit" class="edit-kit" @click="showEditMaterials = true" >Editar</button>
         </section>
 
         <p v-else>Nenhum material encontrado para esta equipe.</p>
 
-        <div id="editMaterials"  v-if="showEditMaterials">
-
+        <div id="editMaterials" v-if="showEditMaterials">
             <h3>Editar Materiais do Kit</h3>
             <p>Equipe: {{ team.name }}</p>
 
             <section class="card-edit-materials">
-                <div v-for="material in team.materials" :key="material.code" class="material-item">
+                <div v-for="(material, idx) in team.materials" :key="material.code" class="material-item">
                     <span v-if="material.description != ''">{{ material.description }} - {{ material.quantity }}</span>
-                    <input v-if="material.description != ''" type="number" v-model="material.quantity" placeholder="Quantidade" />
+                    <input class="input-kit-quantity" v-if="material.description != ''" type="number" v-model="material.quantity" placeholder="Quantidade" />
+                    <button
+                        v-if="material.description != ''"
+                        id="removeMaterial"
+                        @click="removeMaterial(idx)"
+                        type="button"
+                    >
+                        <img data-v-481c0a66="" width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus">
+                    </button>
                 </div>
             </section>
 
             <section class="actions">
-                <button @click="savedMateriais(this.$route.params.id)">Salvar</button>
-                <button @click="showEditMaterials = false">Cancelar</button>
+                <button class="save" @click="savedMateriais(this.$route.params.id)">Salvar</button>
+                <button class="cancel" @click="showEditMaterials = false">Cancelar</button>
             </section>
-
         </div>
 
 
-        <p style="position:fixed; bottom: 5px;"><small>versão em protótipo</small></p>
+        <p style="position:fixed; bottom: 20px;"><small>versão em protótipo</small></p>
     </div>
 </template>
 
@@ -53,8 +59,8 @@ export default {
             team: {},
             apiUrl: BASE_URL,
             apiKey: BASE_API_KEY,
-            showEditMaterials: false, // Variável para controlar a exibição do componente de edição de materiais
-            materials: [] // Lista de materiais do kit
+            showEditMaterials: false, 
+            materials: []
         };
     },
     created() {
@@ -63,8 +69,6 @@ export default {
     methods: {
         
         async savedMateriais(id) {
-
-            console.log(id)
 
             const jsonData = JSON.stringify({
                 teamId: id,
@@ -80,14 +84,14 @@ export default {
                 },
                 body: jsonData
             })
-            console.log("Materiais salvos:", this.team.materials);
-            this.showEditMaterials = false; // Fecha o editor de materiais após salvar
+
+            this.showEditMaterials = false;
         },
         
         async fetchKitTeam() {
             const idTeam = this.$route.params.id;
 
-            // 1. Buscar o nome da equipe pelo ID
+            // Buscar o nome da equipe pelo ID
             let teamName = '';
             await fetch(`${this.apiUrl}/api/teams/${idTeam}`, {
                 method: 'GET',
@@ -112,7 +116,7 @@ export default {
 
             if (!teamName) return;
 
-            // 2. Buscar o kit pelo nome da equipe
+            // Buscar o kit pelo nome da equipe
             await fetch(`${this.apiUrl}/api/kits/search/team?name=${encodeURIComponent(teamName)}`, {
                 method: 'GET',
                 headers: {
@@ -136,6 +140,9 @@ export default {
             .catch(error => {
                 console.error('Erro ao buscar kit:', error);
             });
+        },
+        removeMaterial(idx) {
+            this.team.materials.splice(idx, 1);
         }
 
     }
@@ -172,12 +179,12 @@ export default {
     margin: auto;
     text-align: left;
     font-size: 1.1em;
-    line-height: 1.8em;
+    line-height: 3em;
     height: 70vh;
     min-height: 450px;
     min-width: 320px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 15px;
     width: 80%;
     max-width: 660px;
     background-color: rgb(231, 231, 231);
@@ -236,11 +243,12 @@ export default {
 }
 
 #editMaterials input[type="number"] {
-    width: 80px;
+    width: 40px;
     padding: 7px 10px;
     border: 1.5px solid #d0d7de;
     border-radius: 7px;
     font-size: 1em;
+    margin-left: auto;
     outline: none;
     transition: border 0.2s;
 }
@@ -250,7 +258,7 @@ export default {
     background: #f4faff;
 }
 
-#editMaterials button, .edit-kit {
+.edit-kit, .save, .cancel {
     margin-top: 12px;
     margin-right: 8px;
     background: var(--color-main01);
@@ -265,18 +273,23 @@ export default {
     transition: background 0.2s;
 }
 
+#removeMaterial{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
 
 
-#editMaterials button:last-child {
+#editMaterials .cancel {
     background: #e74c3c;
     margin-right: 0;
 }
 
-#editMaterials button:hover, .edit-kit:hover {
+#editMaterials .save:hover, .edit-kit:hover {
     background: #005fcc;
 }
 
-#editMaterials button:last-child:hover {
+#editMaterials .cancel:hover {
     background: #c0392b;
 }
 
