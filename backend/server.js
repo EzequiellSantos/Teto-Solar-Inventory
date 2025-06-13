@@ -6,8 +6,20 @@ const cors = require('cors')
 const API_KEY = process.env.API_KEY;
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:8080',
+  'https://teto-solar-inventory.vercel.app'
+];
+
 const corsOptions = {
-  origin: '*',
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type', 'x-api-key'] 
 };
