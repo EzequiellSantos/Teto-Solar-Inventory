@@ -167,7 +167,7 @@
                 const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
     
                     this.inputBusca = decodedText;
-                    localStorage.setItem("inputBusca", `${inputBusca}`);
+                    localStorage.setItem("inputBusca", `${this.inputBusca}`);
                     console.log("Lido :))", decodedText)
                     this.inputTextoBusca()
                     divReader.style.display = "none"
