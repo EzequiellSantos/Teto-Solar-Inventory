@@ -6,11 +6,11 @@
 
         <section id="choiceTypeChoice" >
 
-            <div id="stockroom" @click="controlChoice('stockroom')" :class="{ 'active': !outputClient }">
+            <div @click="controlChoice('stockroom')" :class="{ 'active-action': !outputClient }">
                 Estoque
             </div>
 
-            <div id="clients" @click="controlChoice('clients')" :class="{ 'active': outputClient }">
+            <div @click="controlChoice('clients')" :class="{ 'active-action': outputClient }">
                 Clientes
             </div>
 
@@ -30,7 +30,7 @@
                 <input ref="search" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
             </div>
 
-            <div class="almox-containers" >
+            <div class="almox-containers">
                 
                 <h2>Lista de Produtos:</h2>
                 <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
@@ -51,13 +51,21 @@
             </div>
 
             <div class="almox-containers" ref="productSelect">
+            
                 <h3>Produtos Selecionados:</h3>
-                <aside id="headerList"><span>Cód.</span> <span>Descri.</span></aside>
-                <section v-if="selectProductKits.code?.length != 0">
+                <aside id="headerList">
+                    <span>Cód.</span> <span>Descri.</span>
+                </aside>
+
+                <section v-if="selectProductKits.code">
+
                     <p class="select-product">{{selectProductKits.code}} {{selectProductKits.description}}</p>
-                    <input type="number" v-model="quantKit" placeholder="Quantidade">
-                    <img @click="addProductKit" width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                    <br>
+                    <input class="quant-kit" ref="quantKit" type="number" v-model="quantKit" id="quantKit" placeholder="Quantidade">
+                    <img class="add-material-kit" @click="addProductKit" width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                    
                 </section>
+
             </div>    
 
             <div class="almox-containers">
@@ -209,6 +217,7 @@
                 selectProduct: {},
                 selectProductKits: {},
                 allClientMaterial: [],
+                nameClient: null,
                 search: null,
                 outputQuant: null,
                 sector: null,
@@ -292,9 +301,9 @@
                     }
 
                     this.allClientMaterial.push(data)
-
                     this.selectProductKits = {}
                     this.quantKit = null
+                    this.$refs.search.focus();
 
                 } else {
 
@@ -319,6 +328,8 @@
                         code: code,
                         description: product.description,
                     }
+
+                    this.$refs.quantKit.focus();
 
                 }
 
@@ -377,7 +388,7 @@
                     return;
                 }
 
-                // 3. Atualizar os materiais do kit da equipe
+                // Atualizar os materiais do kit da equipe
                 const updatedMaterials = kitEquipe.materials.map(mat => {
                     const found = this.allClientMaterial.find(m => m.code === mat.code);
                     if (found) {
@@ -390,14 +401,14 @@
                     return mat;
                 });
 
-                // 4. Atualizar o kit da equipe no banco
-                await fetch(`${this.apiURL}/api/kits/${kitEquipe._id}`, {
+                // Atualizar o kit da equipe no banco
+                await fetch(`${this.apiURL}/api/kits/`, {
                     method: "PUT",
                     headers: {
                         "Content-type": "application/json",
                         "x-api-key": `${this.apiKey}`
                     },
-                    body: JSON.stringify({ materials: updatedMaterials })
+                    body: JSON.stringify({ teamName: this.sector , materials: updatedMaterials })
                 });
 
                 // Feedback e reset
@@ -465,6 +476,7 @@
             },
 
             searchProduct() {
+
                 const normalize = str => {
                     if (typeof str !== 'string') return '';
                     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -591,7 +603,6 @@
                         this.msgClass = 'sucess';
 
                         // Atualiza o kit da equipe selecionada
-                        // 1. Busca o kit da equipe
                         let kitEquipe = null;
                         await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
                             method: "GET",
@@ -602,20 +613,29 @@
                         })
                         .then(resp => resp.json())
                         .then(data => {
+
                             if (data.data && data.data.length > 0) {
                                 kitEquipe = data.data[0];
                             }
+
                         });
 
                         if (kitEquipe) {
-                            // 2. Atualiza ou adiciona o produto no kit
+                            // Atualiza ou adiciona o produto no kit
                             let found = false;
                             const updatedMaterials = kitEquipe.materials.map(mat => {
                                 if (mat.code === this.selectProduct.code) {
                                     found = true;
+                                    let newQuantity = (mat.quantity || 0) + Number(this.outputQuant);
+
+                                    // Verificação extra: se NÃO for saída para cliente e descrição contém "100M"
+                                    if (!this.outputClient && this.selectProduct.description && this.selectProduct.description.includes("100M")) {
+                                        newQuantity = (mat.quantity || 0) + (Number(this.outputQuant) * 100);
+                                    }
+
                                     return {
                                         ...mat,
-                                        quantity: (mat.quantity || 0) + Number(this.outputQuant)
+                                        quantity: newQuantity
                                     };
                                 }
                                 return mat;
@@ -623,21 +643,28 @@
 
                             // Se não encontrou, adiciona o produto ao kit
                             if (!found) {
+                                let addQuantity = Number(this.outputQuant);
+                                if (!this.outputClient && this.selectProduct.description && this.selectProduct.description.includes("100M")) {
+                                    addQuantity = Number(this.outputQuant) * 100;
+                                }
                                 updatedMaterials.push({
                                     code: this.selectProduct.code,
                                     description: this.selectProduct.description,
-                                    quantity: Number(this.outputQuant)
+                                    quantity: addQuantity
                                 });
                             }
 
-                            // 3. Atualiza o kit no banco
-                            await fetch(`${this.apiURL}/api/kits/${kitEquipe._id}`, {
+                            // Atualiza o kit no banco
+                            await fetch(`${this.apiURL}/api/kits/`, {
                                 method: "PUT",
                                 headers: {
                                     "Content-type": "application/json",
                                     "x-api-key": `${this.apiKey}`
                                 },
-                                body: JSON.stringify({ materials: updatedMaterials })
+                                body: JSON.stringify({
+                                    teamName: this.sector,
+                                    materials: updatedMaterials 
+                                })
                             });
                         }
 
@@ -647,6 +674,7 @@
                     }
                 })
                 .catch((err) => {
+
                     this.msg = 'Erro ao registrar';
                     this.msgClass = 'error';
                     console.log(err);
@@ -654,6 +682,7 @@
                     setTimeout(() => {
                         this.msg = null;
                     }, 1600);
+
                 });
             },
 
@@ -746,14 +775,27 @@
 
     #choiceTypeChoice{
         display: flex;
-        width: 100%;
+        height: 100%;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
+        background-color: aliceblue;
+        max-width: 300px;
+        border-radius: 20px;
+        margin-top: 10px;
+    }
+
+    div.active-action{
+        background-color: var(--color-main00) !important;
+        color: #fff !important;
+        font-weight: bold;
+        border-radius: 20px !important;
+        transition: background 0.2s, color 0.2s ease-in-out;
     }
 
     #choiceTypeChoice div{
-        width: 150px;
-        height: 50px;
+        width: 130px;
+        height: 30px;
+        font-size: 0.9em;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -772,5 +814,12 @@
         background-color: var(--color-secondary);
     }
 
+    input.quant-kit{
+        width:100px
+    }
+
+    .add-material-kit{
+        margin-bottom: -11.5px;
+    }
 
 </style>

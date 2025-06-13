@@ -6,7 +6,7 @@
 
         <section id="headerTittle">
 
-            <h1>Registrar Entrada no Estoque</h1>
+            <h1>Registrar Entradas</h1>
 
         </section>
 
@@ -67,6 +67,24 @@
 
             </div>
 
+            <div class="almox-containers" v-if="type == 'Devolução'">
+
+                <label for="sector">Setor de Saída:</label>
+                <select name="sector" id="sector" v-model="sector" required>
+                    <optgroup label="Setor que levou">
+                        <option value="EQUIPE 01">EQUIPE 01</option>
+                        <option value="EQUIPE 02">EQUIPE 02</option>
+                        <option value="EQUIPE 03">EQUIPE 03</option>
+                        <option value="EQUIPE 04">EQUIPE 04</option>
+                        <option value="EQUIPE 05">EQUIPE 05</option>
+                        <option value="EQUIPE 06">EQUIPE 06</option>
+                        <option value="EQUIPE 07">EQUIPE 07</option>
+                        <option value="MANUTENCAO">Manutenção</option>
+                    </optgroup>
+                </select>
+
+            </div>
+
             <div class="almox-containers">
 
                 <label for="inputDate">Data de Entrada</label>
@@ -105,8 +123,10 @@
                 apiKey: BASE_API_KEY,
                 msg: null,
                 msgClass: null,
+                allProducts: [],
                 products: {},
                 selectProduct: {},
+                sector: null,
                 search: null,
                 inputQuant: null,
                 type: null
@@ -116,10 +136,39 @@
         },
         created(){
 
+            this.getProducts()
             this.getDate()
 
         },
         methods:{
+
+            async getProducts(){
+
+                await fetch(`${this.apiURL}/api/materials/all`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.allProducts = data.data;
+
+
+                    }
+
+                })
+
+            },
 
             getDate(){
 
@@ -134,35 +183,31 @@
 
             },
 
-            async searchProduct(){
+            searchProduct(){
 
-                if(this.search != '' && this.search?.length > 2) {
+                const normalize = str => {
+                    if (typeof str !== 'string') return '';
+                    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                };
 
-                    await fetch(`${this.apiURL}/api/materials/search?query=${this.search}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-type":"application/json",
-                            "x-api-key": `${this.apiKey}`
-                        }
-                    })
-                    .then((resp) => resp.json())
-                    .then((data) => {
+                const termoBusca = normalize(this.search);
 
-                        if(data.error){
+                // Garante que allProducts é sempre um array
+                const baseProducts = Array.isArray(this.allProducts) ? this.allProducts : [];
 
-                            this.msg = data.error
-                            this.msgClass = 'error'
-
-                        } else {
-
-                            this.msg = null
-                            this.products = data.materials
-
-                        }
-
-                    })
-
+                let filtered = [];
+                if (termoBusca.length > 0) {
+                    filtered = baseProducts.filter(product => {
+                        const codeMatch = product.code && normalize(product.code).includes(termoBusca);
+                        const descriptionMatch = product.description && normalize(product.description).includes(termoBusca);
+                        return codeMatch || descriptionMatch;
+                    });
+                } else {
+                    filtered = baseProducts;
                 }
+
+                // Limita o array a no máximo 20 itens
+                this.products = filtered.slice(0, 20);
 
             },
 
@@ -200,8 +245,6 @@
                                 stateQuantity: state,
                                 isActive: product.isActive
                             }
-
-                            console.log(this.selectProduct)
 
                         } else {
                             console.log('nao corresponde')
@@ -256,12 +299,15 @@
 
                         this.msg = data.msg
                         this.msgClass = 'sucess'
+
+
+                        this.getTeam()
                         
                         setTimeout(() => {
 
                             this.sendingRegister(this.selectProduct.code, this.selectProduct.description)
 
-                        }, 1000)
+                        }, 500)
                         
 
                     }
@@ -284,6 +330,71 @@
             
             },
 
+            async getTeam(){
+
+                if (this.type === 'Devolução' && this.sector && this.selectProduct.code) {
+
+                    // 1. Busca o kit da equipe
+                    await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-type": "application/json",
+                            "x-api-key": `${this.apiKey}`
+                        }
+                    })
+                    .then(resp => resp.json())
+                    .then((data) => {
+
+                        if (data.data && data.data.length > 0) {
+
+                            const kit = data.data[0];
+                            
+                            const hasProduct = kit.materials.some(mat => mat.code === this.selectProduct.code);
+                            if (hasProduct) {
+
+                                kit.materials = kit.materials.map(mat => {
+                                    if (mat.code === this.selectProduct.code) {
+                                        return {
+                                            ...mat,
+                                            quantity: Math.max((mat.quantity || 0) - Number(this.inputQuant), 0)
+                                        };
+                                    }
+                                    return mat;
+                                });
+
+                                this.updateKit(kit);
+
+                            }
+                        }
+                    });
+                }
+
+            },
+
+            async updateKit(kit){
+
+                // Chama a função para atualizar o kit da equipe
+                await fetch(`${this.apiURL}/api/kits`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
+                    },
+                    body: JSON.stringify(kit)
+                })
+                .then(resp => resp.json())
+                .then((data) => {
+                    if (data.error) {
+                        this.msg = data.error;
+                        this.msgClass = 'error';
+                    } else {
+                        this.msg = data.msg;
+                        this.msgClass = 'sucess';
+                    }
+                })
+
+            },
+
             async sendingRegister(code, description){
 
                 const data = {
@@ -292,7 +403,7 @@
                     description: description,
                     quant: this.inputQuant,
                     date: this.inputDate,
-                    sector: null,
+                    sector: this.type == 'Devolução' ? this.sector : null,
                     type: this.type
 
                 }
@@ -331,6 +442,7 @@
                         this.inputQuant = null
                         this.products = {}
                         this.selectProduct = {}
+                        this.sector = null
                         this.$refs.search.focus();
 
                         setTimeout(() => {
