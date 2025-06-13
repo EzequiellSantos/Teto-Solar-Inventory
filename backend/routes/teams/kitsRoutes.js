@@ -37,14 +37,11 @@ router.put('/', async (req, res) => {
         teamName: teamName,
         materials: materials
     }
-
-        console.log(kit);
     
     try {
         
         const updateKit = await Kits.findOneAndUpdate({ teamName: teamName },{ $set: kit },{ new: true });
         res.status(200).json({ error: null, data: updateKit });
-        console.log(updateKit);
         
     } catch (error) {
 
