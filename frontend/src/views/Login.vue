@@ -36,7 +36,7 @@
 
     import Message from '@/components/Message.vue'
     import InputSubmit from '@/components/form/inputSubmit.vue'
-    import {BASE_URL} from '@/config'
+    import {BASE_URL, BASE_API_KEY} from '@/config'
 
     export default {
         components:{
