@@ -49,7 +49,8 @@
                 password: null,
                 msg: null,
                 msgClass: null,
-                apiURL: BASE_URL
+                apiURL: BASE_URL,
+                apiKey: BASE_API_KEY
             }
         },
         methods: {
@@ -68,7 +69,7 @@
 
                 await fetch(`${this.apiURL}/api/auth/login`, {
                     method: "POST",
-                    headers: {'Content-type':'application/json'},
+                    headers: {'Content-type':'application/json', 'x-api-key': this.apiKey},
                     body: jsonData
                 })
                 .then((res) => res.json())
