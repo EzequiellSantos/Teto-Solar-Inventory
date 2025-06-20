@@ -198,6 +198,22 @@ const routes = [
       requireAuth: true
     }
   },
+  {
+    path: '/vehicles',
+    name: "vehicles",
+    component: () => import(/* webpackChunkName: "editOrder" */ '../views/vehicles/Vehicles.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/vehicle/:id',
+    name: "vehicle",
+    component: () => import(/* webpackChunkName: "editOrder" */ '../views/vehicles/Vehicle.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
     
 ]
 

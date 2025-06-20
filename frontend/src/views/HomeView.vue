@@ -42,7 +42,7 @@
 
       </router-link>      
 
-       <router-link to="/teams">
+      <router-link to="/teams">
       
         <section class="card">
 
@@ -52,6 +52,17 @@
         </section>
 
       </router-link> 
+
+      <router-link to="/vehicles">
+      
+        <section class="card">
+
+          <img id="teamIcon" class="icon-links" src="../../public/cars_img100.png" alt="team-icon">
+          <p id="team">Carros</p>
+
+        </section>
+
+      </router-link>
 
     </div>
 
@@ -162,7 +173,7 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
     margin-top: 100px;
     padding: 10px 0;
