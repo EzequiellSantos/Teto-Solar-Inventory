@@ -8,6 +8,10 @@ const vehicleSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    team: {
+        type: String,
+        required: true
     }
 });
 

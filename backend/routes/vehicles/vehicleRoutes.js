@@ -7,7 +7,8 @@ router.post('/', async (req, res) => {
 
     const vehicleData = {
         description: req.body.description,
-        plate: req.body.plate
+        plate: req.body.plate,
+        team: req.body.team
     };
 
     try {
@@ -49,7 +50,7 @@ router.get('/:id', async (req, res) => {
 // Atualizar veículo por ID
 router.put('/:id', async (req, res) => {
     try {
-        const vehicle = await Vehicle.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const vehicle = await Vehicle.findOneAndUpdate({_id:req.params.id}, {$set: req.body}, { new: true });
         res.status(200).json({ error: null, data: vehicle });
     } catch (error) {
         res.status(400).json({ error: "Erro ao atualizar veículo" });

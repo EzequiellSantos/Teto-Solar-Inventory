@@ -11,7 +11,10 @@ const historyVehicleSchema = new mongoose.Schema({
     entryDate:{
         type: Date,
     },
-    kmRod:{
+    kmInitial:{
+        type: Number,
+    },
+    kmFinal:{
         type: Number,
     },
     vehicleId:{

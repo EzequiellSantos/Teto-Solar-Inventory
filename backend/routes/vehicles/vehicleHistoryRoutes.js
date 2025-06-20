@@ -9,7 +9,8 @@ router.post('/', async (req, res) => {
         drive: req.body.drive,
         exitDate: req.body.exitDate,
         entryDate: req.body.entryDate,
-        kmRod: req.body.kmRod,
+        kmInitial: req.body.kmInitial,
+        kmFinal: req.body.kmFinal,
         vehicleId: req.body.vehicleId
     }
 
