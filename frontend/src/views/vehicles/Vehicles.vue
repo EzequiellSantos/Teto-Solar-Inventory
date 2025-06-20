@@ -153,6 +153,7 @@ export default {
   min-height: 90vh;
   background: #f7f9fb;
   position: relative;
+  margin: auto;
 }
 
 .header {
@@ -194,7 +195,7 @@ export default {
   gap: 24px;
   max-width: 660px;
   margin: 0 auto;
-  justify-content: flex-start;
+  justify-content: center;
   justify-items: center;
   align-items: center;
 }
