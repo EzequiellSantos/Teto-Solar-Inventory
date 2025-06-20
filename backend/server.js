@@ -68,8 +68,10 @@ const historyRoutes = require('./routes/stockroom/historyRoutes')
 const orderRoutes = require('./routes/stockroom/orderRoutes')
 const historiesRoutes = require('./routes/teams/historiesKitsRoutes')
 const kitsRoutes = require('./routes/teams/kitsRoutes')
-const reports = require('./routes/teams/reportsRoutes')
+const reportsRoutes = require('./routes/teams/reportsRoutes')
 const teamRoutes = require('./routes/teams/teamRoutes')
+const vehiclesRoutes = require('./routes/vehicles/vehicleRoutes')
+const vehicleHistoryRoutes = require('./routes/vehicles/vehicleHistoryRoutes')
 
 app.use('/api/batchs', checkApiKey, batchsRoutes)
 app.use('/api/trackings', checkApiKey, trackingRoutes)
@@ -81,8 +83,10 @@ app.use('/api/histories', checkApiKey, historyRoutes)
 app.use('/api/orders', checkApiKey, orderRoutes)
 app.use('/api/historiesKits', checkApiKey, historiesRoutes)
 app.use('/api/kits', checkApiKey, kitsRoutes)
-app.use('/api/reports', checkApiKey, reports)
+app.use('/api/reports', checkApiKey, reportsRoutes)
 app.use('/api/teams', checkApiKey, teamRoutes)
+app.use('/api/vehicles', checkApiKey, vehiclesRoutes)
+app.use('/api/vehicleHistory', checkApiKey, vehicleHistoryRoutes)
 
 // Start Server
 const PORT = process.env.PORT || 3000;

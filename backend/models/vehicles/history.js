@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const historySchema = new mongoose.Schema({
+const historyVehicleSchema = new mongoose.Schema({
     drive:{
         type: String,
         required: true
@@ -9,15 +9,15 @@ const historySchema = new mongoose.Schema({
         type: Date,
     },
     entryDate:{
-        type: String,
+        type: Date,
     },
     kmRod:{
         type: Number,
     },
     vehicleId:{
-        type: string,
+        type: String,
         required: true
-    },
+    }
 });
 
-module.exports = mongoose.model("HistoryVehicle", historySchema)
+module.exports = mongoose.model("HistoryVehicle", historyVehicleSchema)
