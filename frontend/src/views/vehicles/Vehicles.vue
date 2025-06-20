@@ -24,9 +24,10 @@
       >
         <router-link :to="`/vehicle/${vehicle._id}`" class="vehicle-link">
           <h2>{{ vehicle.description }}</h2>
-          <p>{{ vehicle.plate }}</p>
+          <h3>{{vehicle.team}}</h3>
+          <p>Placa: {{ vehicle.plate }}</p>
         </router-link>
-        <button style="color:#000;" @click="showFormForEdit(vehicle)" class="edit-button">
+        <button @click="showFormForEdit(vehicle)" class="edit-button">
           Editar
         </button>
       </div>
@@ -37,11 +38,14 @@
       <div id="cardFormVehicle">
         <h2>{{ isEditing ? 'Editar Veículo' : 'Criar Veículo' }}</h2>
         <form @submit.prevent="handleSubmit">
-          <label for="description">Descrição</label>
+          <label for="description">Descrição:</label>
           <input type="text" v-model="form.description" required />
 
-          <label for="plate">Placa</label>
+          <label for="plate">Placa: </label>
           <input type="text" v-model="form.plate" required />
+
+          <label for="team">Equipe: </label>
+          <input type="text" v-model="form.team" required />
 
           <button type="submit">
             {{ isEditing ? 'Atualizar' : 'Criar' }}
@@ -117,7 +121,8 @@ export default {
           },
           body: JSON.stringify({
             description: this.form.description,
-            plate: this.form.plate
+            plate: this.form.plate,
+            team: this.form.team
           })
         });
 
@@ -180,7 +185,7 @@ export default {
 }
 
 #createNew button:hover {
-  background: var(--color-main02);
+  background: var(--color-main01);
 }
 
 .vehicles-list {
@@ -197,7 +202,7 @@ export default {
 .vehicle-card {
   background: #fff;
   border-radius: 14px;
-  height: 90px;
+  height: 160px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   min-width: 260px;
   max-width: 200px;
@@ -281,7 +286,7 @@ export default {
   background: var(--color-main01);
   color: white;
   border: none;
-  padding: 10px 0;
+  padding: 10px 10px;
   border-radius: 8px;
   font-weight: bold;
   font-size: 1.05em;
@@ -290,7 +295,7 @@ export default {
 }
 
 #cardFormVehicle button[type="submit"]:hover {
-  background: var(--color-main02);
+  background: var(--color-main01);
 }
 #cardFormVehicle button[type="submit"]:active {
   background: var(--color-main01);

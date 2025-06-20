@@ -2,12 +2,26 @@
   <div class="vehicles-container">
     <!-- Header -->
     <div class="header">
-      <h1>Históricos de: {{ vehicleDescription }}</h1>
-      <div id="createNew">
+    <h1>Históricos de: {{ vehicleDescription }}</h1>
+    <div id="createNew">
+
+        <router-link to="/vehicles">Voltar</router-link>
+
+        <!-- Filtro por mês -->
+        <input
+        type="date"
+        v-model="filterDate"
+        @change="fetchHistories"
+        title="Filtrar por mês"
+        />
+
+        <button style="background-color: var(--color-main00) ;" @click="clearFilter">Limpar Filtro</button>
+
+        <!-- Botão de criação -->
         <button @click="toggleForm">
-          Criar Histórico
+            Criar Histórico
         </button>
-      </div>
+    </div>
     </div>
 
     <!-- Modal de formulário centralizado -->
@@ -25,10 +39,10 @@
           <input type="datetime-local" v-model="form.entryDate" required />
 
           <label>KM Inicial</label>
-          <input type="number" v-model="kmInit" required min="0" />
+          <input type="number" v-model="form.kmInitial" required min="0" />
 
           <label>KM Final</label>
-          <input type="number" v-model="kmFin" required min="0" />
+          <input type="number" v-model="form.kmFinal" required min="0" />
 
           <div class="form-actions">
             <button type="submit">Salvar</button>
@@ -49,12 +63,18 @@
         v-for="(history, index) in histories"
         :key="index"
         class="vehicle-card"
-      >
-        <h2>{{ history.drive }}</h2>
-        <p>Saída: {{ formatDate(history.exitDate) }}</p>
-        <p>Entrada: {{ formatDate(history.entryDate) }}</p>
-        <p>KM Rodado: {{ history.kmRod }}</p>
-      </div>
+        >
+            <h2>{{ history.drive }}</h2>
+            <p>Saída: {{ formatDate(history.exitDate) }}</p>
+            <p>Entrada: {{ formatDate(history.entryDate) }}</p>
+            <p>KM Rodado: {{ Number(history.kmFinal) - Number(history.kmInitial) }}</p>
+
+            <div class="card-actions">
+                <button class="edit-btn" @click="startEdit(history)">Editar</button>
+                <button class="delete-btn" @click="deleteHistory(history._id)">Excluir</button>
+            </div>
+
+        </div>
     </div>
   </div>
 </template>
@@ -71,13 +91,15 @@ export default {
       showForm: false,
       vehicleDescription: '',
       vehicleId: this.$route.params.id,
-      kmInit:'',
-        kmFin:'',
+      isEditing: false,
+      editingId: null,
+      filterDate: '',
       form: {
         drive: '',
         exitDate: '',
         entryDate: '',
-        kmRod: this.kmFin - this.kmInit,
+        kmInitial: 0,
+        kmFinal: 0,
       },
       apiUrl: BASE_URL,
       apiKey: BASE_API_KEY
@@ -97,30 +119,45 @@ export default {
           }
         });
         const data = await response.json();
-        if (data.data) {
-          this.vehicleDescription = data.data.description;
-        }
+        this.vehicleDescription = data.data?.description || '';
       } catch (error) {
         console.error('Erro ao buscar veículo:', error);
       }
     },
 
     async fetchHistories() {
-      this.loading = true;
-      try {
-        const response = await fetch(`${this.apiUrl}/api/vehicleHistory/${this.vehicleId}`, {
-          headers: {
+    this.loading = true;
+
+    try {
+        let url = `${this.apiUrl}/api/vehicleHistory`;
+
+        // Se houver filtro de data, usar a rota de busca por mês
+        if (this.filterDate) {
+        const selected = new Date(this.filterDate);
+        const year = selected.getFullYear();
+        const month = selected.getMonth() + 1; // janeiro = 0
+
+        url += `/search/by-vehicle-and-month?vehicleId=${this.vehicleId}&month=${month}&year=${year}`;
+        } else {
+        // Caso contrário, busca geral
+        url += `/${this.vehicleId}`;
+        }
+
+        const response = await fetch(url, {
+        headers: {
             'Content-Type': 'application/json',
             'x-api-key': this.apiKey
-          }
+        }
         });
+
         const data = await response.json();
         this.histories = data.data;
-      } catch (error) {
+    } catch (error) {
         console.error('Erro ao buscar históricos:', error);
-      } finally {
+        alert('Erro ao buscar históricos.');
+    } finally {
         this.loading = false;
-      }
+    }
     },
 
     toggleForm() {
@@ -130,30 +167,71 @@ export default {
 
     async submitHistory() {
 
-        this.form.kmRod = this.kmFin - this.kmInit;
+        const payload = {
+            ...this.form,
+            vehicleId: this.vehicleId
+        };
 
-      const payload = {
-        ...this.form,
-        vehicleId: this.vehicleId
-      };
+        const method = this.isEditing ? 'PUT' : 'POST';
+        const endpoint = this.isEditing
+            ? `${this.apiUrl}/api/vehicleHistory/${this.editingId}`
+            : `${this.apiUrl}/api/vehicleHistory`;
+
+        try {
+            const response = await fetch(endpoint, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': this.apiKey
+            },
+            body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('Erro ao salvar histórico');
+
+            this.toggleForm();
+            await this.fetchHistories();
+        } catch (error) {
+            console.error('Erro ao salvar histórico:', error);
+            alert('Erro ao salvar histórico. Tente novamente.');
+        }
+        },
+
+
+    startEdit(history) {
+        this.isEditing = true;
+        this.editingId = history._id;
+        this.form = {
+            drive: history.drive,
+            exitDate: history.exitDate.slice(0, 16),
+            entryDate: history.entryDate.slice(0, 16),
+            kmInitial: history.kmInitial,
+            kmFinal: history.kmFinal
+        };
+        this.kmInit = history.kmInitial;
+        this.kmFin = history.kmFinal;
+        this.showForm = true;
+    },
+
+
+    async deleteHistory(id) {
+      if (!confirm('Tem certeza que deseja excluir este histórico?')) return;
 
       try {
-        const response = await fetch(`${this.apiUrl}/api/vehicleHistory`, {
-          method: 'POST',
+        const response = await fetch(`${this.apiUrl}/api/vehicleHistory/${id}`, {
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
             'x-api-key': this.apiKey
-          },
-          body: JSON.stringify(payload)
+          }
         });
 
-        if (!response.ok) throw new Error('Erro ao criar histórico');
+        if (!response.ok) throw new Error('Erro ao excluir histórico');
 
-        this.toggleForm();
         await this.fetchHistories();
       } catch (error) {
-        console.error('Erro ao criar histórico:', error);
-        alert('Erro ao criar histórico. Verifique os dados e tente novamente.');
+        console.error('Erro ao excluir histórico:', error);
+        alert('Erro ao excluir. Tente novamente.');
       }
     },
 
@@ -163,12 +241,21 @@ export default {
     },
 
     resetForm() {
-      this.form = {
-        drive: '',
-        exitDate: '',
-        entryDate: '',
-        kmRod: '',
-      };
+        this.form = {
+            drive: '',
+            exitDate: '',
+            entryDate: '',
+            kmInitial: 0,
+            kmFinal: 0
+        };
+        this.kmInit = '';
+        this.kmFin = '';
+        this.isEditing = false;
+        this.editingId = null;
+    },
+    clearFilter() {
+        this.filterDate = '';
+        this.fetchHistories();
     }
   }
 };
@@ -205,19 +292,21 @@ export default {
   margin: 0;
 }
 
-#createNew button {
+#createNew button, a {
   background-color: var(--color-main01);
   color: #fff;
   border: none;
   border-radius: 15px;
   padding: 10px 18px;
+  margin: 10px 8px;
+  text-decoration: none;
   font-size: 1em;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-#createNew button:hover {
+#createNew button:hover, a:hover {
   background: var(--color-main01);
   opacity: 0.6;
 }
@@ -249,7 +338,7 @@ export default {
 .vehicle-card h2 {
   font-size: 1.25em;
   margin-bottom: 8px;
-  color: var(--color-main01);
+  color: var(--color-main00);
 }
 
 .vehicle-card p {
@@ -287,7 +376,7 @@ export default {
 
 #cardForm h2 {
   margin-bottom: 18px;
-  color: var(--color-main01);
+  color: var(--color-main00);
   font-size: 1.3em;
   font-weight: 600;
 }
@@ -354,5 +443,38 @@ export default {
 .form-actions button[type="submit"]:hover {
   background-color: var(--color-main01);
   box-shadow: #222 0 0 8px rgba(0, 119, 255, 0.3);
+}
+
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn, .delete-btn {
+  padding: 6px 12px;
+  font-size: 0.9em;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.edit-btn {
+  background-color: #0077ff;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #005fcc;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
 }
 </style>
