@@ -481,6 +481,53 @@
     transform: scale(1.2);
   }
 
+  /* Estilo para o botão "Mostrar" (show-Info) */
+  .show-Info {
+    position: fixed;
+    left: 10px;
+    top: 115px; /* logo abaixo do headerOrder */
+    z-index: 10;
+    background: var(--color-main00);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .show-Info:hover {
+    background: #005fa3;
+    color: #e4e4e4;
+  }
+
+  .close-info {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: background 0.2s;
+  }
+
+  .close-info:hover {
+    background: #c0392b;
+  }
+
+  .btn-get-orders{
+    padding: 5px;
+    border-radius: 50%;
+  }
+
   /* cores para cada type */
 
   .background-for-BACKUP{
