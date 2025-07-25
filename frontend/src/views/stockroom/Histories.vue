@@ -53,7 +53,50 @@
 
         <main>
 
-            <div v-if="products.length == null">
+            <span class="show-Info" @click="toggleInfo">
+
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256">
+                <g fill="#f5f5f5" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M24,4c-11.02771,0 -20,8.97229 -20,20c0,3.27532 0.86271,6.33485 2.26172,9.06445l-2.16797,7.76367c-0.50495,1.8034 1.27818,3.58449 3.08203,3.08008l7.76758,-2.16797c2.72769,1.39712 5.7836,2.25977 9.05664,2.25977c11.02771,0 20,-8.97229 20,-20c0,-11.02771 -8.97229,-20 -20,-20zM24,7c9.40629,0 17,7.59371 17,17c0,9.40629 -7.59371,17 -17,17c-3.00297,0 -5.80774,-0.78172 -8.25586,-2.14648c-0.34566,-0.19287 -0.75354,-0.24131 -1.13477,-0.13477l-7.38672,2.0625l2.0625,-7.38281c0.10655,-0.38122 0.05811,-0.7891 -0.13477,-1.13477c-1.36674,-2.4502 -2.15039,-5.25915 -2.15039,-8.26367c0,-9.40629 7.59371,-17 17,-17zM23.97656,12.97852c-0.82766,0.01293 -1.48843,0.69381 -1.47656,1.52148v12c-0.00765,0.54095 0.27656,1.04412 0.74381,1.31683c0.46725,0.27271 1.04514,0.27271 1.51238,0c0.46725,-0.27271 0.75146,-0.77588 0.74381,-1.31683v-12c0.00582,-0.40562 -0.15288,-0.7963 -0.43991,-1.08296c-0.28703,-0.28666 -0.67792,-0.44486 -1.08353,-0.43852zM24,31c-1.10457,0 -2,0.89543 -2,2c0,1.10457 0.89543,2 2,2c1.10457,0 2,-0.89543 2,-2c0,-1.10457 -0.89543,-2 -2,-2z"></path></g></g>
+                </svg>
+
+            </span>
+
+            <section
+                id="historyQueryPanel"
+                :class="{ open: infoVisible }"
+                >
+
+                <button class="close-info" @click="toggleInfo">X</button>
+
+                <div class="history-query-row">
+                    <select v-model="selectedMonth">
+                    <option disabled value="">Mês</option>
+                    <option v-for="(month, index) in months" :key="index" :value="index + 1">
+                        {{ month }}
+                    </option>
+                    </select>
+
+                    <input
+                    v-model="productCode"
+                    placeholder="Código do produto (ex: MP0024)"
+                    type="text"
+                    />
+
+                    <button @click="getMonthlyExit">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="23" viewBox="0 0 30 30">
+                            <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
+                        </svg>
+
+                    </button>
+                </div>
+
+                <div v-if="monthlyResult !== null" class="monthly-result">
+                    Total de saídas no mês: <strong>{{ monthlyResult }}</strong>
+                </div>
+            </section>
+
+            <div v-if="!products.length">
                 <div class="spinner">
                     <div></div>
                     <div></div>
@@ -103,14 +146,24 @@
         data() {
 
             return {
-                products: {},
+                products: [],
+                infoVisible: false,
                 type: null,
                 sector: null,
                 search: null,
                 apiURL: BASE_URL,
                 apiKey: BASE_API_KEY,
                 msg: null,
-                msgClass: null
+                msgClass: null,
+                showInfo: false,
+                productCode: '',
+                selectedMonth: '',
+                months: [
+                    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+                ],
+                monthlyResult: null,
+                currentYear: new Date().getFullYear()
             }
 
         },
@@ -121,6 +174,51 @@
 
         },
         methods:{
+
+            toggleInfo() {
+                this.infoVisible = !this.infoVisible
+            },
+
+            async getMonthlyExit() {
+                if (!this.productCode || !this.selectedMonth) {
+                this.msg = 'Preencha o código e selecione o mês'
+                this.msgClass = 'error'
+                setTimeout(() => (this.msg = null), 2000)
+                return
+                }
+
+                const code = this.productCode.trim().toUpperCase()
+                const month = String(this.selectedMonth).padStart(2, '0')
+                const year = this.currentYear
+
+                try {
+                const response = await fetch(`${this.apiURL}/api/histories/product/exit/month/sum?code=${code}&year=${year}&month=${month}`, {
+                    method: "GET",
+                    headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": this.apiKey
+                    }
+                })
+
+                const data = await response.json()
+
+                if (data.error) {
+                    this.msg = data.error
+                    this.msgClass = 'error'
+                    this.monthlyResult = null
+                } else {
+                    this.monthlyResult = data.totalQuantity
+                    this.msg = null
+                    this.msgClass = null
+                }
+
+                } catch (err) {
+                    this.msg = 'Erro ao buscar histórico mensal'
+                    this.msgClass = 'error'
+                    this.monthlyResult = null
+                    console.error(err)
+                }
+            },
 
             exibir(id){
 
@@ -392,6 +490,122 @@
         background-color: blue;
         border-radius: 5px;
         text-decoration: none;
+    }
+
+   /* Botão de abrir */
+    .show-Info {
+        position: fixed;
+        left: 10px;
+        top: 140px;
+        z-index: 10;
+        background: var(--color-main00);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .show-Info:hover {
+        background-color: var(--color-main01);
+    }
+
+    /* Overlay */
+    #historyQueryPanel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.65);
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Painel de busca visível */
+    #historyQueryPanel.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Container interno (painel branco) */
+    #historyQueryPanel.open .history-query-content {
+        background: #fff;
+        border-radius: 14px;
+        padding: 32px 28px;
+        min-width: 300px;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        animation: fadeInPanel 0.35s ease forwards;
+    }
+
+    /* Row de input/select/button */
+    .history-query-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Campos de texto e select */
+    .history-query-row select,
+    .history-query-row input {
+        padding: 6px 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        min-width: 160px;
+        flex: 1 1 45%;
+    }
+
+    /* Botão */
+    .history-query-row button {
+        padding: 6px 14px;
+        border-radius: 50%;
+        background-color: #0e76a8;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        flex: 1 1 100px;
+    }
+
+    .history-query-row button:hover {
+        background-color: #095a85;
+    }
+
+    /* Resultado */
+    .monthly-result {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    /* Animação suave do painel */
+    @keyframes fadeInPanel {
+        from {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
 
     @keyframes exibir {
