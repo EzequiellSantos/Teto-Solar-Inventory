@@ -66,34 +66,74 @@
                 :class="{ open: infoVisible }"
                 >
 
-                <button class="close-info" @click="toggleInfo">X</button>
+                <h1 class="head-info">Coletando Insights</h1>
 
-                <div class="history-query-row">
-                    <select v-model="selectedMonth">
-                    <option disabled value="">Mês</option>
-                    <option v-for="(month, index) in months" :key="index" :value="index + 1">
-                        {{ month }}
-                    </option>
-                    </select>
+                <div class="history-info">
 
-                    <input
-                    v-model="productCode"
-                    placeholder="Código do produto (ex: MP0024)"
-                    type="text"
-                    />
+                    <button class="close-info" @click="toggleInfo">X</button>
 
-                    <button @click="getMonthlyExit">
+                    <section class="section-info-quantity">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="23" viewBox="0 0 30 30">
-                            <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
-                        </svg>
+                        <h3>Quantidade total por mês</h3>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select v-model="selectedYear" required>
+                                <option disabled value="">Ano</option>
+                                <option v-for="year in [currentYear, currentYear - 1, currentYear - 2]" :key="year" :value="year">
+                                    {{ year }}
+                                </option>
+                            </select>
+                            <select v-model="selectedMonth" required>
+                                <option disabled value="">Mês</option>
+                                <option v-for="(month, index) in months" :key="index" :value="index + 1">
+                                    {{ month }}
+                                </option>
+                            </select>
+                            <input
+                            id="productCodeOne"
+                            v-model="productCode"
+                            placeholder="Código do produto (ex: MP0024)"
+                            type="text"
+                            />
+                            <button id="search" @click="getMonthlyExit">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="23" viewBox="0 0 30 30">
+                                    <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
+                                </svg>
+                            </button>
+                        </div>
 
-                    </button>
+                        <span v-if="monthlyResult !== null" class="monthly-result">
+                            Total de saídas no mês: <strong style="color: red;">{{ monthlyResult }}</strong>
+                        </span>
+
+                    </section>
+
+                    <section class="section-info-interval">
+
+                        <h3>Quantidade em um intervalo de Data</h3>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="date" name="startDate" id="startDate" v-model="startDate" placeholder="Data inicial" />
+                            <input type="date" name="endDate" id="endDate" v-model="endDate" placeholder="Data final" />
+                            <input
+                            id="productCodeTwo"
+                            v-model="productCodeInterval"
+                            placeholder="Código do produto (ex: MP0024)"
+                            type="text"
+                            />
+                            <button id="search" @click="getQuantityByInterval">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="23" viewBox="0 0 30 30">
+                                    <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <span v-if="monthlyResultByInterval !== null" class="monthly-result">
+                            Total de saídas no intervalo: <strong style="color: red;">{{ monthlyResultByInterval }}</strong>
+                        </span>
+
+                    </section>
+
                 </div>
 
-                <div v-if="monthlyResult !== null" class="monthly-result">
-                    Total de saídas no mês: <strong>{{ monthlyResult }}</strong>
-                </div>
             </section>
 
             <div v-if="!products.length">
@@ -106,7 +146,7 @@
                 </div>
             </div>
 
-                <div class="div-container-histories" :id="product._id" @click="exibir(product._id)" v-for="(product, index) in products" :key="index">
+            <div class="div-container-histories" :id="product._id" @click="exibir(product._id)" v-for="(product, index) in products" :key="index">
 
                 <section class="item">
                     
@@ -157,12 +197,17 @@
                 msgClass: null,
                 showInfo: false,
                 productCode: '',
+                productCodeInterval: '',
+                startDate: '',
+                endDate: '',
                 selectedMonth: '',
+                selectedYear: '',
                 months: [
                     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
                     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
                 ],
                 monthlyResult: null,
+                monthlyResultByInterval: null,
                 currentYear: new Date().getFullYear()
             }
 
@@ -189,7 +234,7 @@
 
                 const code = this.productCode.trim().toUpperCase()
                 const month = String(this.selectedMonth).padStart(2, '0')
-                const year = this.currentYear
+                const year = String(this.selectedYear)
 
                 try {
                 const response = await fetch(`${this.apiURL}/api/histories/product/exit/month/sum?code=${code}&year=${year}&month=${month}`, {
@@ -218,6 +263,50 @@
                     this.monthlyResult = null
                     console.error(err)
                 }
+            },
+
+            async getQuantityByInterval() {
+
+                if (!this.productCodeInterval || !this.startDate || !this.endDate) {
+                    this.msg = 'Preencha todos os campos'
+                    this.msgClass = 'error'
+                    setTimeout(() => (this.msg = null), 2000)
+                    return
+                }
+
+                const code = this.productCodeInterval.trim().toUpperCase()
+                const start = new Date(this.startDate).toISOString()
+                const end = new Date(this.endDate).toISOString()
+
+                try {
+                    const response = await fetch(`${this.apiURL}/api/histories/product/exit/date-range/sum?code=${code}&startDate=${start}&endDate=${end}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-api-key": this.apiKey
+                        }
+                    })
+
+                    const data = await response.json()
+
+                    if (data.error) {
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.monthlyResultByInterval = data.totalQuantity
+
+                    }
+
+                } catch (err) {
+
+                    this.msg = 'Erro ao buscar quantidade por intervalo'
+                    this.msgClass = 'error'
+
+                }
+
             },
 
             exibir(id){
@@ -392,6 +481,10 @@
 
 <style scoped>
 
+    select{
+        margin: 0;
+    }
+
     #headerHistories{
         position: fixed;
         width: 100%;
@@ -423,9 +516,9 @@
         background-color: #F8F8F8;
         padding: 13px 5px;
         border-radius: 20px;
-        width: 90vw;
+        width: 80vw;
         margin: auto;
-        max-width: 800px;
+        max-width: 90%;
         margin-block: 10px;
     }
 
@@ -534,6 +627,7 @@
     #historyQueryPanel.open {
         opacity: 1;
         pointer-events: auto;
+        flex-direction: column;
     }
 
     /* Container interno (painel branco) */
@@ -542,7 +636,7 @@
         border-radius: 14px;
         padding: 32px 28px;
         min-width: 300px;
-        max-width: 420px;
+        max-width: 450px;
         width: 90%;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
         display: flex;
@@ -551,47 +645,69 @@
         animation: fadeInPanel 0.35s ease forwards;
     }
 
+    .head-info{
+        color: var(--color-main00);
+        margin-bottom: -60px;
+        z-index: 1;
+    }
+
     /* Row de input/select/button */
-    .history-query-row {
+    .history-info {
         display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
+        flex-direction: column;
+        background-color: white;
+        padding: 10px;
+        border-radius: 20px;
+        height: 400px;
         align-items: center;
         justify-content: center;
     }
 
     /* Campos de texto e select */
-    .history-query-row select,
-    .history-query-row input {
+    .history-info select,
+    .history-info input {
         padding: 6px 10px;
         font-size: 1rem;
         border: 1px solid #ccc;
-        border-radius: 6px;
-        min-width: 160px;
-        flex: 1 1 45%;
+        border-radius: 20px;
+        min-width: 100px;
+        width: 150px;
+        flex: 1 1 30%;
     }
 
     /* Botão */
-    .history-query-row button {
-        padding: 6px 14px;
+    .history-info #search {
+        padding: 10px;
         border-radius: 50%;
-        background-color: #0e76a8;
         color: white;
         border: none;
-        border-radius: 6px;
         cursor: pointer;
         font-weight: 500;
-        flex: 1 1 100px;
     }
 
-    .history-query-row button:hover {
-        background-color: #095a85;
+    .history-info #search:hover {
+        opacity: 0.8;
+    }
+
+    .section-info-quantity{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        margin-block: 20px;
+    }
+
+    .section-info-interval{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        margin-block: 20px;
     }
 
     /* Resultado */
     .monthly-result {
         text-align: center;
-        margin-top: 15px;
         font-size: 1.1rem;
         color: #333;
     }
