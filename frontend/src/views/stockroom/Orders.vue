@@ -37,7 +37,7 @@
                     <button class="close-info" @click="showInfo = false">X</button>
                     <h2>Informações</h2>
                     <p>Total de Pedidos: <span class="total-orders">{{orders.length}}</span></p>
-                    <p>Total de Gastos: <span class="total-price info-prices">{{allPrices.toFixed(2)}} R$</span></p>
+                    <p>Total de Gastos Semanais: <span class="total-price info-prices">{{allPrices.toFixed(2)}} R$</span></p>
                     <p>Total de Gastos Mensais: <span class="total-month info-prices"> {{ allPricesMonth.toFixed(2) }} R$</span> </p>
 
                     <label for="supplierName">Escolha um fornecedor Especifico:</label>
