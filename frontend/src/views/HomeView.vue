@@ -237,19 +237,19 @@ export default {
 
   }
 
-  @media (1100px < width){
+  @media (1200px < width){
 
     #header::before{
-      top: -1100px;
+      top: -1290px;
       width: 470px;
-      height: 2000px;
+      height: 2400px;
       right: 40%;
     }
 
     #header::after{
-      top: -1040px; 
+      top: -1240px; 
       right: 40%;
-      height: 1900px;
+      height: 2300px;
     }
 
   }
