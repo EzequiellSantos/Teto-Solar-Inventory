@@ -164,7 +164,10 @@ const routes = [
   {
     path: '/orders',
     name: "orders",
-    component: () => import(/* webpackChunkName: "orders" */ '../views/stockroom/Orders.vue')
+    component: () => import(/* webpackChunkName: "orders" */ '../views/stockroom/Orders.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/registerOrder',
