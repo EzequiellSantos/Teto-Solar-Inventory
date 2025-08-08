@@ -72,14 +72,14 @@
                 <label for="sector">Setor de Saída:</label>
                 <select name="sector" id="sector" v-model="sector" required>
                     <optgroup label="Setor que levou">
-                        <option value="EQUIPE 01">EQUIPE 01</option>
-                        <option value="EQUIPE 02">EQUIPE 02</option>
-                        <option value="EQUIPE 03">EQUIPE 03</option>
-                        <option value="EQUIPE 04">EQUIPE 04</option>
-                        <option value="EQUIPE 05">EQUIPE 05</option>
-                        <option value="EQUIPE 06">EQUIPE 06</option>
-                        <option value="EQUIPE 07">EQUIPE 07</option>
                         <option value="MANUTENCAO">Manutenção</option>
+                        <option value="EQUIPE 07">EQUIPE 07</option>
+                        <option value="EQUIPE 06">EQUIPE 06</option>
+                        <option value="EQUIPE 05">EQUIPE 05</option>
+                        <option value="EQUIPE 04">EQUIPE 04</option>
+                        <option value="EQUIPE 03">EQUIPE 03</option>
+                        <option value="EQUIPE 02">EQUIPE 02</option>
+                        <option value="EQUIPE 01">EQUIPE 01</option>
                     </optgroup>
                 </select>
 
@@ -300,7 +300,7 @@
                         this.msg = data.msg
                         this.msgClass = 'sucess'
 
-
+                        this.getProducts()
                         this.getTeam()
                         
                         setTimeout(() => {
@@ -443,6 +443,7 @@
                         this.products = {}
                         this.selectProduct = {}
                         this.sector = null
+                        this.getProducts()
                         this.$refs.search.focus();
 
                         setTimeout(() => {
