@@ -83,14 +83,14 @@
                 <label for="sector">Setor de Saída:</label>
                 <select name="sector" id="sector" v-model="sector" required>
                     <optgroup label="Setor que levou">
-                        <option value="EQUIPE 01">EQUIPE 01</option>
-                        <option value="EQUIPE 02">EQUIPE 02</option>
-                        <option value="EQUIPE 03">EQUIPE 03</option>
-                        <option value="EQUIPE 04">EQUIPE 04</option>
-                        <option value="EQUIPE 05">EQUIPE 05</option>
-                        <option value="EQUIPE 06">EQUIPE 06</option>
-                        <option value="EQUIPE 07">EQUIPE 07</option>
                         <option value="MANUTENCAO">Manutenção</option>
+                        <option value="EQUIPE 07">EQUIPE 07</option>
+                        <option value="EQUIPE 06">EQUIPE 06</option>
+                        <option value="EQUIPE 05">EQUIPE 05</option>
+                        <option value="EQUIPE 04">EQUIPE 04</option>
+                        <option value="EQUIPE 03">EQUIPE 03</option>
+                        <option value="EQUIPE 02">EQUIPE 02</option>
+                        <option value="EQUIPE 01">EQUIPE 01</option>
                     </optgroup>
                 </select>
 
@@ -156,16 +156,16 @@
                 <label for="sector">Setor de Saída:</label>
                 <select name="sector" id="sector" v-model="sector" required>
                     <optgroup label="Setor que levou">
-                        <option value="EQUIPE 01">EQUIPE 01</option>
-                        <option value="EQUIPE 02">EQUIPE 02</option>
-                        <option value="EQUIPE 03">EQUIPE 03</option>
-                        <option value="EQUIPE 04">EQUIPE 04</option>
-                        <option value="EQUIPE 05">EQUIPE 05</option>
-                        <option value="EQUIPE 06">EQUIPE 06</option>
-                        <option value="EQUIPE 07">EQUIPE 07</option>
-                        <option value="MANUTENCAO">Manutenção</option>
-                        <option value="LOJA">Loja</option>
                         <option value="ALMOXARIFADO">Almoxarifado</option>
+                        <option value="LOJA">Loja</option>
+                        <option value="MANUTENCAO">Manutenção</option>
+                        <option value="EQUIPE 07">EQUIPE 07</option>
+                        <option value="EQUIPE 06">EQUIPE 06</option>
+                        <option value="EQUIPE 05">EQUIPE 05</option>
+                        <option value="EQUIPE 04">EQUIPE 04</option>
+                        <option value="EQUIPE 03">EQUIPE 03</option>
+                        <option value="EQUIPE 02">EQUIPE 02</option>
+                        <option value="EQUIPE 01">EQUIPE 01</option>
                         <!-- <option value="FINANCEIRO">Financeiro</option> -->
                     </optgroup>
                 </select>
@@ -412,6 +412,7 @@
                 });
 
                 // Feedback e reset
+                this.getProducts()
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 this.msg = "Saída registrada e kit da equipe atualizado!";
                 this.msgClass = 'sucess';
@@ -601,6 +602,8 @@
                     } else {
                         this.msg = data.msg;
                         this.msgClass = 'sucess';
+
+                        this.getProducts()
 
                         // Atualiza o kit da equipe selecionada
                         let kitEquipe = null;
