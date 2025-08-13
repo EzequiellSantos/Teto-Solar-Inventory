@@ -488,7 +488,7 @@
     #headerHistories{
         position: fixed;
         width: 100%;
-        background-color: var(--color-main00);
+        background-color: var(--color-main01);
         padding: 13px 0;
         z-index: 2;
     }

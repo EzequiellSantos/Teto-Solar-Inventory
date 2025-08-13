@@ -1022,7 +1022,7 @@
 
   .sub-menu{
     position: absolute;
-    background-color: var(--color-main01);
+    background-color: var(--color-main00);
     border-radius: 10px;
     top: 26px;
   }

@@ -288,7 +288,7 @@
     }
 
     section#headerAlmox{
-        background-color: var(--color-main00);
+        background-color: var(--color-main01);
         color: #fff;
         position: fixed;
         top: 0;

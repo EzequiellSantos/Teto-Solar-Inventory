@@ -618,7 +618,7 @@
         width: 100%;
         top: 0;
         padding: 10px 0;
-        background-color: var(--color-main00);
+        background-color: var(--color-main01);
         color: #fff;
         height: 90px;
         z-index: 2;

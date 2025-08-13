@@ -145,7 +145,7 @@
         padding: 0px;
         border-radius: 30px;
         backdrop-filter: blur(10px);
-        color: rgb(0, 0, 160);
+        color: var(--color-main00);
         background-color: rgba(155, 155, 155, 0.199);
     }
 
@@ -170,7 +170,7 @@
 
     .active-link{
         border-radius: 30px;
-        background-color: var(--color-main01);
+        background-color: var(--color-main00);
         transition: background .7s ease-in-out;
         color: #fff;
         fill: #000;        
