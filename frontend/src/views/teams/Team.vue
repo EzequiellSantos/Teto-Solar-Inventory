@@ -7,6 +7,8 @@
 
         <h2>{{ team.name }}</h2>
 
+        <button id="editKit" class="edit-kit" @click="showEditMaterials = true" >Editar</button>
+
         <section v-if="team.materials && team.materials.length > 0">
             <h3 class="description">Materiais do Kit:</h3>
             <ul class="list-materials" >
@@ -14,7 +16,6 @@
                     {{ index + 1}} {{ material.description }} - <span class="quantity">{{ material.quantity }}</span>
                 </li>
             </ul>
-            <button id="editKit" class="edit-kit" @click="showEditMaterials = true" >Editar</button>
         </section>
 
         <p v-else>Nenhum material encontrado para esta equipe.</p>
@@ -44,8 +45,6 @@
             </section>
         </div>
 
-
-        <p style="position:fixed; bottom: 20px;"><small>versão em protótipo</small></p>
     </div>
 </template>
 
@@ -131,7 +130,13 @@ export default {
                 } else {
                     // Se encontrar, pega os materiais do kit
                     if (data.data && data.data.length > 0) {
-                        this.team.materials = data.data[0].materials;
+                        // Ordena os materiais em ordem alfabética pela descrição
+                        this.team.materials = data.data[0].materials.sort((a, b) => {
+                            if (!a.description) return 1;
+                            if (!b.description) return -1;
+                            return a.description.localeCompare(b.description);
+                        });
+
                     } else {
                         this.team.materials = [];
                     }
@@ -181,7 +186,7 @@ export default {
     font-size: 1.1em;
     line-height: 3em;
     height: 70vh;
-    min-height: 450px;
+    min-height: 350px;
     min-width: 320px;
     border-radius: 10px;
     padding: 15px;
@@ -264,13 +269,19 @@ export default {
     background: var(--color-main01);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 15px;
     padding: 10px 18px;
     font-size: 1.05em;
     letter-spacing: 1px;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s;
+}
+
+#editKit{
+    position: absolute;
+    right: 5px;
+    top: 13px;
 }
 
 #removeMaterial{

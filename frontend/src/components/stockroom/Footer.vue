@@ -170,7 +170,7 @@
 
     .active-link{
         border-radius: 30px;
-        background-color: var(--color-main00);
+        background-color: var(--color-main01);
         transition: background .7s ease-in-out;
         color: #fff;
         fill: #000;        

@@ -21,7 +21,12 @@
 
             <div class="almox-containers">
                 <label for="nameClient">Nome do Cliente:</label>
-                <input ref="nameClient" type="text" name="nameClient" id="nameClient" v-model="nameClient" required placeholder="Nome / cidade">
+                <input ref="nameClient" type="text" name="nameClient" id="nameClient" v-model="nameClient" required placeholder="Nome">
+            </div>
+
+            <div class="almox-containers">
+                <label for="clientCity">Cidade do Cliente:</label>
+                <input ref="clientCity" type="text" name="clientCity" id="clientCity" v-model="clientCity" required placeholder="cidade">
             </div>
 
             <div class="almox-containers">
@@ -61,7 +66,7 @@
 
                     <p class="select-product">{{selectProductKits.code}} {{selectProductKits.description}}</p>
                     <br>
-                    <input class="quant-kit" ref="quantKit" type="number" v-model="quantKit" id="quantKit" placeholder="Quantidade">
+                    <input class="quant-kit" ref="quantKits" type="number" v-model="quantKit" id="quantKits" placeholder="Quantidade">
                     <img class="add-material-kit" @click="addProductKit" width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
                     
                 </section>
@@ -74,7 +79,7 @@
                 <aside id="headerList"><span>Cód.</span> <span>Descri.</span> <span>Quant.</span></aside>
 
                 <section v-for="(material, index) in allClientMaterial" :key="index" class="list-itens">
-                    <p class="select-product">{{material.code}} {{material.description}} - {{material.quantity}}</p>
+                    <p class="select-product">{{material.code}} {{material.description}}  {{material.quantity}}</p>
                 </section>
             </div>
 
@@ -104,8 +109,6 @@
             </div>
 
             <InputSubmit text="Registrar" />
-
-            <p style="position:fixed; bottom: 70px; right: 45%;"><small>versão em protótipo</small></p>
         
         </form>
 
@@ -166,7 +169,6 @@
                         <option value="EQUIPE 03">EQUIPE 03</option>
                         <option value="EQUIPE 02">EQUIPE 02</option>
                         <option value="EQUIPE 01">EQUIPE 01</option>
-                        <!-- <option value="FINANCEIRO">Financeiro</option> -->
                     </optgroup>
                 </select>
 
@@ -218,6 +220,7 @@
                 selectProductKits: {},
                 allClientMaterial: [],
                 nameClient: null,
+                clientCity: null,
                 search: null,
                 outputQuant: null,
                 sector: null,
@@ -329,7 +332,11 @@
                         description: product.description,
                     }
 
-                    this.$refs.quantKit.focus();
+                    this.$nextTick(() => {
+                        if (this.$refs.quantKits) {
+                            this.$refs.quantKits.focus();
+                        }
+                    });
 
                 }
 
@@ -338,34 +345,34 @@
             async updateKits(e) {
                 e.preventDefault();
 
-                if (this.allClientMaterial.length == 0) {
+                if (this.allClientMaterial.length === 0) {
                     this.msg = "Selecione pelo menos um produto";
                     this.msgClass = 'error';
                     setTimeout(() => { this.msg = null }, 1600);
                     return;
                 }
 
-                // Monta o objeto conforme o model de historiesKit
-                const data = {
+                // Monta o objeto conforme o model de historiesKits
+                const historyData = {
                     teamName: this.sector,
                     clientName: this.nameClient,
+                    clientCity: this.clientCity,
                     date: this.outputDate,
-                    materials: this.allClientMaterial
+                    materials: this.allClientMaterial,
+                    isCompleted: false
                 };
 
-                const jsonData = JSON.stringify(data);
-
-                // 1. Registrar o histórico do kit do cliente
+                // 1. Registrar o histórico completo
                 await fetch(`${this.apiURL}/api/historiesKits`, {
                     method: "POST",
                     headers: {
                         "Content-type": "application/json",
                         "x-api-key": `${this.apiKey}`
                     },
-                    body: jsonData
+                    body: JSON.stringify(historyData)
                 });
 
-                // 2. Buscar o kit da equipe selecionada
+                // 2. Buscar o kit da equipe
                 let kitEquipe = null;
                 await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
                     method: "GET",
@@ -388,33 +395,37 @@
                     return;
                 }
 
-                // Atualizar os materiais do kit da equipe
-                const updatedMaterials = kitEquipe.materials.map(mat => {
-                    const found = this.allClientMaterial.find(m => m.code === mat.code);
-                    if (found) {
-                        // Subtrai a quantidade retirada, nunca deixando negativo
-                        return {
-                            ...mat,
-                            quantity: Math.max((mat.quantity || 0) - (found.quantity || 0), 0)
-                        };
+                // 3. Atualizar os materiais do kit da equipe (SOMANDO)
+                const updatedMaterials = [...kitEquipe.materials];
+
+                this.allClientMaterial.forEach(clientMat => {
+                    const existingMat = updatedMaterials.find(mat => mat.code === clientMat.code);
+
+                    if (existingMat) {
+                        existingMat.quantity = (existingMat.quantity || 0) + (clientMat.quantity || 0);
+                    } else {
+                        updatedMaterials.push({
+                            code: clientMat.code,
+                            description: clientMat.description,
+                            quantity: clientMat.quantity || 0
+                        });
                     }
-                    return mat;
                 });
 
-                // Atualizar o kit da equipe no banco
+                // 4. Atualizar o kit no banco (com os novos materiais somados)
                 await fetch(`${this.apiURL}/api/kits/`, {
                     method: "PUT",
                     headers: {
                         "Content-type": "application/json",
                         "x-api-key": `${this.apiKey}`
                     },
-                    body: JSON.stringify({ teamName: this.sector , materials: updatedMaterials })
+                    body: JSON.stringify({ teamName: this.sector, materials: updatedMaterials })
                 });
 
-                // Feedback e reset
-                this.getProducts()
+                // 6. Feedback e reset
+                this.getProducts();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                this.msg = "Saída registrada e kit da equipe atualizado!";
+                this.msg = "Kit atualizado e histórico registrado com sucesso!";
                 this.msgClass = 'sucess';
                 this.search = null;
                 this.outputQuant = null;
@@ -468,7 +479,6 @@
                     } else {
 
                         this.allProducts = data.data;
-
 
                     }
 
@@ -559,134 +569,146 @@
 
             },
 
-            async update(e){
+            async updateKits(e) {
+                e.preventDefault();
 
-                e.preventDefault()
-
-                let quantAtual = this.selectProduct.quantity - this.outputQuant
-
-                if(quantAtual < 0){
-                    quantAtual = 0
-                    this.enviarNotificacao("Alerta de Quantidade", `${this.selectProduct.description} em falta no estoque !!!`)
+                if (this.allClientMaterial.length === 0) {
+                    this.msg = "Selecione pelo menos um produto";
+                    this.msgClass = 'error';
+                    setTimeout(() => { this.msg = null }, 1600);
+                    return;
                 }
 
-                const data = {
-                    id: this.selectProduct._id,
-                    type: this.selectProduct.type,
-                    code: this.selectProduct.code,
-                    description: this.selectProduct.description,
-                    quantity: quantAtual,
-                    minQuantity: this.selectProduct.minQuantity,
-                    uniMed: this.selectProduct.uniMed,
-                    location: this.selectProduct.location,
-                    stateQuantity: this.selectProduct.stateQuantity,
-                    isActive: this.selectProduct.isActive
-                }
+                // 1. Registrar histórico do kit
+                const historyData = {
+                    teamName: this.sector,
+                    clientName: this.nameClient,
+                    clientCity: this.clientCity,
+                    date: this.outputDate,
+                    materials: this.allClientMaterial,
+                    isCompleted: false
+                };
 
-                const jsonData = JSON.stringify(data)
-
-                // Atualiza o produto no estoque geral
-                await fetch(`${this.apiURL}/api/materials`, {
-                    method: "PUT",
+                await fetch(`${this.apiURL}/api/historiesKits`, {
+                    method: "POST",
                     headers: {
                         "Content-type": "application/json",
                         "x-api-key": `${this.apiKey}`
                     },
-                    body: jsonData
-                })
-                .then((resp) => resp.json())
-                .then(async (data) => {
-                    if (data.error) {
-                        this.msg = data.error;
-                        this.msgClass = 'error';
-                    } else {
-                        this.msg = data.msg;
-                        this.msgClass = 'sucess';
+                    body: JSON.stringify(historyData)
+                });
 
-                        this.getProducts()
-
-                        // Atualiza o kit da equipe selecionada
-                        let kitEquipe = null;
-                        await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
-                            method: "GET",
-                            headers: {
-                                "Content-type": "application/json",
-                                "x-api-key": `${this.apiKey}`
-                            }
-                        })
-                        .then(resp => resp.json())
-                        .then(data => {
-
-                            if (data.data && data.data.length > 0) {
-                                kitEquipe = data.data[0];
+                // 2. Atualizar o estoque de cada material (RETIRANDO do estoque geral)
+                for (const item of this.allClientMaterial) {
+                    await fetch(`${this.apiURL}/api/materials/search?query=${item.code}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-type": "application/json",
+                            "x-api-key": `${this.apiKey}`
+                        }
+                    })
+                    .then(resp => resp.json())
+                    .then(async (data) => {
+                        const product = data.materials.find(prod => prod.code === item.code);
+                        if (product) {
+                            let newQuantity = (product.quantity || 0) - (item.quantity || 0);
+                            if (newQuantity < 0) {
+                                newQuantity = 0;
+                                this.enviarNotificacao("Alerta de Quantidade", `${item.description} em falta no estoque!`);
                             }
 
-                        });
+                            const updatedProduct = {
+                                id: product._id,
+                                type: product.type,
+                                code: product.code,
+                                description: product.description,
+                                quantity: newQuantity,
+                                minQuantity: product.minQuantity,
+                                uniMed: product.uniMed,
+                                location: product.location,
+                                stateQuantity: product.stateQuantity,
+                                isActive: product.isActive
+                            };
 
-                        if (kitEquipe) {
-                            // Atualiza ou adiciona o produto no kit
-                            let found = false;
-                            const updatedMaterials = kitEquipe.materials.map(mat => {
-                                if (mat.code === this.selectProduct.code) {
-                                    found = true;
-                                    let newQuantity = (mat.quantity || 0) + Number(this.outputQuant);
-
-                                    // Verificação extra: se NÃO for saída para cliente e descrição contém "100M"
-                                    if (!this.outputClient && this.selectProduct.description && this.selectProduct.description.includes("100M")) {
-                                        newQuantity = (mat.quantity || 0) + (Number(this.outputQuant) * 100);
-                                    }
-
-                                    return {
-                                        ...mat,
-                                        quantity: newQuantity
-                                    };
-                                }
-                                return mat;
-                            });
-
-                            // Se não encontrou, adiciona o produto ao kit
-                            if (!found) {
-                                let addQuantity = Number(this.outputQuant);
-                                if (!this.outputClient && this.selectProduct.description && this.selectProduct.description.includes("100M")) {
-                                    addQuantity = Number(this.outputQuant) * 100;
-                                }
-                                updatedMaterials.push({
-                                    code: this.selectProduct.code,
-                                    description: this.selectProduct.description,
-                                    quantity: addQuantity
-                                });
-                            }
-
-                            // Atualiza o kit no banco
-                            await fetch(`${this.apiURL}/api/kits/`, {
+                            await fetch(`${this.apiURL}/api/materials`, {
                                 method: "PUT",
                                 headers: {
                                     "Content-type": "application/json",
                                     "x-api-key": `${this.apiKey}`
                                 },
-                                body: JSON.stringify({
-                                    teamName: this.sector,
-                                    materials: updatedMaterials 
-                                })
+                                body: JSON.stringify(updatedProduct)
                             });
                         }
+                    });
+                }
 
-                        setTimeout(() => {
-                            this.sendingRegister();
-                        }, 1000);
+                // 3. Buscar o kit da equipe
+                let kitEquipe = null;
+                await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
                     }
                 })
-                .catch((err) => {
-
-                    this.msg = 'Erro ao registrar';
-                    this.msgClass = 'error';
-                    console.log(err);
-
-                    setTimeout(() => {
-                        this.msg = null;
-                    }, 1600);
-
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.data && data.data.length > 0) {
+                        kitEquipe = data.data[0];
+                    }
                 });
+
+                if (!kitEquipe) {
+                    this.msg = "Kit da equipe não encontrado!";
+                    this.msgClass = 'error';
+                    setTimeout(() => { this.msg = null }, 1600);
+                    return;
+                }
+
+                // 4. Atualizar os materiais do kit da equipe (SOMANDO)
+                const updatedMaterials = [...kitEquipe.materials];
+
+                this.allClientMaterial.forEach(clientMat => {
+                    const existingMat = updatedMaterials.find(mat => mat.code === clientMat.code);
+
+                    if (existingMat) {
+                        existingMat.quantity = (existingMat.quantity || 0) + (clientMat.quantity || 0);
+                    } else {
+                        updatedMaterials.push({
+                            code: clientMat.code,
+                            description: clientMat.description,
+                            quantity: clientMat.quantity || 0
+                        });
+                    }
+                });
+
+                // 5. Atualizar o kit no banco
+                await fetch(`${this.apiURL}/api/kits/`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-api-key": `${this.apiKey}`
+                    },
+                    body: JSON.stringify({ teamName: this.sector, materials: updatedMaterials })
+                });
+
+                // 6. Feedback e reset
+                this.getProducts();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.msg = "Kit atualizado, estoque ajustado e histórico registrado!";
+                this.msgClass = 'sucess';
+                this.search = null;
+                this.sector = null;
+                this.clientName = null
+                this.clientCity = null;
+                this.outputQuant = null;
+                this.products = [];
+                this.selectProductKits = {};
+                this.allClientMaterial = [];
+                this.
+                this.$refs.search.focus();
+
+                setTimeout(() => { this.msg = null }, 1700);
             },
 
             async sendingRegister(){

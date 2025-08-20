@@ -11,8 +11,10 @@ router.post('/', async (req, res) => {
         const history = new HistoriesKit({
             teamName: historyData.teamName,
             clientName: historyData.clientName,
+            clientCity: historyData.clientCity,
             date: historyData.date,
-            materials: historyData.materials
+            materials: historyData.materials,
+            isCompleted: historyData.isCompleted
         });
         await history.save();
         res.status(201).json({ error: null, data: history });
@@ -26,7 +28,17 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const histories = await HistoriesKit.find();
-        res.status(200).json({ error: null, data: histories });
+        res.status(200).json({ error: null, histories: histories });
+    } catch (error) {
+        res.status(400).json({ error: "Erro ao buscar históricos" });
+        console.log(error);
+    }
+});
+
+router.get('/notCompleted', async (req, res) => {
+    try {
+        const histories = await HistoriesKit.find({isCompleted: false}).sort({description: 1});
+        res.status(200).json({ error: null, histories: histories });
     } catch (error) {
         res.status(400).json({ error: "Erro ao buscar históricos" });
         console.log(error);
@@ -50,8 +62,11 @@ router.get('/:id', async (req, res) => {
 
 // Atualizar histórico por ID
 router.put('/:id', async (req, res) => {
+
+    console.log(req.body);
+
     try {
-        const history = await HistoriesKit.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const history = await HistoriesKit.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true });
         res.status(200).json({ error: null, data: history });
     } catch (error) {
         res.status(400).json({ error: "Erro ao atualizar histórico" });

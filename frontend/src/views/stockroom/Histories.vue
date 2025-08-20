@@ -20,6 +20,7 @@
 
                     <li class="menu-item"> <span class="item">Tipo<img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/></span>
                         <ul class="sub-menu" id="ulTypes">
+                            <li class="sub-item" id="ChoiceClientes" @click="getClientHistory('Clientes')">Clientes</li>
                             <li class="sub-item" id="ChoiceSaida" @click="getTypeHistory('Saida')">Saída</li>
                             <li class="sub-item" id="ChoiceCompra" @click="getTypeHistory('Compra')">Compra</li>
                             <li class="sub-item" id="ChoiceDevolução" @click="getTypeHistory('Devolução')">Devolução</li>
@@ -136,7 +137,7 @@
 
             </section>
 
-            <div v-if="!products.length">
+            <div v-if="isLoading">
                 <div class="spinner">
                     <div></div>
                     <div></div>
@@ -144,6 +145,32 @@
                     <div></div>
                     <div></div>
                 </div>
+            </div>
+
+            <!-- retirar ou colocar de volta no kit da equipe -->
+            <!-- editar o kit mudando o nome da equipe toggleMaterialUsage(material, client.teamName)-->
+
+            <div class="div-container-clients" v-for="(client, index) in clients" :key="index">
+
+                <div class="client-materials">
+
+                    <span v-for="(material, index) in client.materials" :key="index">
+                        {{ material.description}} 
+                        <input type="number" v-model="material.quantity" min="0">
+                    </span>
+
+
+                </div>
+
+                <div class="client-info">
+                    <span>{{ client.ClientName }}</span> 
+                    <span>{{ client.clientCity }} </span>
+                    <span>{{ client.teamName }}</span>
+                    <span><input type="checkbox" name="materialCheckbox" id="isCompleted" v-model="client.isCompleted" @change="toggleMaterialUsage(client._id, client.materials, client.teamName, client.isCompleted)"> Concluído</span>
+                    <span class="edit-button">Editar</span>
+                    
+                </div>
+
             </div>
 
             <div class="div-container-histories" :id="product._id" @click="exibir(product._id)" v-for="(product, index) in products" :key="index">
@@ -186,7 +213,9 @@
         data() {
 
             return {
+                isLoading: true,
                 products: [],
+                clients: [],
                 infoVisible: false,
                 type: null,
                 sector: null,
@@ -212,16 +241,116 @@
             }
 
         },
-        mounted () {
-
-            this.getTypeHistory('Saida'),
-            this.scrollBottom()
-
+        mounted() {
+            this.getClientHistory('Clientes')
+            this.$nextTick(() => {
+                this.adequedStyles('Clientes')
+            })
         },
         methods:{
 
             toggleInfo() {
                 this.infoVisible = !this.infoVisible
+            },
+
+            async toggleMaterialUsage(id, materials, teamName, isCompleted) {
+                this.isLoading = true;
+
+                const data = {
+                    _id: id,
+                    materials: materials,
+                    teamName: teamName,
+                    isCompleted: isCompleted
+                };
+
+                const jsonData = JSON.stringify(data);
+
+                // Atualiza o histórico do cliente
+                await fetch(`${this.apiURL}/api/historiesKits/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": this.apiKey
+                    },
+                    body: jsonData
+                })
+                .then(async (response) => {
+                    const data = await response.json();
+
+                    if (data.error) {
+                        this.msg = data.error;
+                        this.msgClass = 'error';
+                        this.isLoading = false;
+                        return;
+                    } else {
+                        this.msg = "Material atualizado com sucesso";
+                        this.msgClass = "sucess";
+                    }
+
+                    // ↓↓↓ SOMENTE SE FOI MARCADO COMO CONCLUÍDO ↓↓↓
+                    if (isCompleted) {
+                        // 1. Buscar o kit da equipe
+                        let kitEquipe = null;
+                        await fetch(`${this.apiURL}/api/kits/search/team?name=${teamName}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-type": "application/json",
+                                "x-api-key": this.apiKey
+                            }
+                        })
+                        .then(resp => resp.json())
+                        .then(data => {
+                            if (data.data && data.data.length > 0) {
+                                kitEquipe = data.data[0];
+                            }
+                        });
+
+                        if (!kitEquipe) {
+                            this.msg = "Kit da equipe não encontrado!";
+                            this.msgClass = 'error';
+                            this.isLoading = false;
+                            setTimeout(() => { this.msg = null }, 1600);
+                            return;
+                        }
+
+                        // 2. Atualizar os materiais do kit da equipe (SUBTRAINDO)
+                        const updatedMaterials = [...kitEquipe.materials];
+
+                        materials.forEach(clientMat => {
+                            const existingMat = updatedMaterials.find(mat => mat.code === clientMat.code);
+
+                            if (existingMat) {
+                                // Subtrai a quantidade usada
+                                existingMat.quantity = Math.max((existingMat.quantity || 0) - (clientMat.quantity || 0), 0);
+                            } else {
+                                // Se o material não existe no kit, ignora ou adiciona com zero
+                                // Aqui você pode decidir o que é mais apropriado
+                            }
+                        });
+
+                        // 3. Atualizar o kit no banco
+                        await fetch(`${this.apiURL}/api/kits/`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-type": "application/json",
+                                "x-api-key": this.apiKey
+                            },
+                            body: JSON.stringify({
+                                teamName: teamName,
+                                materials: updatedMaterials
+                            })
+                        });
+                    }
+
+                    this.isLoading = false;
+
+                })
+                .catch((err) => {
+                    this.msg = 'Erro ao atualizar material';
+                    this.msgClass = 'error';
+                    this.isLoading = false;
+                    console.error(err);
+                });
             },
 
             async getMonthlyExit() {
@@ -336,6 +465,8 @@
             },
 
             async getHistories(){
+
+                this.clients = []
  
                 if (this.sector === null) {
                     
@@ -370,6 +501,7 @@
                         
                         this.products = data.history
                         this.scrollBottom()
+                        this.isLoading = false
 
                     }
                 })
@@ -393,6 +525,8 @@
                 this.adequedStyles(type)
                 this.type = type
 
+                this.isLoading = true
+
                 await fetch(`${this.apiURL}/api/histories/type?choice=${type}`, {
                     method:"GET",
                     headers: {
@@ -412,6 +546,7 @@
 
                         this.products = data.histories
                         this.scrollBottom()
+                        this.isLoading = false
 
                     }
 
@@ -429,6 +564,8 @@
 
             async getHistoryForSector(sector){
                 
+                this.clients = []
+                this.isLoading = true
                 this.adequedStyles(sector)
 
                 this.sector = sector
@@ -452,6 +589,7 @@
 
                         this.products = data.histories
                         this.scrollBottom()
+                        this.isLoading = false
 
                     }
 
@@ -463,6 +601,47 @@
                     console.log(err)
 
                 })
+
+            },
+
+            async getClientHistory(type){
+
+                this.isLoading = true
+
+                this.adequedStyles(type)
+
+                this.products = []
+
+                await fetch(`${this.apiURL}/api/historiesKits/notCompleted`, {
+                    method:"GET",
+                    headers: {
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.clients = data.histories
+                        this.isLoading = false
+                    }
+
+                })
+                .catch((err) => {
+
+                    this.msg = err
+                    this.msgClass = 'error'
+                    console.log(err)
+
+                })
+
 
             },
 
