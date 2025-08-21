@@ -63,8 +63,6 @@ router.get('/:id', async (req, res) => {
 // Atualizar histórico por ID
 router.put('/:id', async (req, res) => {
 
-    console.log(req.body);
-
     try {
         const history = await HistoriesKit.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true });
         res.status(200).json({ error: null, data: history });
@@ -77,7 +75,7 @@ router.put('/:id', async (req, res) => {
 // Deletar histórico por ID
 router.delete('/:id', async (req, res) => {
     try {
-        await HistoriesKit.findByIdAndDelete(req.params.id);
+        await HistoriesKit.findOneAndDelete({ _id: req.params.id });
         res.status(200).json({ error: null, message: "Histórico deletado com sucesso" });
     } catch (error) {
         res.status(400).json({ error: "Erro ao deletar histórico" });

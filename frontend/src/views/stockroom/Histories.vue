@@ -147,28 +147,39 @@
                 </div>
             </div>
 
-            <!-- retirar ou colocar de volta no kit da equipe -->
-            <!-- editar o kit mudando o nome da equipe toggleMaterialUsage(material, client.teamName)-->
+            <div v-if="(products.length === 0 && clients.length === 0) && !isLoading"><p>Sem Registros :/</p></div>
 
-            <div class="div-container-clients" v-for="(client, index) in clients" :key="index">
+            <div class="div-container-clientes" v-for="(client, index) in clients" :key="index">
 
                 <div class="client-materials">
 
                     <span v-for="(material, index) in client.materials" :key="index">
+                        {{ index + 1}} - 
                         {{ material.description}} 
-                        <input type="number" v-model="material.quantity" min="0">
+                        <input class="quantityMaterial" type="number" v-model="material.quantity" min="0">
                     </span>
 
 
                 </div>
 
                 <div class="client-info">
-                    <span>{{ client.ClientName }}</span> 
-                    <span>{{ client.clientCity }} </span>
-                    <span>{{ client.teamName }}</span>
-                    <span><input type="checkbox" name="materialCheckbox" id="isCompleted" v-model="client.isCompleted" @change="toggleMaterialUsage(client._id, client.materials, client.teamName, client.isCompleted)"> Concluído</span>
-                    <span class="edit-button">Editar</span>
-                    
+                    <span class="client-name">{{ client.clientName }} - {{ client.clientCity }} </span>
+
+                    <span class="team-name">{{ client.teamName }}</span>
+
+                    <span class="status">
+                        <input type="checkbox" name="materialCheckbox" id="isCompleted" v-model="client.isCompleted" @change="toggleMaterialUsage(client._id, client.materials, client.teamName, client.isCompleted)">
+
+                        <span v-if="client. isCompleted">
+                            Concluído
+                        </span>
+                        <span v-else>Não Concluído</span>
+
+                    </span>
+
+                    <span class="delete-button" @click="deleteClient(client._id, client.materials, client.teamName)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="#000000" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>
+                    </span>
                 </div>
 
             </div>
@@ -237,7 +248,11 @@
                 ],
                 monthlyResult: null,
                 monthlyResultByInterval: null,
-                currentYear: new Date().getFullYear()
+                currentYear: new Date().getFullYear(),
+                clientName: '',
+                clientCity: '',
+                teamName: '',
+                materials: [],
             }
 
         },
@@ -254,7 +269,6 @@
             },
 
             async toggleMaterialUsage(id, materials, teamName, isCompleted) {
-                this.isLoading = true;
 
                 const data = {
                     _id: id,
@@ -332,7 +346,7 @@
                         await fetch(`${this.apiURL}/api/kits/`, {
                             method: "PUT",
                             headers: {
-                                "Content-type": "application/json",
+                                "Content-Type": "application/json",
                                 "x-api-key": this.apiKey
                             },
                             body: JSON.stringify({
@@ -350,6 +364,122 @@
                     this.msgClass = 'error';
                     this.isLoading = false;
                     console.error(err);
+                });
+            },
+
+            async deleteClient(id, materials, teamName) {
+                this.isLoading = true;
+
+                // 1. Buscar o kit da equipe correspondente
+                let kitEquipe = null;
+                await fetch(`${this.apiURL}/api/kits/search/team?name=${encodeURIComponent(teamName)}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": this.apiKey
+                    }
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.data && data.data.length > 0) {
+                        kitEquipe = data.data[0];
+                    }
+                });
+
+                // 2. Se encontrou o kit, subtrai as quantidades dos materiais do kit
+                if (kitEquipe) {
+                    const updatedMaterials = kitEquipe.materials.map(kitMat => {
+                        const matToRemove = materials.find(mat => mat.code === kitMat.code);
+                        if (matToRemove) {
+                            return {
+                                ...kitMat,
+                                quantity: Math.max((kitMat.quantity || 0) - (matToRemove.quantity || 0), 0)
+                            };
+                        }
+                        return kitMat;
+                    });
+
+                    // Atualiza o kit no banco
+                    await fetch(`${this.apiURL}/api/kits/`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-api-key": this.apiKey
+                        },
+                        body: JSON.stringify({
+                            teamName: kitEquipe.teamName,
+                            materials: updatedMaterials
+                        })
+                    });
+                }
+
+                // 3. DEVOLVER AO ESTOQUE as quantidades dos materiais do histórico deletado
+                for (const mat of materials) {
+                    // Busca o material no estoque pelo código
+                    await fetch(`${this.apiURL}/api/materials/search?query=${mat.code}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-api-key": this.apiKey
+                        }
+                    })
+                    .then(resp => resp.json())
+                    .then(async data => {
+                        if (data.materials && data.materials.length > 0) {
+                            const estoque = data.materials[0];
+                            // Soma a quantidade devolvida
+                            const novaQuantidade = (estoque.quantity || 0) + (mat.quantity || 0);
+
+                            // Atualiza o material no estoque
+                            await fetch(`${this.apiURL}/api/materials`, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "x-api-key": this.apiKey
+                                },
+                                body: JSON.stringify({
+                                    id: estoque._id,
+                                    type: estoque.type,
+                                    code: estoque.code,
+                                    description: estoque.description,
+                                    quantity: novaQuantidade,
+                                    minQuantity: estoque.minQuantity,
+                                    uniMed: estoque.uniMed,
+                                    location: estoque.location,
+                                    stateQuantity: estoque.stateQuantity,
+                                    isActive: estoque.isActive
+                                })
+                            });
+                        }
+                    });
+                }
+
+                // 4. Agora deleta o histórico normalmente
+                await fetch(`${this.apiURL}/api/historiesKits/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": this.apiKey
+                    }
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.error) {
+                        this.msg = data.error;
+                        this.msgClass = 'error';
+                    } else {
+                        this.msg = 'Cliente excluído com sucesso';
+                        this.msgClass = 'sucess';
+                        this.getClientHistory('Clientes'); // Atualiza a lista
+                    }
+                })
+                .catch((err) => {
+                    this.msg = 'Erro ao excluir cliente';
+                    this.msgClass = 'error';
+                    console.error(err);
+                })
+                .finally(() => {
+                    this.isLoading = false;
                 });
             },
 
@@ -925,6 +1055,79 @@
             height: 50px;
         }
 
+    }
+
+    /* estilos do card de clientes */
+
+    .div-container-clientes{
+
+        margin: auto;
+        margin-block: 20px;
+        border-radius: 15px;
+        background-color: #f2f2f2;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 15px;
+    }
+
+    .client-materials > span{
+        margin-block: 10px;
+    }
+
+    .client-materials > span > input{
+        width: 25px;
+        height: 25px;
+    }
+
+    .client-info{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        align-items: center;
+
+        gap: 5px;
+        padding: 10px;
+
+    }
+
+    .client-info > span{
+        font-size: clamp(0.625rem, 0.4792rem + 0.6667vw, 1.0625rem);
+        padding: 4px;
+    }
+
+    .team-name, .client-name{
+        background-color: #e4e4e4;
+        border-radius: 6px;
+    }
+
+    .client-info > span > input{
+        width: 25px;
+        height: 25px;
+        /* margin-bottom: -10px; */
+    }
+
+    .status {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .delete-button{
+        background-color: rgb(255, 80, 80);
+        border-radius: 10px;
+        width: 30px ;
+    }
+
+    .delete-button:active{
+        transform: scale(0.95);
     }
 
 </style>

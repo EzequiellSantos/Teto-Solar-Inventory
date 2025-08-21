@@ -115,8 +115,8 @@
         <form id="productForm" enctype="multipart/form-data" @submit="update($event)" v-if="!outputClient">
 
             <div class="almox-containers">
-                <label for="search">Procurar por Código ou Descrição:</label>
-                <input ref="search" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
+                <label for="searchClient">Procurar por Código ou Descrição:</label>
+                <input ref="searchClient" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
             </div>
 
             <div class="almox-containers" >
@@ -306,7 +306,7 @@
                     this.allClientMaterial.push(data)
                     this.selectProductKits = {}
                     this.quantKit = null
-                    this.$refs.search.focus();
+                    this.$refs.searchClient.focus();
 
                 } else {
 
@@ -432,7 +432,7 @@
                 this.products = [];
                 this.selectProductKits = {};
                 this.allClientMaterial = [];
-                this.$refs.search.focus();
+                this.$refs.searchClient.focus();
 
                 setTimeout(() => { this.msg = null }, 1700);
             },
