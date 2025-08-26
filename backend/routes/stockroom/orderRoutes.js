@@ -273,4 +273,22 @@ router.put('/updateUniqueOrder', async(req, res) => {
 
 })
 
+router.delete('/:id', async(req, res) => {
+
+    const id = req.params.id
+
+    try {
+
+        await Order.findOneAndDelete({_id: id})
+        res.status(200).json({error: null, msg: "Pedido excluído com sucesso"})
+
+    } catch (error) {
+
+        res.status(400).json({error: "Erro ao excluir pedido"})
+        console.log(error)
+
+    }
+
+})
+
 module.exports = router
