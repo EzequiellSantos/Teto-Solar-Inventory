@@ -35,9 +35,19 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/completed', async (req, res) => {
+    try {
+        const histories = await HistoriesKit.find({isCompleted: true}).sort({teamName: 1});
+        res.status(200).json({ error: null, histories: histories });
+    } catch (error) {
+        res.status(400).json({ error: "Erro ao buscar históricos" });
+        console.log(error);
+    }
+});
+
 router.get('/notCompleted', async (req, res) => {
     try {
-        const histories = await HistoriesKit.find({isCompleted: false}).sort({description: 1});
+        const histories = await HistoriesKit.find({isCompleted: false}).sort({teamName: 1});
         res.status(200).json({ error: null, histories: histories });
     } catch (error) {
         res.status(400).json({ error: "Erro ao buscar históricos" });
