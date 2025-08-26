@@ -86,7 +86,8 @@
                 msg: null,
                 msgClass: null,
                 products: [],
-                Allproducts: [],
+                AllproductsActived: [],
+                Allproducts:[],
                 search: null,
                 state: null,
                 apiURL: BASE_URL,
@@ -98,6 +99,7 @@
         created() {
 
 
+            this.getAllMaterialsActived()
             this.getAllMaterials()
             this.scrollBottom()
 
@@ -108,7 +110,7 @@
                 
                 if(this.search.length == 0 && this.search === "" && this.search.length < 2){
 
-                    this.products = this.Allproducts
+                    this.products = this.AllproductsActived
 
                 } else {
 
@@ -201,6 +203,48 @@
 
             },
 
+            async getAllMaterialsActived(){    
+
+                await fetch(`${this.apiURL}/api/materials/actived`, {
+                    method: "GET",
+                    headers: {
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = 'error'
+
+                    } else {
+
+                        this.AllproductsActived = data.data
+                        this.products = data.data
+
+                    }
+                        
+
+                })
+                .catch((err) => {
+
+                    this.msg = err
+                    this.msgClass = 'error'
+                    console.log(err)
+
+                })
+
+                setTimeout(() => {
+                    
+                    this.msg = null
+
+                }, 1500);
+
+            },
+
             async getAllMaterials(){    
 
                 await fetch(`${this.apiURL}/api/materials/all`, {
@@ -221,7 +265,6 @@
                     } else {
 
                         this.Allproducts = data.data
-                        this.products = data.data
 
                     }
                         
