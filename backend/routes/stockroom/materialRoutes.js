@@ -106,7 +106,7 @@ router.get('/actived', async(req, res) => {
     
         const materialsActived = await Material.find({isActive: true})
 
-        res.status(200).json({error: null, materials: materialsActived})
+        res.status(200).json({error: null, data: materialsActived})
 
     } catch (error) {
      

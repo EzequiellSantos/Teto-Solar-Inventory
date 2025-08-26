@@ -114,6 +114,9 @@
                     <button class="pdf-button" @click="OrderProcess(order.materials, order.date, String(index + 1).padStart(2, '0'))">
                         Gerar PDF
                     </button>
+                    <span class="delete-button" @click="deleteOrder(order)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="#000000" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>
+                    </span>
                 </section> 
 
             </div>
@@ -180,6 +183,122 @@
 
         },
         methods: {
+
+            async deleteOrder(order){
+
+                console.log(order)
+
+                if (!confirm('Tem certeza que deseja deletar este kit?')) return;
+
+                let materialFinded = {
+                    id: null,
+                    quantity: null,
+                    minQuantity: null,
+                    stateQuantity: null,
+                }
+
+                for (let i = 0; i < order.materials.length; i++) {
+
+
+                    materialFinded = {
+                        id: null,
+                        quantity: null,
+                        minQuantity: null,
+                        stateQuantity: null
+                    }
+
+                    //coletando informações do produto selecionado
+                    await fetch(`${this.apiURL}/api/materials/${order.materials[i]._id}`,{
+                        method: "GET",
+                        headers: {
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.error){
+
+                            console.log(data.error, " erro ao coletar quantidade ")
+
+                        } else {
+
+                            //coleta os campos do material selecionado
+                            materialFinded.id = data.material._id
+                            materialFinded.minQuantity = data.material.minQuantity
+                            materialFinded.quantity = data.material.quantity
+                            materialFinded.stateQuantity = " "
+
+                        }
+
+                    })
+
+                    const data = {
+                        id: materialFinded.id,
+                        quantity: materialFinded.quantity,
+                        minQuantity: materialFinded.minQuantity,
+                        stateQuantity: materialFinded.stateQuantity
+                    }
+
+                    console.log(data, " testeee")
+
+                    const jsonData = JSON.stringify(data)
+
+                    await fetch(`${this.apiURL}/api/materials/`, {
+                        method:"PUT",
+                        headers: {
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
+                        },
+                        body: jsonData
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+                        
+                        if(data.error){
+                            
+                            console.log(data.error)
+
+                        } else {
+
+                            console.log(data.updateMaterial)
+
+                        }
+
+                    })
+
+                }
+
+                await fetch(`${this.apiURL}/api/orders/${order._id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type":"application/json",
+                        "x-api-key": `${this.apiKey}`
+                    }
+                })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    if(data.error){
+
+                        this.msg = data.error
+                        this.msgClass = "error"
+
+                    } else {
+
+                        this.msg = data.msg
+                        this.msgClass = "success"
+                        this.getOrders(this.dataChoice)
+                        setTimeout(() => {
+                            this.msg = null
+                            this.msgClass = null
+                        }, 3000);
+
+                    }
+
+                })
+
+            },
 
             showInfoOrders(){
 
@@ -734,10 +853,12 @@
     .info-container{
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center;
         align-content: center;
-        align-items: baseline;
+        align-items: center;
         gap: 10px;
+        margin-top: 20px;
     }
 
     .info-supplier, .info-prices{
@@ -750,7 +871,6 @@
     .span-date{
         position: relative;
         margin-left: auto;
-        margin-top: 15px;
         margin-right: 10px;
         background-color: var(--color-main00);
         font-size: 0.9em;
@@ -876,6 +996,16 @@
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+
+    .delete-button{
+        background-color: rgb(255, 80, 80);
+        border-radius: 10px;
+        width: 30px ;
+    }
+
+    .delete-button:active{
+        transform: scale(0.95);
     }
 
 </style>
