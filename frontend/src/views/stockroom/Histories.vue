@@ -18,7 +18,10 @@
                 
                 <ul class="menu">
 
-                    <li class="menu-item"> <span class="item">Tipo<img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/></span>
+                    <li class="menu-item"> 
+
+                        <span class="item">Tipo<img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/></span>
+
                         <ul class="sub-menu" id="ulTypes">
                             <li class="sub-item" id="ChoiceClientes" @click="getClientHistory('Clientes')">Clientes</li>
                             <li class="sub-item" id="ChoiceSaida" @click="getTypeHistory('Saida')">Saída</li>
@@ -26,6 +29,20 @@
                             <li class="sub-item" id="ChoiceDevolução" @click="getTypeHistory('Devolução')">Devolução</li>
                             <li class="sub-item" id="ChoiceContagem" @click="getTypeHistory('Contagem')">Contagem</li>
                         </ul>
+                    </li>
+
+                    <li class="menu-item" v-if="this.isClientsActived">
+
+                        <span class="item">
+                            Status
+                            <img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/>
+                        </span>
+
+                        <ul class="sub-menu" id="ulStates">
+                            <li class="sub-item" id="Choice" @click="getClientHistoryState(false)">Em Andamento</li>
+                            <li class="sub-item" id="Choice" @click="getClientHistoryState(true)">Concluída</li>
+                        </ul>
+
                     </li>
 
                     <li class="menu-item" v-if="this.products[0]?.type === 'Saida'" ><span class="item">Setor<img width="20" height="20" src="https://img.icons8.com/metro/26/chevron-up.png" alt="chevron-up"/></span>
@@ -227,6 +244,8 @@
                 isLoading: true,
                 products: [],
                 clients: [],
+                allClients: [],
+                isClientsActived: true,
                 infoVisible: false,
                 type: null,
                 sector: null,
@@ -368,6 +387,9 @@
             },
 
             async deleteClient(id, materials, teamName) {
+
+                if (!confirm('Tem certeza que deseja deletar este kit?')) return;
+
                 this.isLoading = true;
 
                 // 1. Buscar o kit da equipe correspondente
@@ -596,62 +618,99 @@
 
             async getHistories(){
 
-                this.clients = []
- 
-                if (this.sector === null) {
-                    
-                    this.msg = 'Selecione um setor'
-                    this.msgClass = 'error'
+                if(this.isClientsActived){
 
-                    setTimeout(() => {
-                        
-                        this.msg = null
+                    let clientsFiltered = []
 
-                    }, 1500);
+                    const normalize = str => {
+                        if (typeof str !== 'string') return '';
+                        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                    };
 
-                }
+                    const termoBusca  = normalize(this.search)
 
-                await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}&param3=${this.type}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-type":"application/json",
-                        "x-api-key": `${this.apiKey}`
+                    const baseProducts = Array.isArray(this.allClients) ? this.allClients : [];
+
+                    if(termoBusca.length > 0){
+                        clientsFiltered = baseProducts.filter(client => {
+                            const nameMatch = client.clientName && normalize(client.clientName).includes(termoBusca);
+                            const teamMatch = client.teamName && normalize(client.teamName).includes(termoBusca);
+                            return nameMatch || teamMatch;
+                        });
+                    } else {
+                        clientsFiltered = baseProducts;
                     }
-                })
-                .then((resp) => resp.json())
-                .then((data) => {
 
-                    if (data.error) {
-                        
-                        // console.error(data.error)
-                        this.msg = data.error
+                    this.clients = clientsFiltered
+
+                    if(this.search.length == 0){
+
+                        this.clients = this.allClients
+
+                    }
+
+                } else {
+
+                    this.clients = []
+
+                    if (this.sector === null) {
+                    
+                        this.msg = 'Selecione um setor'
                         this.msgClass = 'error'
 
-                    } else {
-                        
-                        this.products = data.history
-                        this.scrollBottom()
-                        this.isLoading = false
+                        setTimeout(() => {
+                            
+                            this.msg = null
+
+                        }, 1500);
 
                     }
-                })
-                .catch((err) => {
 
-                    this.msg = err
-                    this.msgClass = 'error'
-                    consle.error(err)
-                        
-                })
+                    await fetch(`${this.apiURL}/api/histories/searchSeparate?param1=${this.sector}&param2=${this.search}&param3=${this.type}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
 
-                setTimeout(() => {
-                    this.msg = null
-                    this.msgClass = null
-                }, 1400)
+                        if (data.error) {
+                            
+                            // console.error(data.error)
+                            this.msg = data.error
+                            this.msgClass = 'error'
+
+                        } else {
+                            
+                            this.products = data.history
+                            this.scrollBottom()
+                            this.isLoading = false
+
+                        }
+                    })
+                    .catch((err) => {
+
+                        this.msg = err
+                        this.msgClass = 'error'
+                        consle.error(err)
+                            
+                    })
+
+                    setTimeout(() => {
+                        this.msg = null
+                        this.msgClass = null
+                    }, 1400)
+
+                }
 
             },
 
             async getTypeHistory(type){
 
+                this.clients = []
+                this.isClientsActived = false
                 this.adequedStyles(type)
                 this.type = type
 
@@ -690,6 +749,80 @@
                 })
 
 
+            },
+
+            async getClientHistoryState(state){
+             
+                if(state){
+
+                    await fetch(`${this.apiURL}/api/historiesKits/completed`, {
+                        method:"GET",
+                        headers: {
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.error){
+
+                            this.msg = data.error
+                            this.msgClass = 'error'
+
+                        } else {
+
+                            this.clients = data.histories
+                            this.scrollBottom()
+                            this.isLoading = false
+
+                        }
+
+                    })
+                    .catch((err) => {
+
+                        this.msg = err
+                        this.msgClass = 'error'
+                        console.log(err)
+
+                    })
+
+                } else {
+
+                    await fetch(`${this.apiURL}/api/historiesKits/notCompleted`, {
+                        method:"GET",
+                        headers: {
+                            "Content-type":"application/json",
+                            "x-api-key": `${this.apiKey}`
+                        }
+                    })
+                    .then((resp) => resp.json())
+                    .then((data) => {
+
+                        if(data.error){
+
+                            this.msg = data.error
+                            this.msgClass = 'error'
+
+                        } else {
+
+                            this.clients = data.histories
+                            this.scrollBottom()
+                            this.isLoading = false
+
+                        }
+
+                    })
+                    .catch((err) => {
+
+                        this.msg = err
+                        this.msgClass = 'error'
+                        console.log(err)
+
+                    })
+
+                }
+             
             },
 
             async getHistoryForSector(sector){
@@ -737,7 +870,7 @@
             async getClientHistory(type){
 
                 this.isLoading = true
-
+                this.isClientsActived = true
                 this.adequedStyles(type)
 
                 this.products = []
@@ -759,7 +892,8 @@
 
                     } else {
 
-                        this.clients = data.histories
+                        this.allClients = data.histories
+                        this.clients = this.allClients
                         this.isLoading = false
                     }
 
@@ -1073,6 +1207,13 @@
         align-items: center;
         gap: 15px;
         padding: 15px 15px;
+    }
+
+    .client-materials{
+        display: flex;
+        flex-direction: column  ;
+        justify-content: center;
+        align-items: flex-start;
     }
 
     .client-materials > span{
