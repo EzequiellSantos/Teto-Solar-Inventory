@@ -187,9 +187,9 @@
                     <span class="team-name">{{ client.teamName }}</span>
 
                     <span class="status">
-                        <input type="checkbox" name="materialCheckbox" id="isCompleted" v-model="client.isCompleted" @change="toggleMaterialUsage(client._id, client.materials, client.teamName, client.isCompleted)">
+                        <input type="checkbox" name="materialCheckbox" id="isCompleted" v-model="client.isCompleted" @mouseover="handleMouseOver(client.isCompleted)" @click="toggleMaterialUsage(client._id, client.materials, client.teamName, client.isCompleted)">
 
-                        <span v-if="client. isCompleted">
+                        <span v-if="client.isCompleted">
                             Concluído
                         </span>
                         <span v-else>Não Concluído</span>
@@ -290,7 +290,22 @@
                 this.infoVisible = !this.infoVisible
             },
 
+            handleMouseOver(isCompleted) {
+                const checkbox = document.getElementById('isCompleted');
+                if (isCompleted) {
+                    checkbox.disabled = true
+                    checkbox.style.cursor = "not-allowed"
+                }
+            },
+
             async toggleMaterialUsage(id, materials, teamName, isCompleted) {
+                
+                const checkbox = document.getElementById('isCompleted');
+                if (isCompleted) {
+                    checkbox.disabled = true
+                    checkbox.style.cursor = "not-allowed"
+                    return;
+                }
 
                 const data = {
                     _id: id,
@@ -358,10 +373,8 @@
                             if (existingMat) {
                                 // Subtrai a quantidade usada
                                 existingMat.quantity = Math.max((existingMat.quantity || 0) - (clientMat.quantity || 0), 0);
-                            } else {
-                                // Se o material não existe no kit, ignora ou adiciona com zero
-                                // Aqui você pode decidir o que é mais apropriado
                             }
+
                         });
 
                         // 3. Atualizar o kit no banco
@@ -374,6 +387,25 @@
                             body: JSON.stringify({
                                 teamName: teamName,
                                 materials: updatedMaterials
+                            })
+                        });
+                    }
+
+                    //adicionar saidas de cada material no historico
+                    for (const mat of materials) {
+                        await fetch(`${this.apiURL}/api/histories/`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "x-api-key": this.apiKey
+                            },
+                            body: JSON.stringify({
+                                code: mat.code,
+                                description: mat.description,
+                                quant: mat.quantity,
+                                date: new Date().toISOString().split('T')[0],
+                                type: "Saida",
+                                sector: teamName
                             })
                         });
                     }
@@ -916,8 +948,8 @@
 
             scrollBottom(){
                 window.scrollTo({
-                    top: document.documentElement.scrollHeight, // Altura total do documento
-                    behavior: 'smooth' // Animação suave
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
                 });
             }
 
