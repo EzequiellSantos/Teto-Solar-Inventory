@@ -85,7 +85,8 @@
 
                 msg: null,
                 msgClass: null,
-                products: {},
+                products: [],
+                Allproducts: [],
                 search: null,
                 state: null,
                 apiURL: BASE_URL,
@@ -107,59 +108,35 @@
                 
                 if(this.search.length == 0 && this.search === "" && this.search.length < 2){
 
-                    setTimeout(() => {
-                        
-                        this.getAllMaterials()
-
-                    }, 900);
-
-                } else if(this.state != null){
-
-                    await fetch(`${this.apiURL}/api/materials/searchChoice?param1=${this.search}&param2=${this.state}`, {
-                        method:"GET",
-                        headers: {
-                            "Content-type":"Application/json",
-                            "x-api-key": `${this.apiKey}`
-                        }
-                    })
-                    .then((resp) => resp.json())
-                    .then((data) => {
-
-                        if(data.error){
-
-                            console.error(data.error)
-
-                        } else {
-
-                            this.products = data.materials
-
-                        }
-
-                    })
+                    this.products = this.Allproducts
 
                 } else {
 
-                    await fetch(`${this.apiURL}/api/materials/searchChoice?param1=${this.search}`, {
-                        method:"GET",
-                        headers: {
-                            "Content-type":"Application/json",
-                            "x-api-key": `${this.apiKey}`
-                        }
-                    })
-                    .then((resp) => resp.json())
-                    .then((data) => {
+                    let clientsFiltered = []
+                    
+                    const normalize = str => {
+                        if (typeof str !== 'string') return '';
+                        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                    }
 
-                        if(data.error){
+                    const termoBusca = normalize(this.search)
 
-                            console.error(data.error)
+                    const baseClients = Array.isArray(this.Allproducts) ? this.Allproducts : []
 
-                        } else {
+                    if(termoBusca.length > 0){
 
-                            this.products = data.materials
+                        clientsFiltered = baseClients.filter(item => {
+                            return (
+                                normalize(item.code).includes(termoBusca) ||
+                                normalize(item.description).includes(termoBusca)
+                            )
+                        })
 
-                        }
+                    } else {
+                        clientsFiltered = baseClients
+                    }
 
-                    })
+                    this.products = clientsFiltered
 
                 }
 
@@ -220,8 +197,8 @@
 
             async getDesactivedMaterials(){
 
-                await fetch(`${this.apiURL}//type`)
-                 
+                await fetch(`${this.apiURL}/api/materials/type`)
+
             },
 
             async getAllMaterials(){    
@@ -243,6 +220,7 @@
 
                     } else {
 
+                        this.Allproducts = data.data
                         this.products = data.data
 
                     }
