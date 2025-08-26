@@ -31,8 +31,8 @@
 
             <div class="almox-containers">
 
-                <label for="search">Procurar por Código ou Descrição:</label>
-                <input ref="search" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
+                <label for="searchClient">Procurar por Código ou Descrição:</label>
+                <input ref="searchClient" type="text" name="searchClient" id="searchClient" v-model="search" @input="searchProduct" placeholder="Código ou descrição" >
             </div>
 
             <div class="almox-containers">
@@ -67,7 +67,9 @@
                     <p class="select-product">{{selectProductKits.code}} {{selectProductKits.description}}</p>
                     <br>
                     <input class="quant-kit" ref="quantKits" type="number" v-model="quantKit" id="quantKits" placeholder="Quantidade">
-                    <img class="add-material-kit" @click="addProductKit" width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                    <button class="add-material-kit" @click="addProductKit">
+                        <img  width="32" height="32" src="https://img.icons8.com/puffy/32/000000/add.png" alt="add"> 
+                    </button>
                     
                 </section>
 
@@ -115,8 +117,8 @@
         <form id="productForm" enctype="multipart/form-data" @submit="update($event)" v-if="!outputClient">
 
             <div class="almox-containers">
-                <label for="searchClient">Procurar por Código ou Descrição:</label>
-                <input ref="searchClient" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
+                <label for="search">Procurar por Código ou Descrição:</label>
+                <input ref="searchAmox" type="text" name="search" id="search" v-model="search" @input="searchProduct" required placeholder="Código ou descrição" >
             </div>
 
             <div class="almox-containers" >
@@ -216,8 +218,8 @@
                 msgClass: null,
                 allProducts: [],
                 products: [],
-                selectProduct: {},
-                selectProductKits: {},
+                selectProduct: [],
+                selectProductKits: [],
                 allClientMaterial: [],
                 nameClient: null,
                 clientCity: null,
@@ -239,12 +241,12 @@
 
             controlChoice(type) {
 
-                if(type == 'stockroom'){
+                /* if(type == 'stockroom'){
 
                     this.outputClient = false
                     this.selectProductKits = {}
                     this.allClientMaterial = []
-                    this.search = null
+                    this.searchAlmox = null
                     this.outputQuant = null
                     this.products = {}
                     this.selectProduct = {}
@@ -254,12 +256,20 @@
                     this.outputClient = true
                     this.selectProductKits = {}
                     this.allClientMaterial = []
-                    this.search = null
+                    this.searchClient = null
                     this.outputQuant = null
                     this.products = {}
                     this.selectProduct = {}
 
-                }
+                } */
+
+                this.outputClient = true
+                this.selectProductKits = {}
+                this.allClientMaterial = []
+                this.outputQuant = null
+                this.products = {}
+                this.selectProduct = {}
+                this.search = null
 
             },
 
@@ -304,8 +314,10 @@
                     }
 
                     this.allClientMaterial.push(data)
-                    this.selectProductKits = {}
+                    this.products = []
                     this.quantKit = null
+                    this.search = null
+
                     this.$refs.searchClient.focus();
 
                 } else {
@@ -342,99 +354,141 @@
 
             },
 
-            async updateKits(e) {
-                e.preventDefault();
+            async update(e){
 
-                if (this.allClientMaterial.length === 0) {
-                    this.msg = "Selecione pelo menos um produto";
-                    this.msgClass = 'error';
-                    setTimeout(() => { this.msg = null }, 1600);
-                    return;
+                e.preventDefault()
+
+                let quantAtual = this.selectProduct.quantity - this.outputQuant
+
+                console.log("produto selecionado", this.selectProduct) //CORRETO
+
+                if(quantAtual < 0){
+                    quantAtual = 0
+                    this.enviarNotificacao("Alerta de Quantidade", `${this.selectProduct.description} em falta no estoque !!!`)
                 }
 
-                // Monta o objeto conforme o model de historiesKits
-                const historyData = {
-                    teamName: this.sector,
-                    clientName: this.nameClient,
-                    clientCity: this.clientCity,
-                    date: this.outputDate,
-                    materials: this.allClientMaterial,
-                    isCompleted: false
-                };
-
-                // 1. Registrar o histórico completo
-                await fetch(`${this.apiURL}/api/historiesKits`, {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json",
-                        "x-api-key": `${this.apiKey}`
-                    },
-                    body: JSON.stringify(historyData)
-                });
-
-                // 2. Buscar o kit da equipe
-                let kitEquipe = null;
-                await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-type": "application/json",
-                        "x-api-key": `${this.apiKey}`
-                    }
-                })
-                .then(resp => resp.json())
-                .then(data => {
-                    if (data.data && data.data.length > 0) {
-                        kitEquipe = data.data[0];
-                    }
-                });
-
-                if (!kitEquipe) {
-                    this.msg = "Kit da equipe não encontrado!";
-                    this.msgClass = 'error';
-                    setTimeout(() => { this.msg = null }, 1600);
-                    return;
+                const data = {
+                    id: this.selectProduct._id,
+                    type: this.selectProduct.type,
+                    code: this.selectProduct.code,
+                    description: this.selectProduct.description,
+                    quantity: quantAtual,
+                    minQuantity: this.selectProduct.minQuantity,
+                    uniMed: this.selectProduct.uniMed,
+                    location: this.selectProduct.location,
+                    stateQuantity: this.selectProduct.stateQuantity,
+                    isActive: this.selectProduct.isActive
                 }
 
-                // 3. Atualizar os materiais do kit da equipe (SOMANDO)
-                const updatedMaterials = [...kitEquipe.materials];
+                console.log("produto antes do stringfy", data) //CORRETO
 
-                this.allClientMaterial.forEach(clientMat => {
-                    const existingMat = updatedMaterials.find(mat => mat.code === clientMat.code);
+                const jsonData = JSON.stringify(data)
 
-                    if (existingMat) {
-                        existingMat.quantity = (existingMat.quantity || 0) + (clientMat.quantity || 0);
-                    } else {
-                        updatedMaterials.push({
-                            code: clientMat.code,
-                            description: clientMat.description,
-                            quantity: clientMat.quantity || 0
-                        });
-                    }
-                });
-
-                // 4. Atualizar o kit no banco (com os novos materiais somados)
-                await fetch(`${this.apiURL}/api/kits/`, {
+                // Atualiza o produto no estoque geral
+                await fetch(`${this.apiURL}/api/materials`, {
                     method: "PUT",
                     headers: {
                         "Content-type": "application/json",
                         "x-api-key": `${this.apiKey}`
                     },
-                    body: JSON.stringify({ teamName: this.sector, materials: updatedMaterials })
+                    body: jsonData
+                })
+                .then((resp) => resp.json())
+                .then(async (data) => {
+
+                    if (data.error) {
+
+                        this.msg = data.error;
+                        this.msgClass = 'error';
+
+                    } else {
+                        this.msg = data.msg;
+                        this.msgClass = 'sucess';
+
+                        this.getProducts()
+
+                        // Atualiza o kit da equipe selecionada
+                        let kitEquipe = null;
+                        await fetch(`${this.apiURL}/api/kits/search/team?name=${this.sector}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-type": "application/json",
+                                "x-api-key": `${this.apiKey}`
+                            }
+                        })
+                        .then(resp => resp.json())
+                        .then(data => {
+
+                            if (data.data && data.data.length > 0) {
+                                kitEquipe = data.data[0];
+                            }
+
+                        });
+
+                        if (kitEquipe) {
+                            // Atualiza ou adiciona o produto no kit
+                            let found = false;
+                            const updatedMaterials = kitEquipe.materials.map(mat => {
+                                if (mat.code === this.selectProduct.code) {
+                                    found = true;
+                                    let newQuantity = (mat.quantity || 0) + Number(this.outputQuant);
+
+                                    // Verificação extra: se NÃO for saída para cliente e descrição contém "100M"
+                                    if (!this.outputClient && this.selectProduct.description && this.selectProduct.description.includes("100M")) {
+                                        newQuantity = (mat.quantity || 0) + (Number(this.outputQuant) * 100);
+                                    }
+
+                                    return {
+                                        ...mat,
+                                        quantity: newQuantity
+                                    };
+                                }
+                                return mat;
+                            });
+
+                            // Se não encontrou, adiciona o produto ao kit
+                            if (!found) {
+                                let addQuantity = Number(this.outputQuant);
+                                if (!this.outputClient && this.selectProduct.description && this.selectProduct.description.includes("100M")) {
+                                    addQuantity = Number(this.outputQuant) * 100;
+                                }
+                                updatedMaterials.push({
+                                    code: this.selectProduct.code,
+                                    description: this.selectProduct.description,
+                                    quantity: addQuantity
+                                });
+                            }
+
+                            // Atualiza o kit no banco
+                            await fetch(`${this.apiURL}/api/kits/`, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "x-api-key": `${this.apiKey}`
+                                },
+                                body: JSON.stringify({
+                                    teamName: this.sector,
+                                    materials: updatedMaterials 
+                                })
+                            });
+                        }
+
+                        setTimeout(() => {
+                            this.sendingRegister();
+                        }, 1000);
+                    }
+                })
+                .catch((err) => {
+
+                    this.msg = 'Erro ao registrar';
+                    this.msgClass = 'error';
+                    console.log(err);
                 });
 
-                // 6. Feedback e reset
-                this.getProducts();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                this.msg = "Kit atualizado e histórico registrado com sucesso!";
-                this.msgClass = 'sucess';
-                this.search = null;
-                this.outputQuant = null;
-                this.products = [];
-                this.selectProductKits = {};
-                this.allClientMaterial = [];
-                this.$refs.searchClient.focus();
+                setTimeout(() => {
+                    this.msg = null;
+                }, 1600);
 
-                setTimeout(() => { this.msg = null }, 1700);
             },
 
             enviarNotificacao(header, body) {
@@ -697,18 +751,19 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 this.msg = "Kit atualizado, estoque ajustado e histórico registrado!";
                 this.msgClass = 'sucess';
+
                 this.search = null;
                 this.sector = null;
-                this.clientName = null
+                this.nameClient = null
                 this.clientCity = null;
                 this.outputQuant = null;
                 this.products = [];
                 this.selectProductKits = {};
                 this.allClientMaterial = [];
-                this.
-                this.$refs.search.focus();
+                this.$refs.nameClient.focus();
 
                 setTimeout(() => { this.msg = null }, 1700);
+
             },
 
             async sendingRegister(){
@@ -757,7 +812,7 @@
                         this.outputQuant = null
                         this.products = {}
                         this.selectProduct = {}
-                        this.$refs.search.focus();
+                        this.$refs.searchAmox.focus();
 
                         setTimeout(() => {
                             
