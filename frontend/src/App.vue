@@ -943,6 +943,16 @@
 
   /* styles for almox */
 
+  .list-itens{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+  }
+
   .list-itens > button{
     width: 95%;
     display: flex;
@@ -956,6 +966,22 @@
     margin: auto;
     margin-block: 5px;
     padding: 7px;
+  }
+
+  .list-itens > #remove{
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    width: 30px;
+    border-radius: 50%;
+  }
+
+  .list-itens > p.select-product{
+    font-size: 1.1em;
+    text-align: center;
+    width: 90%;
+    text-transform: uppercase;
   }
 
   .list-itens > img {

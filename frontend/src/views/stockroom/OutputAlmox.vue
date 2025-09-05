@@ -82,6 +82,9 @@
 
                 <section v-for="(material, index) in allClientMaterial" :key="index" class="list-itens">
                     <p class="select-product">{{material.code}} {{material.description}}  {{material.quantity}}</p>
+                        <button id="remove" class="button-remove" @click="remove($event, index)">
+                            <img width="20" height="20" src="https://img.icons8.com/ios/50/minus.png" alt="minus">
+                        </button> 
                 </section>
             </div>
 
@@ -238,6 +241,12 @@
 
         },
         methods: {
+
+            remove(e, index) {
+                e.preventDefault();
+                this.allClientMaterial.splice(index, 1);
+
+            },
 
             controlChoice(type) {
 
@@ -900,6 +909,15 @@
 
     .add-material-kit{
         margin-bottom: -11.5px;
+    }
+
+    #remove{
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 10px;
+        width: 30px;
+        border-radius: 50%;
     }
 
 </style>
