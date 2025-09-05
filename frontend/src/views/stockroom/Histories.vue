@@ -298,21 +298,23 @@
                 }
             },
 
-            async toggleMaterialUsage(id, materials, teamName, isCompleted) {
+            async toggleMaterialUsage(id, materials, teamName, currentIsCompleted) {
                 
-                const checkbox = document.getElementById('isCompleted');
-                if (isCompleted) {
-                    checkbox.disabled = true
-                    checkbox.style.cursor = "not-allowed"
-                    return;
-                }
+                const newIsCompleted = !currentIsCompleted;
 
-                const data = {
-                    _id: id,
-                    materials: materials,
-                    teamName: teamName,
-                    isCompleted: isCompleted
-                };
+                    const checkbox = document.getElementById('isCompleted');
+                    if (currentIsCompleted) {
+                        checkbox.disabled = true
+                        checkbox.style.cursor = "not-allowed"
+                        return;
+                    }
+
+                    const data = {
+                        _id: id,
+                        materials: materials,
+                        teamName: teamName,
+                        isCompleted: newIsCompleted  // <-- aqui você envia o novo valor
+                    };
 
                 const jsonData = JSON.stringify(data);
 
